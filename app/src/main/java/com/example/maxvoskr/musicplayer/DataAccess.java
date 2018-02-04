@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import static android.content.Context.MODE_PRIVATE;
 
@@ -23,7 +25,7 @@ public class DataAccess {
 
     void writeData(Song song)
     {
-        Set<String> data = Collections.emptySet();
+        Set<String> data = new LinkedHashSet();
         data.add(song.getLocation());
         data.add(Long.toString(song.getTimeMS()));
         data.add(Integer.toString(song.getDayOfWeek()));
@@ -40,10 +42,10 @@ public class DataAccess {
         String[] songData = data.toArray(new String[data.size()]);
         try{
             songObj.setLocation(songData[0]);
-            songObj.setTimeMS(Long.parseLong(songData[1]));
-            songObj.setDayOfWeek(Integer.parseInt(songData[2]));
-            songObj.setTimeOfDay(Integer.parseInt(songData[3]));
-            songObj.setLikeDislike(Integer.parseInt(songData[4]));
+            //songObj.setTimeMS(Long.parseLong(songData[1]));
+            //songObj.setDayOfWeek(Integer.parseInt(songData[2]));
+            //songObj.setTimeOfDay(Integer.parseInt(songData[3]));
+            //songObj.setLikeDislike(Integer.parseInt(songData[4]));
         }
         catch (Exception e){
             System.out.println("Unable to retrieve last play information");

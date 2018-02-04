@@ -9,10 +9,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     public static Context contextOfApplication;
+
+    private Button storeButton;
+    private Button retrieveButton;
+    private EditText keyText;
+    private EditText storeText;
+    private TextView message;
+    private DataAccess dataAccess;
+    private Song exampleSong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +41,39 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         contextOfApplication = getApplicationContext();
+        exampleSong = new Song("Song Title","Album Title","Artist",0);
+        exampleSong.setTimeMS(0);
+        exampleSong.setDayOfWeek(0);
+        exampleSong.setTimeOfDay(0);
+        exampleSong.setLikeDislike(0);
+        dataAccess = new DataAccess(contextOfApplication);
+        storeButton = (Button) findViewById(R.id.buttonStore);
+        retrieveButton = (Button) findViewById(R.id.buttonRetrieve);
+        keyText = (EditText) findViewById(R.id.songTitle);
+        storeText = (EditText) findViewById(R.id.messageToStore);
+        message = (TextView) findViewById(R.id.showMessage);
+        storeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String key = keyText.getText().toString();
+                String messToStore = storeText.getText().toString();
+                exampleSong.setLocation(messToStore);
+                exampleSong.setNameOfSong(key);
+                dataAccess.writeData(exampleSong);
+            }
+        });
+        retrieveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String key = keyText.getText().toString();
+                exampleSong.setNameOfSong(key);
+                dataAccess.updateData(exampleSong);
+                message.setText(exampleSong.getLocation());
+            }
+        });
+
+
+
     }
 
     @Override
