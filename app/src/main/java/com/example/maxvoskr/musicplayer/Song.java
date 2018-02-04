@@ -2,6 +2,8 @@
  * Created by mdavi on 2/4/2018.
  */
 
+package com.example.maxvoskr.musicplayer;
+
 public class Song {
     private String location;
     private long timeMS;
@@ -13,6 +15,13 @@ public class Song {
     private String nameOfArtist;
     private int reference;
 
+
+    Song(String name, String album, String artist, int reference){
+        this.nameOfSong = name;
+        this.nameOfAlbum = album;
+        this.nameOfArtist = artist;
+        this.reference = reference;
+    }
 
     Song(String location, long timeMS, int dayOfWeek, int timeOfDay,
         int likeDislike, String name, String album, String artist, int reference){
