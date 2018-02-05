@@ -32,26 +32,23 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
         contextOfApplication = getApplicationContext();
         exampleSong = new Song("Song Title","Album Title","Artist",0);
         exampleSong.setTimeMS(0);
         exampleSong.setDayOfWeek(0);
         exampleSong.setTimeOfDay(0);
         exampleSong.setLikeDislike(0);
+        exampleSong.setLocation("default");
+
         dataAccess = new DataAccess(contextOfApplication);
+
         storeButton = (Button) findViewById(R.id.buttonStore);
         retrieveButton = (Button) findViewById(R.id.buttonRetrieve);
         keyText = (EditText) findViewById(R.id.songTitle);
         storeText = (EditText) findViewById(R.id.messageToStore);
         message = (TextView) findViewById(R.id.showMessage);
+
         storeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
                 exampleSong.setLocation(messToStore);
                 exampleSong.setNameOfSong(key);
                 dataAccess.writeData(exampleSong);
+
+
             }
         });
         retrieveButton.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
                 exampleSong.setNameOfSong(key);
                 dataAccess.updateData(exampleSong);
                 message.setText(exampleSong.getLocation());
+
+
             }
         });
 

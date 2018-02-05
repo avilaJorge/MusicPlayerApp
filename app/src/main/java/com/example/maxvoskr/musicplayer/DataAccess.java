@@ -15,37 +15,38 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class DataAccess {
 
+    static final String LOCATION = "LOC";
+    static final String TIME_MS = "T_MS";
+    static final String DAY_OF_WEEK = "DOW";
+    static final String TIME_OF_DAY = "TOD";
+    static final String LIKE_DISLIKE = "LD";
+
     final SharedPreferences SongData;
     final SharedPreferences.Editor SongDataEditor;
     DataAccess(Context contextOfApplication)
     {
         SongData = contextOfApplication.getSharedPreferences("SongData", MODE_PRIVATE);
-        SongDataEditor = contextOfApplication.getSharedPreferences("SongData", MODE_PRIVATE).edit();
+        SongDataEditor = SongData.edit();
     }
 
     void writeData(Song song)
     {
-        Set<String> data = new LinkedHashSet();
-        data.add(song.getLocation());
-        data.add(Long.toString(song.getTimeMS()));
-        data.add(Integer.toString(song.getDayOfWeek()));
-        data.add(Integer.toString(song.getTimeOfDay()));
-        data.add(Integer.toString(song.getLikeDislike()));
-
-        SongDataEditor.putStringSet(song.getNameOfSong(), data);
+        SongDataEditor.putString(song.getNameOfSong()+LOCATION, song.getLocation());
+        SongDataEditor.putString(song.getNameOfSong()+TIME_MS, Long.toString(song.getTimeMS()));
+        SongDataEditor.putString(song.getNameOfSong()+DAY_OF_WEEK, Integer.toString(song.getDayOfWeek()));
+        SongDataEditor.putString(song.getNameOfSong()+TIME_OF_DAY, Integer.toString(song.getTimeOfDay()));
+        SongDataEditor.putString(song.getNameOfSong()+LIKE_DISLIKE, Integer.toString(song.getLikeDislike()));
         SongDataEditor.apply();
     }
 
     boolean updateData(Song songObj)
     {
-        Set<String> data = SongData.getStringSet(songObj.getNameOfSong(), null);
-        String[] songData = data.toArray(new String[data.size()]);
         try{
-            songObj.setLocation(songData[0]);
-            //songObj.setTimeMS(Long.parseLong(songData[1]));
-            //songObj.setDayOfWeek(Integer.parseInt(songData[2]));
-            //songObj.setTimeOfDay(Integer.parseInt(songData[3]));
-            //songObj.setLikeDislike(Integer.parseInt(songData[4]));
+            songObj.setLocation(SongData.getString(songObj.getNameOfSong()+LOCATION, null));
+            songObj.setTimeMS(Long.parseLong(SongData.getString(songObj.getNameOfSong()+TIME_MS, null)));
+            songObj.setDayOfWeek(Integer.parseInt(SongData.getString(songObj.getNameOfSong()+DAY_OF_WEEK, null)));
+            songObj.setTimeOfDay(Integer.parseInt(SongData.getString(songObj.getNameOfSong()+TIME_OF_DAY, null)));
+            songObj.setLikeDislike(Integer.parseInt(SongData.getString(songObj.getNameOfSong()+LIKE_DISLIKE, null)));
         }
         catch (Exception e){
             System.out.println("Unable to retrieve last play information");
