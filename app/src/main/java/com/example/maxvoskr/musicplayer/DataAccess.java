@@ -25,8 +25,10 @@ public class DataAccess {
         SongDataEditor = SongData.edit();
     }
 
-    void writeData(Song song)
-    {
+    void writeData(Song song) {
+        if (song == null){
+            throw new NullPointerException("Cannot write an uninitialized song");
+        }
         SongDataEditor.putString(song.getNameOfSong()+LOCATION, song.getLocation());
         SongDataEditor.putString(song.getNameOfSong()+TIME_MS, Long.toString(song.getTimeMS()));
         SongDataEditor.putString(song.getNameOfSong()+DAY_OF_WEEK, Integer.toString(song.getDayOfWeek()));
@@ -37,6 +39,9 @@ public class DataAccess {
 
     boolean updateData(Song songObj)
     {
+        if(songObj == null){
+            throw new NullPointerException("Cannot update a uninitialized song");
+        }
         try{
             songObj.setLocation(SongData.getString(songObj.getNameOfSong()+LOCATION, null));
             songObj.setTimeMS(Long.parseLong(SongData.getString(songObj.getNameOfSong()+TIME_MS, null)));

@@ -10,6 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 
 /**
  * Tests that modify the shared preferences.
@@ -33,7 +35,7 @@ public class SharedPreferencesTest {
         song1.setDayOfWeek(0);
         song1.setTimeOfDay(0);
         song1.setLikeDislike(0);
-        song1.setLocation("default");
+        song1.setLocation("");
 
         song2 = new Song("Song Title","Album Title","Artist",0);
         song2.setTimeMS(0);
@@ -46,15 +48,67 @@ public class SharedPreferencesTest {
     }
 
     @Test
-    public void PlaceOne() throws Exception {
+    public void testRetrieveLocation() throws Exception {
+        song1.setLocation("Mars");
         dataAccess.writeData(song1);
         dataAccess.updateData(song2);
 
         assertEquals(song1.getLocation(), song2.getLocation());
     }
+    @Test
+    public void testRetrieveTimeMS() throws Exception {
+        song1.setLocation("Mars");
+        dataAccess.writeData(song1);
+        dataAccess.updateData(song2);
+
+        assertEquals(song1.getLocation(), song2.getLocation());
+    }
+    @Test
+    public void testRetrieveDayOfWeek() throws Exception {
+        song1.setDayOfWeek(3);
+        dataAccess.writeData(song1);
+        dataAccess.updateData(song2);
+
+        assertEquals(song1.getLocation(), song2.getLocation());
+    }
+    @Test
+    public void testRetrieveTimeOfDay() throws Exception {
+        song1.setTimeOfDay(2);
+        dataAccess.writeData(song1);
+        dataAccess.updateData(song2);
+
+        assertEquals(song1.getLocation(), song2.getLocation());
+    }
+    @Test
+    public void testRetrieveLikeDislike() throws Exception {
+        song1.setLikeDislike(-1);
+        dataAccess.writeData(song1);
+        dataAccess.updateData(song2);
+
+        assertEquals(song1.getLocation(), song2.getLocation());
+    }
+    @Test
+    public void testWriteNullSong() throws Exception {
+        try{
+            dataAccess.writeData(null);
+            fail("Writing a null song should throw exception");
+        }
+        catch (NullPointerException e){
+        }
+    }
+    @Test
+    public void testRetrieveNullSong() throws Exception {
+        try{
+            Song song3;
+            dataAccess.updateData(null);
+            fail("Retrieving a null song should throw exception");
+        }
+        catch (NullPointerException e){
+        }
+    }
 
     @After
     public void after() {
-        sharedPreferences.edit().putString(KEY_PREF, null).apply();
+        //sharedPreferences.edit().putString(KEY_PREF, null).apply();
     }
 }
