@@ -3,10 +3,6 @@ package com.example.maxvoskr.musicplayer;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
