@@ -8,45 +8,34 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ArrayList<Music> musicList;
+    private MusicAdapter adapter;
+    private ListView trackList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        trackList = (ListView) findViewById(R.id.trackList);
+        musicList = new ArrayList<>();
+        musicList.add(new Music("Windows Are the Eyes", "Forum", R.raw.windowsaretheeyestothehouse));
+        musicList.add(new Music("Dead Dove, Do Not Eat", "Forum", R.raw.deaddovedonoteat));
+        musicList.add(new Music("Sisters of the Sun", "Forum",  R.raw.sistersofthesun));
+        musicList.add(new Music("Sky Full of Ghosts", "Forum",  R.raw.skyfullofghosts));
+        musicList.add(new Music("Dreamatorium", "Forum", R.raw.dreamatorium));
+        musicList.add(new Music("I just Want to Tell You", "Forum", R.raw.ijustwanttotellyoubothgoodluck));
+
+        adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList);
+        trackList.setAdapter(adapter);
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }
