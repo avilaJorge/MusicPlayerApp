@@ -29,11 +29,11 @@ public class DataAccess {
         if (song == null){
             throw new NullPointerException("Cannot write an uninitialized song");
         }
-        SongDataEditor.putString(song.getNameOfSong()+LOCATION, song.getLocation());
-        SongDataEditor.putString(song.getNameOfSong()+TIME_MS, Long.toString(song.getTimeMS()));
-        SongDataEditor.putString(song.getNameOfSong()+DAY_OF_WEEK, Integer.toString(song.getDayOfWeek()));
-        SongDataEditor.putString(song.getNameOfSong()+TIME_OF_DAY, Integer.toString(song.getTimeOfDay()));
-        SongDataEditor.putString(song.getNameOfSong()+LIKE_DISLIKE, Integer.toString(song.getLikeDislike()));
+        SongDataEditor.putString(song.getName()+LOCATION, song.getLocation());
+        SongDataEditor.putString(song.getName()+TIME_MS, Long.toString(song.getTimeMS()));
+        SongDataEditor.putString(song.getName()+DAY_OF_WEEK, Integer.toString(song.getDayOfWeek()));
+        SongDataEditor.putString(song.getName()+TIME_OF_DAY, Integer.toString(song.getTimeOfDay()));
+        SongDataEditor.putString(song.getName()+LIKE_DISLIKE, Integer.toString(song.getLikeDislike()));
         SongDataEditor.apply();
     }
 
@@ -43,11 +43,11 @@ public class DataAccess {
             throw new NullPointerException("Cannot update a uninitialized song");
         }
         try{
-            songObj.setLocation(SongData.getString(songObj.getNameOfSong()+LOCATION, null));
-            songObj.setTimeMS(Long.parseLong(SongData.getString(songObj.getNameOfSong()+TIME_MS, null)));
-            songObj.setDayOfWeek(Integer.parseInt(SongData.getString(songObj.getNameOfSong()+DAY_OF_WEEK, null)));
-            songObj.setTimeOfDay(Integer.parseInt(SongData.getString(songObj.getNameOfSong()+TIME_OF_DAY, null)));
-            songObj.setLikeDislike(Integer.parseInt(SongData.getString(songObj.getNameOfSong()+LIKE_DISLIKE, null)));
+            songObj.setLocation(SongData.getString(songObj.getName()+LOCATION, null));
+            songObj.setTimeMS(Long.parseLong(SongData.getString(songObj.getName()+TIME_MS, null)));
+            songObj.setDayOfWeek(Integer.parseInt(SongData.getString(songObj.getName()+DAY_OF_WEEK, null)));
+            songObj.setTimeOfDay(Integer.parseInt(SongData.getString(songObj.getName()+TIME_OF_DAY, null)));
+            songObj.setLikeDislike(Integer.parseInt(SongData.getString(songObj.getName()+LIKE_DISLIKE, null)));
         }
         catch (Exception e){
             System.out.println("Unable to retrieve last play information");

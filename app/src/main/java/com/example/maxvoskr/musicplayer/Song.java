@@ -13,18 +13,18 @@ public class Song {
     private String nameOfSong;
     private String nameOfAlbum;
     private String nameOfArtist;
-    private int reference;
+    private int song;
 
 
-    Song(String name, String album, String artist, int reference){
+    Song(String name, String album, String artist, int song){
         this.nameOfSong = name;
         this.nameOfAlbum = album;
         this.nameOfArtist = artist;
-        this.reference = reference;
+        this.song = song;
     }
 
     Song(String location, long timeMS, int dayOfWeek, int timeOfDay,
-        int likeDislike, String name, String album, String artist, int reference){
+        int likeDislike, String name, String album, String artist, int song){
         this.location = location;
         this.timeMS = timeMS;
         this.dayOfWeek = dayOfWeek;
@@ -33,11 +33,11 @@ public class Song {
         this.nameOfSong = name;
         this.nameOfAlbum = album;
         this.nameOfArtist = artist;
-        this.reference = reference;
+        this.song = song;
         }
 
     Song(String location, long timeMS, int dayOfWeek, int timeOfDay,
-         int likeDislike, String name, String album, int reference){
+         int likeDislike, String name, String album, int song){
         this.location = location;
         this.timeMS = timeMS;
         this.dayOfWeek = dayOfWeek;
@@ -45,7 +45,7 @@ public class Song {
         this.likeDislike = likeDislike;
         this.nameOfSong = name;
         this.nameOfAlbum = album;
-        this.reference = reference;
+        this.song = song;
     }
 
     public String getLocation(){
@@ -66,23 +66,23 @@ public class Song {
         return likeDislike;
     }
 
-    public String getNameOfSong() {
+    public String getName() {
         return nameOfSong;
     }
 
-    public String getNameOfAlbum() {
+    public String getAlbum() {
         return nameOfAlbum;
     }
 
-    public String getNameOfArtist() {
+    public String getArtist() {
         return nameOfArtist;
     }
 
-    public int getReference() {
-        return reference;
+    public int getSong() {
+        return song;
     }
 
-    public void setNameOfArtist(String nameOfArtist) {
+    public void setArtist(String nameOfArtist) {
         this.nameOfArtist = nameOfArtist;
     }
 
@@ -104,16 +104,16 @@ public class Song {
         this.location = location;
     }
 
-    public void setNameOfAlbum(String nameOfAlbum) {
+    public void setAlbum(String nameOfAlbum) {
         this.nameOfAlbum = nameOfAlbum;
     }
 
-    public void setNameOfSong(String nameOfSong) {
+    public void setName(String nameOfSong) {
         this.nameOfSong = nameOfSong;
     }
 
-    public void setReference(int reference) {
-        this.reference = reference;
+    public void setSong(int song) {
+        this.song = song;
     }
 
     public void setTimeMS(long timeMS) {
