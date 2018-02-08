@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         exampleSong.setDayOfWeek(0);
         exampleSong.setTimeOfDay(0);
         exampleSong.setLikeDislike(0);
-        exampleSong.setLocation("default");
+        exampleSong.setLocation(null);
 
         dataAccess = new DataAccess(contextOfApplication);
 
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 String key = keyText.getText().toString();
                 String messToStore = storeText.getText().toString();
                 exampleSong.setLocation(messToStore);
-                exampleSong.setNameOfSong(key);
+                exampleSong.setName(key);
                 dataAccess.writeData(exampleSong);
 
 
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String key = keyText.getText().toString();
-                exampleSong.setNameOfSong(key);
+                exampleSong.setName(key);
                 dataAccess.updateData(exampleSong);
                 message.setText(exampleSong.getLocation());
 
