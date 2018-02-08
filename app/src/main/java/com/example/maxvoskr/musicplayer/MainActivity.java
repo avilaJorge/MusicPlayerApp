@@ -1,11 +1,19 @@
 package com.example.maxvoskr.musicplayer;
 
+import android.Manifest;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +24,8 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     public static Context contextOfApplication;
-
+    public static LocationService locationService;
+    private boolean bound = false;
     private Button storeButton;
     private Button retrieveButton;
     private EditText keyText;
@@ -24,6 +33,37 @@ public class MainActivity extends AppCompatActivity {
     private TextView message;
     private DataAccess dataAccess;
     private Song exampleSong;
+
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder binder) {
+            LocationService.LocationBinder locationBinder = (LocationService.LocationBinder) binder;
+            locationService = locationBinder.getLocationService();
+            bound = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            bound = false;
+        }
+    };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
+            Log.d("test1", "in");
+            return;
+        } else {
+            Log.d("test2", "out");
+            Intent intent = new Intent(this, LocationService.class);
+            bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +115,15 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(bound) {
+            unbindService(connection);
+            bound = false;
+        }
     }
 
     @Override

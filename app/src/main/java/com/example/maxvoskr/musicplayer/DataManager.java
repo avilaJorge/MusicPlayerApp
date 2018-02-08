@@ -25,16 +25,17 @@ class DataManager {
     private final static int MORNING = 0;
     private final static int AFTERNOON = 1;
     private final static int EVENING = 2;
-    private static DataAccess dataAccess;
-    private static Location lastLocation;
+    private DataAccess dataAccess;
+    private LocationService locationService;
     private LocationListener listener;
     private LocationManager locManager;
     private SimpleTimeZone timezone;
     private Date currentTime;
     private Calendar calendar;
+    private static Location lastLocation;
 
 
-    DataManager(Context contextOfApplication) {
+    DataManager(Context contextOfApplication, DataAccess dataAccess, LocationService locationService) {
         listener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -56,12 +57,8 @@ class DataManager {
 
             }
         };
-        locManager = (LocationManager)contextOfApplication.getSystemService(Context.LOCATION_SERVICE);
-        try {
-            locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
-        } catch(SecurityException se) {
-            se.printStackTrace();
-        }
+        this.locationService = locationService;
+        this.dataAccess = dataAccess;
 
         // get the supported ids for GMT-08:00 (Pacific Standard Time)
         String[] ids = TimeZone.getAvailableIDs(-8 * 60 * 60 * 1000);
@@ -73,16 +70,14 @@ class DataManager {
         calendar = new GregorianCalendar(timezone);
     }
 
-    public updateData(Song song) {
+    public void updateData(Song song) {
 
         currentTime = new Date();
         calendar.setTime(currentTime);
-        int timeOfDay = 0;
-        song.setLocation();
+        song.setLocation(locationService.getLocationName());
         song.setDayOfWeek(Calendar.DAY_OF_WEEK);
         song.setTimeMS(currentTime.getTime());
         song.setTimeOfDay(getTimeOfDay(Calendar.HOUR_OF_DAY));
-
     }
 
     private int getTimeOfDay(int hourOfDay) {
