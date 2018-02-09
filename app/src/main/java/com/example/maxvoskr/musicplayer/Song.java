@@ -1,8 +1,8 @@
-package com.example.maxvoskr.musicplayer;
-
 /**
- * Created by maxvoskr on 2/4/18.
+ * Created by mdavi on 2/4/2018.
  */
+
+package com.example.maxvoskr.musicplayer;
 
 public class Song {
     private String location;
@@ -14,6 +14,8 @@ public class Song {
     private String nameOfAlbum;
     private String nameOfArtist;
     private int song;
+    private boolean played;
+    private int weight;
 
 
     Song(String name, String album, String artist, int song){
@@ -21,6 +23,8 @@ public class Song {
         this.nameOfAlbum = album;
         this.nameOfArtist = artist;
         this.song = song;
+        this.played = false;
+        this.weight = 0;
     }
 
     Song(String location, long timeMS, int dayOfWeek, int timeOfDay,
@@ -34,6 +38,8 @@ public class Song {
         this.nameOfAlbum = album;
         this.nameOfArtist = artist;
         this.song = song;
+        this.played = false;
+        this.weight = 0;
     }
 
     Song(String location, long timeMS, int dayOfWeek, int timeOfDay,
@@ -46,6 +52,8 @@ public class Song {
         this.nameOfSong = name;
         this.nameOfAlbum = album;
         this.song = song;
+        this.played = false;
+        this.weight = 0;
     }
 
     public String getLocation(){
@@ -78,6 +86,10 @@ public class Song {
         return nameOfArtist;
     }
 
+    public boolean beenPlayed(){return played;}
+
+    //reference to song
+  
     public int getSong() {
         return song;
     }
@@ -86,6 +98,13 @@ public class Song {
         this.nameOfArtist = nameOfArtist;
     }
 
+    public void setPlayed() {
+        this.played = true;
+    }
+    public void unsetPlayed(){
+        this.played = false;
+    }
+  
     public void setDayOfWeek(int dayOfWeek) {
         if (dayOfWeek >= 0 && dayOfWeek<7)
             this.dayOfWeek = dayOfWeek;
@@ -126,4 +145,18 @@ public class Song {
         else
             throw new IllegalArgumentException();
     }
+/*
+    public void findWeight(DataObj dataObj) {
+        weight = 0;
+        if (dataObj.getLocation() == location) weight++;
+        if (dataObj.getDayOfWeek() == dayOfWeek) weight++;
+        if (dataObj.getTimeOfDay() == timeOfDay) weight++;
+        if (likeDislike == 1) weight++;
+    }
+ */
+    public int getWeight() {
+        return weight;
+    }
+
+    public
 }

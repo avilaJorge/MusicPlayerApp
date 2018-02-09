@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <!--
+            Upper navigation bar
+     -->
+
+    <View
+        android:id="@+id/navLeft"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:background="#c547025c"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/navMid"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <View
+        android:id="@+id/navMid"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:background="#a90208c6"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/navRight"
+        app:layout_constraintLeft_toRightOf="@id/navLeft"
+        />
+
+    <View
+        android:id="@+id/navRight"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:background="#a4ff6701"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/navMid"
+        />
+
+    <ImageView
+        android:id="@+id/songsMode"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/cd"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/navLeft"
+        app:layout_constraintRight_toRightOf="@id/navLeft"
+        android:layout_marginTop="15dp"/>
+
+    <ImageView
+        android:id="@+id/albumMode"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/album"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/navMid"
+        app:layout_constraintRight_toRightOf="@id/navMid"
+        android:layout_marginTop="15dp"/>
+
+    <ImageView
+        android:id="@+id/flashbackMode"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/flashback"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/navRight"
+        app:layout_constraintRight_toRightOf="@id/navRight"
+        android:layout_marginTop="15dp"/>
+
+
+
+    <!--
+        middle stuff
+    -->
+
+    <View
+        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:background="#78e1762e"
+        app:layout_constraintTop_toBottomOf="@+id/navMid"
+        app:layout_constraintBottom_toTopOf="@+id/musicBar"
+        />
+
+    <TextView
+        android:id="@+id/songTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Song Name"
+        android:textSize="50sp"
+        android:textColor="#000000"
+        android:layout_marginTop="5dp"
+        app:layout_constraintTop_toBottomOf="@+id/navMid"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/albumTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Album"
+        android:textSize="30sp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/songTitle"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/lastPlayed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Last Played:"
+        android:textSize="40sp"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/time"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12:32"
+        android:textSize="25sp"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/date"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Monday, Jan 5 2018"
+        android:textSize="25sp"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/location"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="at Geisel"
+        android:textSize="25sp"
+        android:textColor="#000000"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/musicBar"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+
+
+
+
+
+    <!--
+        Lower music bar stuff
+     -->
+
+    <View
+        android:id="@+id/musicBar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#bcbcb8b8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/dislike"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/dislike_black"
+        app:layout_constraintBottom_toBottomOf="@id/play"
+        app:layout_constraintRight_toLeftOf="@id/previous"
+        app:layout_constraintLeft_toRightOf="parent"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"/>
+
+
+    <ImageView
+        android:id="@+id/previous"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/previous"
+        app:layout_constraintBottom_toBottomOf="@id/play"
+        app:layout_constraintRight_toLeftOf="@id/play"
+        app:layout_constraintLeft_toRightOf="@id/dislike"
+        android:layout_marginRight="20dp" />
+
+    <ImageView
+        android:id="@+id/play"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/pause"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/previous"
+        app:layout_constraintRight_toLeftOf="@id/next"
+        android:layout_marginBottom="15dp"/>
+
+    <ImageView
+        android:id="@+id/next"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/next"
+        app:layout_constraintBottom_toBottomOf="@id/play"
+        app:layout_constraintLeft_toRightOf="@id/play"
+        app:layout_constraintRight_toLeftOf="@id/like"
+        android:layout_marginLeft="20dp"
+        />
+
+
+
+    <ImageView
+        android:id="@+id/like"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/like_black"
+        app:layout_constraintBottom_toBottomOf="@id/play"
+        app:layout_constraintLeft_toRightOf="@id/next"
+        app:layout_constraintRight_toLeftOf="parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"/>
+
+</android.support.constraint.ConstraintLayout>
