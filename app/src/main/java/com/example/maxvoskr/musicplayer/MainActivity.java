@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ListView;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +24,13 @@ public class MainActivity extends AppCompatActivity {
     private TextView message;
     private DataAccess dataAccess;
     private Song exampleSong;
+    /*private ArrayList<Song> musicList;
+    private MusicAdapter adapter;
+    private ListView trackList;
+    */
+
+public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,27 +42,20 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(this, SongPlayerScreen.class);
         startActivity(i);
 
+        /*
+        trackList = (ListView) findViewById(R.id.trackList);
+        musicList = new ArrayList<>();
+        musicList.add(new Song("Windows Are the Eyes", "Max", "Forum", R.raw.windowsaretheeyestothehouse));
+        musicList.add(new Song("Dead Dove, Do Not Eat", "Max","Forum", R.raw.deaddovedonoteat));
+        musicList.add(new Song("Sisters of the Sun", "Max","Forum",  R.raw.sistersofthesun));
+        musicList.add(new Song("Sky Full of Ghosts", "Max", "Forum",  R.raw.skyfullofghosts));
+        musicList.add(new Song("Dreamatorium", "Max","Forum", R.raw.dreamatorium));
+        musicList.add(new Song("I just Want to Tell You", "Max","Forum", R.raw.ijustwanttotellyoubothgoodluck));
+
+        adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList);
+        trackList.setAdapter(adapter);
+        */
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

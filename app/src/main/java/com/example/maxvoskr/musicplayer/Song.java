@@ -28,7 +28,7 @@ public class Song {
     }
 
     Song(String location, long timeMS, int dayOfWeek, int timeOfDay,
-        int likeDislike, String name, String album, String artist, int song){
+         int likeDislike, String name, String album, String artist, int song){
         this.location = location;
         this.timeMS = timeMS;
         this.dayOfWeek = dayOfWeek;
@@ -40,7 +40,7 @@ public class Song {
         this.song = song;
         this.played = false;
         this.weight = 0;
-        }
+    }
 
     Song(String location, long timeMS, int dayOfWeek, int timeOfDay,
          int likeDislike, String name, String album, int song){
@@ -89,6 +89,7 @@ public class Song {
     public boolean beenPlayed(){return played;}
 
     //reference to song
+  
     public int getSong() {
         return song;
     }
@@ -103,7 +104,7 @@ public class Song {
     public void unsetPlayed(){
         this.played = false;
     }
-
+  
     public void setDayOfWeek(int dayOfWeek) {
         if (dayOfWeek >= 0 && dayOfWeek<7)
             this.dayOfWeek = dayOfWeek;
@@ -144,7 +145,7 @@ public class Song {
         else
             throw new IllegalArgumentException();
     }
-
+/*
     public void findWeight(DataObj dataObj) {
         weight = 0;
         if (dataObj.getLocation() == location) weight++;
@@ -152,7 +153,7 @@ public class Song {
         if (dataObj.getTimeOfDay() == timeOfDay) weight++;
         if (likeDislike == 1) weight++;
     }
-
+ */
     public int getWeight() {
         return weight;
     }
