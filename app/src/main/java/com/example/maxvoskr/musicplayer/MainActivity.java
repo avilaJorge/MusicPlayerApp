@@ -29,9 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private ListView trackList;
     */
 
-public class MainActivity extends AppCompatActivity {
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

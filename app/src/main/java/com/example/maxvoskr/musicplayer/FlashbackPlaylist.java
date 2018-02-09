@@ -19,7 +19,8 @@ public class FlashbackPlaylist {
      * getsNextSong for flashback mode (trigger on song end)
      * input(dataObj that contains the user location and time info)
      */
-    public Song getNextSong(DataObj dataObj){
+    //TODO
+   /* public Song getNextSong(DataObj dataObj){
         for(Song s : listOfSongs){
             if (!s.beenPlayed())
                 s.findWeight(dataObj);
@@ -38,5 +39,5 @@ public class FlashbackPlaylist {
             }
         }
         return next;
-    }
+    }*/
 }

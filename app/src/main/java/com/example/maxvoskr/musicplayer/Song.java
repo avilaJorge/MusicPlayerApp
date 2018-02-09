@@ -157,6 +157,4 @@ public class Song {
     public int getWeight() {
         return weight;
     }
-
-    public
 }
