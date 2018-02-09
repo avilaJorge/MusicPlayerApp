@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<Music> musicList;
+    private ArrayList<Song> musicList;
     private MusicAdapter adapter;
     private ListView trackList;
 
@@ -25,12 +25,12 @@ public class MainActivity extends AppCompatActivity {
 
         trackList = (ListView) findViewById(R.id.trackList);
         musicList = new ArrayList<>();
-        musicList.add(new Music("Windows Are the Eyes", "Forum", R.raw.windowsaretheeyestothehouse));
-        musicList.add(new Music("Dead Dove, Do Not Eat", "Forum", R.raw.deaddovedonoteat));
-        musicList.add(new Music("Sisters of the Sun", "Forum",  R.raw.sistersofthesun));
-        musicList.add(new Music("Sky Full of Ghosts", "Forum",  R.raw.skyfullofghosts));
-        musicList.add(new Music("Dreamatorium", "Forum", R.raw.dreamatorium));
-        musicList.add(new Music("I just Want to Tell You", "Forum", R.raw.ijustwanttotellyoubothgoodluck));
+        musicList.add(new Song("Windows Are the Eyes", "Max", "Forum", R.raw.windowsaretheeyestothehouse));
+        musicList.add(new Song("Dead Dove, Do Not Eat", "Max","Forum", R.raw.deaddovedonoteat));
+        musicList.add(new Song("Sisters of the Sun", "Max","Forum",  R.raw.sistersofthesun));
+        musicList.add(new Song("Sky Full of Ghosts", "Max", "Forum",  R.raw.skyfullofghosts));
+        musicList.add(new Song("Dreamatorium", "Max","Forum", R.raw.dreamatorium));
+        musicList.add(new Song("I just Want to Tell You", "Max","Forum", R.raw.ijustwanttotellyoubothgoodluck));
 
         adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList);
         trackList.setAdapter(adapter);

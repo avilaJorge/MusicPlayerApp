@@ -20,11 +20,11 @@ public class MusicAdapter extends BaseAdapter {
 
     private Context context;
     private int layout;
-    private ArrayList<Music> musicList;
+    private ArrayList<Song> musicList;
     private MediaPlayer mediaPlayer;
     private Boolean flag = true;
 
-    public MusicAdapter(Context context, int layout, ArrayList<Music> musicList) {
+    public MusicAdapter(Context context, int layout, ArrayList<Song> musicList) {
         this.context = context;
         this.layout = layout;
         this.musicList = musicList;
@@ -75,7 +75,7 @@ public class MusicAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        final Music music = musicList.get(i);
+        final Song music = musicList.get(i);
         viewHolder.trackName.setText(music.getName());
         viewHolder.artistName.setText(music.getArtist());
 
