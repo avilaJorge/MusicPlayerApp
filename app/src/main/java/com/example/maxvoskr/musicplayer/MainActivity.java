@@ -25,7 +25,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static Context contextOfApplication;
     public static LocationService locationService;
-    private boolean bound = false;
+    public static DateService dateService;
+    private boolean locBound = false;
+    private boolean dateBound = false;
     private Button storeButton;
     private Button retrieveButton;
     private EditText keyText;
@@ -34,17 +36,28 @@ public class MainActivity extends AppCompatActivity {
     private DataAccess dataAccess;
     private Song exampleSong;
 
-    private ServiceConnection connection = new ServiceConnection() {
+    private ServiceConnection locConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder binder) {
             LocationService.LocationBinder locationBinder = (LocationService.LocationBinder) binder;
             locationService = locationBinder.getLocationService();
-            bound = true;
+            locBound = true;
         }
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            bound = false;
+            locBound = false;
         }
+    };
+    private ServiceConnection dateConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            DateService.DateBinder dateBinder = (DateService.DateBinder) iBinder;
+            dateService = dateBinder.getDateService();
+            dateBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) { dateBound = false; }
     };
 
     @Override
@@ -60,9 +73,11 @@ public class MainActivity extends AppCompatActivity {
             return;
         } else {
             Log.d("test2", "out");
-            Intent intent = new Intent(this, LocationService.class);
-            bindService(intent, connection, Context.BIND_AUTO_CREATE);
+            Intent locIntent = new Intent(this, LocationService.class);
+            bindService(locIntent, locConnection, Context.BIND_AUTO_CREATE);
         }
+        Intent dateIntent = new Intent(this, DateService.class);
+        bindService(dateIntent, dateConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -120,9 +135,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if(bound) {
-            unbindService(connection);
-            bound = false;
+        if(locBound) {
+            unbindService(locConnection);
+            locBound = false;
+        }
+        if(dateBound) {
+            unbindService(dateConnection);
+            dateBound = false;
         }
     }
 

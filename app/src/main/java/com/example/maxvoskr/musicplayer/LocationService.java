@@ -20,7 +20,7 @@ public class LocationService extends Service {
 
     private static double distanceInMeters;
     private static Location lastLocation = null;
-    private static String locName = null;
+    private static String locName = "";
     private static double longitude = 0;
     private static double latitude = 0;
     private LocationListener listener;
@@ -59,8 +59,10 @@ public class LocationService extends Service {
                 try {
                     List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
                     if(null!=addressList && addressList.size() > 0) {
-                        //locName = addressList.get(0).getLocality();
-                        locName = addressList.get(0).getAddressLine(0);
+                        String tempLocName = addressList.get(0).getAddressLine(0);
+                        if(!tempLocName.isEmpty()) {
+                            locName = tempLocName;
+                        }
                     }
                 } catch(IOException e) {
                     e.printStackTrace();
