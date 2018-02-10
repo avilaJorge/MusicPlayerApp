@@ -32,8 +32,4 @@ public class DataObj {
         return dateService.getCurrentTime();
     }
 
-
-
-
-
 }
