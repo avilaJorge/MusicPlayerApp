@@ -19,8 +19,7 @@ public class DateService extends Service {
     private final static int AFTERNOON = 1;
     private final static int EVENING = 2;
     private static int day_Of_Week = -1;
-    private static int hour_Of_Day = -1;
-    private SimpleTimeZone timezone;
+    private SimpleTimeZone timeZone;
     private Date currentTime;
     private Calendar calendar;
 
@@ -39,11 +38,11 @@ public class DateService extends Service {
         // get the supported ids for GMT-08:00 (Pacific Standard Time)
         String[] ids = TimeZone.getAvailableIDs(-8 * 60 * 60 * 1000);
         // create a Pacific Standard Time time zone
-        SimpleTimeZone timeZone = new SimpleTimeZone(-8 * 60 * 60 * 1000, ids[0]);
+        timeZone = new SimpleTimeZone(-8 * 60 * 60 * 1000, ids[0]);
         // set up rules for Daylight Saving Time
-        timezone.setStartRule(Calendar.APRIL, 1, Calendar.SUNDAY, 2 * 60 * 60 * 1000);
-        timezone.setEndRule(Calendar.OCTOBER, -1, Calendar.SUNDAY, 2 * 60 * 60 * 1000);
-        calendar = new GregorianCalendar(timezone);
+        timeZone.setStartRule(Calendar.APRIL, 1, Calendar.SUNDAY, 2 * 60 * 60 * 1000);
+        timeZone.setEndRule(Calendar.OCTOBER, -1, Calendar.SUNDAY, 2 * 60 * 60 * 1000);
+        calendar = new GregorianCalendar(timeZone);
     }
 
     public long getCurrentTime() {
