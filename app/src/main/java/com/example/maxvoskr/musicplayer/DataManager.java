@@ -1,13 +1,6 @@
 package com.example.maxvoskr.musicplayer;
 
 import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by avila on 2/7/2018.
