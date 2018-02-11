@@ -23,9 +23,9 @@ public class SongPlayerScreen extends AppCompatActivity {
     private ImageView previous;
     private ImageView like;
     private ImageView dislike;
-    private ImageView songMode;
-    private ImageView albumMode;
-    private ImageView flashbackMode;
+    private View songMode;
+    private View albumMode;
+    private View flashbackMode;
     private View background;
     Intent intent;
 
@@ -40,9 +40,9 @@ public class SongPlayerScreen extends AppCompatActivity {
         previous = findViewById(R.id.previous);
         like = findViewById(R.id.like);
         dislike = findViewById(R.id.dislike);
-        songMode = findViewById(R.id.songsMode);
-        albumMode = findViewById(R.id.albumMode);
-        flashbackMode = findViewById(R.id.flashbackMode);
+        songMode = findViewById(R.id.navLeft);
+        albumMode = findViewById(R.id.navMid);
+        flashbackMode = findViewById(R.id.navRight);
         background = findViewById(R.id.background);
 
 
@@ -122,24 +122,30 @@ public class SongPlayerScreen extends AppCompatActivity {
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent.putExtra("playerMode", SONG_MODE);
-                startActivity(intent);
+                if(playerMode != SONG_MODE) {
+                    intent.putExtra("playerMode", SONG_MODE);
+                    startActivity(intent);
+                }
             }
         });
 
         albumMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent.putExtra("playerMode", ALBUM_MODE);
-                startActivity(intent);
+                if(playerMode != ALBUM_MODE) {
+                    intent.putExtra("playerMode", ALBUM_MODE);
+                    startActivity(intent);
+                }
             }
         });
 
         flashbackMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent.putExtra("playerMode", FLASHBACK_MODE);
-                startActivity(intent);
+                if(playerMode != FLASHBACK_MODE) {
+                    intent.putExtra("playerMode", FLASHBACK_MODE);
+                    startActivity(intent);
+                }
             }
         });
     }
