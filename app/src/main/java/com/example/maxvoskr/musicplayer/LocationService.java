@@ -18,7 +18,6 @@ import java.util.Locale;
 
 public class LocationService extends Service {
 
-    private static double distanceInMeters;
     private static Location lastLocation = null;
     private static String locName = "";
     private static double longitude = 0;
@@ -49,39 +48,49 @@ public class LocationService extends Service {
         listener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                if(lastLocation == null) {
+                if (lastLocation == null) {
                     lastLocation = location;
                 }
-                distanceInMeters += location.distanceTo(lastLocation);
                 lastLocation = location;
                 longitude = location.getLongitude();
                 latitude = location.getLatitude();
                 try {
                     List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
-                    if(null!=addressList && addressList.size() > 0) {
+                    if (null != addressList && addressList.size() > 0) {
                         String tempLocName = addressList.get(0).getAddressLine(0);
-                        if(!tempLocName.isEmpty()) {
+                        if (!tempLocName.isEmpty()) {
                             locName = tempLocName;
                         }
                     }
-                } catch(IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
-            public void onProviderDisabled(String arg0) {}
+            public void onProviderDisabled(String arg0) {
+            }
+
             @Override
-            public void onProviderEnabled(String arg0) {}
+            public void onProviderEnabled(String arg0) {
+            }
+
             @Override
-            public void onStatusChanged(String arg0, int arg1, Bundle bundle) {}
+            public void onStatusChanged(String arg0, int arg1, Bundle bundle) {
+            }
         };
-        locManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         try {
             locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, listener);
             geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         } catch (SecurityException se) {
             se.printStackTrace();
         }
+    }
+
+    /* For testing */
+    public void setLocation(String location) {
+        locName = location;
     }
 
     @Override
@@ -93,8 +102,5 @@ public class LocationService extends Service {
         }
     }
 
-    public double getMiles() {
-        return this.distanceInMeters / 1609.344;
-    }
     public String getLocationName() { return this.locName; }
 }
