@@ -13,7 +13,7 @@
         android:id="@+id/navLeft"
         android:layout_width="0dp"
         android:layout_height="80dp"
-        android:background="#7347025c"
+        android:background="#6e47025c"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toLeftOf="@id/navMid"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -79,7 +79,7 @@
         android:id="@+id/background"
         android:layout_height="0dp"
         android:layout_width="wrap_content"
-        android:background="#7347025c"
+        android:background="#6eff6701"
         app:layout_constraintTop_toBottomOf="@+id/navMid"
         app:layout_constraintBottom_toTopOf="@+id/musicBar"
         />
