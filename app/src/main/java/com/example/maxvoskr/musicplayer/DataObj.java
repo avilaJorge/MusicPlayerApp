@@ -32,4 +32,12 @@ public class DataObj {
         return dateService.getCurrentTime();
     }
 
+    /*
+    public void updateData(Song song) {
+        song.setLocation(locationService.getLocationName());
+        song.setDayOfWeek(dateService.getCurrentDayOfWeek());
+        song.setTimeMS(dateService.getCurrentTime());
+        song.setTimeOfDay(dateService.getCurrentTimeOfDay());
+    }*/
+
 }
