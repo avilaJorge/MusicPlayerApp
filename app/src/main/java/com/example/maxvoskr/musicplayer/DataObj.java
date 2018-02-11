@@ -10,10 +10,21 @@ public class DataObj {
 
     private DateService dateService;
     private LocationService locationService;
+    private static String locationName;
+    private static int dayOfWeek;
+    private static int timeOfDay;
+    private static long currentTime;
 
     public DataObj(DateService dateService, LocationService locationService){
         this.dateService = dateService;
         this.locationService = locationService;
+    }
+
+    public void updateData() {
+        locationName = locationService.getLocationName();
+        dayOfWeek = dateService.getCurrentDayOfWeek();
+        timeOfDay = dateService.getCurrentTimeOfDay();
+        currentTime = dateService.getCurrentTime();
     }
 
     public String getLocation(){
@@ -31,13 +42,4 @@ public class DataObj {
     public long getTimeMS() {
         return dateService.getCurrentTime();
     }
-
-    /*
-    public void updateData(Song song) {
-        song.setLocation(locationService.getLocationName());
-        song.setDayOfWeek(dateService.getCurrentDayOfWeek());
-        song.setTimeMS(dateService.getCurrentTime());
-        song.setTimeOfDay(dateService.getCurrentTimeOfDay());
-    }*/
-
 }

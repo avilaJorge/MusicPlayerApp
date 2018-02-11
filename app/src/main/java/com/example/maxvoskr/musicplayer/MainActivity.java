@@ -111,6 +111,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+
+    }
+
+    @Override
+    protected void onResume() {
+        
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         if(locBound) {
