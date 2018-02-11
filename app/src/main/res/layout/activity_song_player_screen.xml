@@ -13,7 +13,7 @@
         android:id="@+id/navLeft"
         android:layout_width="0dp"
         android:layout_height="80dp"
-        android:background="#c547025c"
+        android:background="#7347025c"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toLeftOf="@id/navMid"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -23,7 +23,7 @@
         android:id="@+id/navMid"
         android:layout_width="0dp"
         android:layout_height="80dp"
-        android:background="#a90208c6"
+        android:background="#6e0208c6"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toLeftOf="@id/navRight"
         app:layout_constraintLeft_toRightOf="@id/navLeft"
@@ -33,7 +33,7 @@
         android:id="@+id/navRight"
         android:layout_width="0dp"
         android:layout_height="80dp"
-        android:background="#a4ff6701"
+        android:background="#6eff6701"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toRightOf="@id/navMid"
@@ -43,7 +43,7 @@
         android:id="@+id/songsMode"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/cd"
+        android:src="@drawable/song"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/navLeft"
         app:layout_constraintRight_toRightOf="@id/navLeft"
@@ -76,9 +76,10 @@
     -->
 
     <View
+        android:id="@+id/background"
         android:layout_height="0dp"
         android:layout_width="wrap_content"
-        android:background="#78e1762e"
+        android:background="#7347025c"
         app:layout_constraintTop_toBottomOf="@+id/navMid"
         app:layout_constraintBottom_toTopOf="@+id/musicBar"
         />

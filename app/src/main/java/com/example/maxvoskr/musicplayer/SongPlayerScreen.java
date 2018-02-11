@@ -1,5 +1,6 @@
 package com.example.maxvoskr.musicplayer;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -15,9 +16,10 @@ public class SongPlayerScreen extends AppCompatActivity {
     private ImageView previous;
     private ImageView like;
     private ImageView dislike;
-    private ImageView songMode;
-    private ImageView albumMode;
-    private ImageView flashbackMode;
+    private View songMode;
+    private View albumMode;
+    private View flashbackMode;
+    private View background;
 
 
     @Override
@@ -30,9 +32,11 @@ public class SongPlayerScreen extends AppCompatActivity {
         previous = findViewById(R.id.previous);
         like = findViewById(R.id.like);
         dislike = findViewById(R.id.dislike);
-        songMode = findViewById(R.id.songsMode);
-        albumMode = findViewById(R.id.albumMode);
-        flashbackMode = findViewById(R.id.flashbackMode);
+        songMode = findViewById(R.id.navLeft);
+        albumMode = findViewById(R.id.navMid);
+        flashbackMode = findViewById(R.id.navRight);
+
+        background = findViewById(R.id.background);
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,21 +104,21 @@ public class SongPlayerScreen extends AppCompatActivity {
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                background.setBackgroundColor(Color.parseColor("#7347025c"));
             }
         });
 
         albumMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                background.setBackgroundColor(Color.parseColor("#6e0208c6"));
             }
         });
 
         flashbackMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                background.setBackgroundColor(Color.parseColor("#6eff6701"));
             }
         });
     }

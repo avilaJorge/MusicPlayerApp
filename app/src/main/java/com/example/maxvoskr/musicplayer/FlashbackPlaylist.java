@@ -1,6 +1,5 @@
 package com.example.maxvoskr.musicplayer;
 
-import java.util.HashMap;
 import java.util.Vector;
 
 /**
@@ -19,7 +18,7 @@ public class FlashbackPlaylist {
      * getsNextSong for flashback mode (trigger on song end)
      * input(dataObj that contains the user location and time info)
      */
-    public Song getNextSong(DataObj dataObj){
+    /*public Song getNextSong(DataObj dataObj){
         for(Song s : listOfSongs){
             if (!s.beenPlayed())
                 s.findWeight(dataObj);
@@ -28,6 +27,10 @@ public class FlashbackPlaylist {
         int maxWeight = 0;
         for(Song s : listOfSongs){
             if(s.beenPlayed() || s.getLikeDislike()==-1 || s.getWeight() == 0)continue;
+
+            if(maxWeight == 0)
+                next = s;
+
             if (s.getWeight()>=maxWeight){
                 if(s.getWeight()>maxWeight) {
                     maxWeight = s.getWeight();
@@ -38,5 +41,5 @@ public class FlashbackPlaylist {
             }
         }
         return next;
-    }
+    }*/
 }

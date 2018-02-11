@@ -145,17 +145,17 @@ public class Song {
             throw new IllegalArgumentException();
     }
 
-    public void findWeight(DataObj dataObj) {
+   /* public void findWeight(DataObj dataObj) {
         weight = 0;
         if (dataObj.getLocation() == location) weight++;
         if (dataObj.getDayOfWeek() == dayOfWeek) weight++;
         if (dataObj.getTimeOfDay() == timeOfDay) weight++;
         if (likeDislike == 1) weight++;
-    }
+    }*/
 
     public int getWeight() {
         return weight;
     }
 
-    public
+  //  public
 }
