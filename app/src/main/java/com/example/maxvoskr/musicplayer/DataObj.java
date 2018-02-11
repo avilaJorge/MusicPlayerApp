@@ -11,9 +11,9 @@ public class DataObj {
     private DateService dateService;
     private LocationService locationService;
 
-    public DataObj(){
-        dateService = new DateService();
-        locationService = new LocationService();
+    public DataObj(DateService dateService, LocationService locationService){
+        this.dateService = dateService;
+        this.locationService = locationService;
     }
 
     public String getLocation(){
