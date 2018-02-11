@@ -53,8 +53,6 @@ public class MusicAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         final ViewHolder viewHolder;
 
-        System.out.println("hey");
-
         if (view == null) {
 
             System.out.println("1");

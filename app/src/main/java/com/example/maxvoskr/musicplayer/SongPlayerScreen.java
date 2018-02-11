@@ -1,14 +1,21 @@
 package com.example.maxvoskr.musicplayer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 
 public class SongPlayerScreen extends AppCompatActivity {
 
     private boolean playing = true;
     private int likeDislike = 0;
+    private int pos = 0;
 
     private ImageView play;
     private ImageView next;
@@ -19,6 +26,8 @@ public class SongPlayerScreen extends AppCompatActivity {
     private ImageView albumMode;
     private ImageView flashbackMode;
 
+    private TextView songTitleTextView;
+    private TextView albumTitleTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +42,15 @@ public class SongPlayerScreen extends AppCompatActivity {
         songMode = findViewById(R.id.songsMode);
         albumMode = findViewById(R.id.albumMode);
         flashbackMode = findViewById(R.id.flashbackMode);
+
+        Intent intent = getIntent();
+        pos = intent.getExtras().getInt("Position");
+
+        songTitleTextView = findViewById(R.id.songTitle);
+        albumTitleTextView = findViewById(R.id.albumTitle);
+
+        songTitleTextView.setText(MusicArrayList.musicList.get(pos).getName());
+        albumTitleTextView.setText(MusicArrayList.musicList.get(pos).getAlbum());
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override

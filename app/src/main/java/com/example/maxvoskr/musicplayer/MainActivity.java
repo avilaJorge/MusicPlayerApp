@@ -1,6 +1,7 @@
 package com.example.maxvoskr.musicplayer;
 
 import android.Manifest;
+import android.app.ListActivity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -14,9 +15,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.view.View;
 import android.widget.ListView;
 import java.util.ArrayList;
 
@@ -36,10 +39,13 @@ public class MainActivity extends AppCompatActivity {
     private TextView message;
     private DataAccess dataAccess;
     private Song exampleSong;
-    /*private ArrayList<Song> musicList;
+
+    //private ArrayList<Song> musicList;
     private MusicAdapter adapter;
     private ListView trackList;
-    */
+
+    private MusicArrayList musicList;
+
 
     private ServiceConnection locConnection = new ServiceConnection() {
         @Override
@@ -92,22 +98,34 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Intent i = new Intent(this, SongPlayerScreen.class);
-        startActivity(i);
+        final Intent anotherActivityIntent  = new Intent(this, SongPlayerScreen.class);
 
-        /*
         trackList = (ListView) findViewById(R.id.trackList);
-        musicList = new ArrayList<>();
-        musicList.add(new Song("Windows Are the Eyes", "Max", "Forum", R.raw.windowsaretheeyestothehouse));
-        musicList.add(new Song("Dead Dove, Do Not Eat", "Max","Forum", R.raw.deaddovedonoteat));
-        musicList.add(new Song("Sisters of the Sun", "Max","Forum",  R.raw.sistersofthesun));
-        musicList.add(new Song("Sky Full of Ghosts", "Max", "Forum",  R.raw.skyfullofghosts));
-        musicList.add(new Song("Dreamatorium", "Max","Forum", R.raw.dreamatorium));
-        musicList.add(new Song("I just Want to Tell You", "Max","Forum", R.raw.ijustwanttotellyoubothgoodluck));
 
-        adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList);
+        musicList = new MusicArrayList();
+
+        musicList.musicList.add(new Song("Windows Are the Eyes", "Trevor", "Forum", R.raw.windowsaretheeyestothehouse));
+        musicList.musicList.add(new Song("Dead Dove, Do Not Eat", "Max","Forum", R.raw.deaddovedonoteat));
+        musicList.musicList.add(new Song("Sisters of the Sun", "Adi","Forum",  R.raw.sistersofthesun));
+        musicList.musicList.add(new Song("Sky Full of Ghosts", "Matt", "Forum",  R.raw.skyfullofghosts));
+        musicList.musicList.add(new Song("Dreamatorium", "Tim","Forum", R.raw.dreamatorium));
+        musicList.musicList.add(new Song("I just Want to Tell You", "Jorge","Forum", R.raw.ijustwanttotellyoubothgoodluck));
+
+        adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList.musicList);
         trackList.setAdapter(adapter);
-        */
+
+        trackList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                anotherActivityIntent.putExtra("Position", i);
+
+                startActivity(anotherActivityIntent);
+
+            }
+        });
+
     }
 
     @Override
