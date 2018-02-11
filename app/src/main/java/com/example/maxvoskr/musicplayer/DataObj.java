@@ -11,9 +11,9 @@ public class DataObj {
     private DateService dateService;
     private LocationService locationService;
 
-    public DataObj(){
-        dateService = new DateService();
-        locationService = new LocationService();
+    public DataObj(DateService dateService, LocationService locationService){
+        this.dateService = dateService;
+        this.locationService = locationService;
     }
 
     public String getLocation(){
@@ -31,5 +31,13 @@ public class DataObj {
     public long getTimeMS() {
         return dateService.getCurrentTime();
     }
+
+    /*
+    public void updateData(Song song) {
+        song.setLocation(locationService.getLocationName());
+        song.setDayOfWeek(dateService.getCurrentDayOfWeek());
+        song.setTimeMS(dateService.getCurrentTime());
+        song.setTimeOfDay(dateService.getCurrentTimeOfDay());
+    }*/
 
 }
