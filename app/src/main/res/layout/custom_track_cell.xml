@@ -12,41 +12,31 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="18dp"
         android:layout_marginStart="18dp"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/trackimage" />
 
-    <ImageView
-        android:id="@+id/pauseImage"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignBottom="@+id/artistName"
-        android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
-        android:layout_toLeftOf="@+id/resetImage"
-        android:layout_toStartOf="@+id/resetImage"
-        android:src="@drawable/pauseimage" />
 
     <ImageView
-        android:id="@+id/playImage"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignBottom="@+id/artistName"
-        android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
-        android:layout_toLeftOf="@+id/resetImage"
-        android:layout_toStartOf="@+id/resetImage"
-        android:src="@drawable/playimage" />
-
-    <ImageView
-        android:id="@+id/resetImage"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:id="@+id/like"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/playImage"
+        android:layout_alignBottom="@+id/artistName"
         android:layout_marginEnd="11dp"
         android:layout_marginRight="11dp"
-        android:src="@drawable/resetimage" />
+        android:src="@drawable/like_black" />
+
+    <ImageView
+        android:id="@+id/dislike"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignTop="@+id/like"
+        android:layout_toLeftOf="@+id/like"
+        android:layout_toStartOf="@+id/like"
+        android:layout_marginEnd="11dp"
+        android:layout_marginRight="11dp"
+        android:src="@drawable/dislike_black" />
 
     <TextView
         android:id="@+id/trackName"

@@ -17,7 +17,7 @@ public class SongPlayerScreen extends AppCompatActivity {
     private int playerMode = SONG_MODE;
 
     private boolean playing = true;
-    private int likeDislike = 0;
+    private Song currentSong;
     private int pos = 0;
 
     private ImageView play;
@@ -67,9 +67,25 @@ public class SongPlayerScreen extends AppCompatActivity {
 
         songTitleTextView = findViewById(R.id.songTitle);
         albumTitleTextView = findViewById(R.id.albumTitle);
+        currentSong = MusicArrayList.musicList.get(pos);
+        songTitleTextView.setText(currentSong.getName());
+        albumTitleTextView.setText(currentSong.getAlbum());
 
-        songTitleTextView.setText(MusicArrayList.musicList.get(pos).getName());
-        albumTitleTextView.setText(MusicArrayList.musicList.get(pos).getAlbum());
+        if(currentSong.getLikeDislike() == -1)
+        {
+            like.setImageResource(R.drawable.like_black);
+            dislike.setImageResource(R.drawable.dislike_red);
+        }
+        else if(currentSong.getLikeDislike() == 1)
+        {
+            like.setImageResource(R.drawable.like_green);
+            dislike.setImageResource(R.drawable.dislike_black);
+        }
+        else
+        {
+            like.setImageResource(R.drawable.like_black);
+            dislike.setImageResource(R.drawable.dislike_black);
+        }
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,16 +103,16 @@ public class SongPlayerScreen extends AppCompatActivity {
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(likeDislike <= 0) {
+                if(currentSong.getLikeDislike() <= 0) {
                     like.setImageResource(R.drawable.like_green);
                     dislike.setImageResource(R.drawable.dislike_black);
-                    likeDislike = 1;
+                    currentSong.setLikeDislike(1);
                 }
                 else
                 {
                     like.setImageResource(R.drawable.like_black);
                     dislike.setImageResource(R.drawable.dislike_black);
-                    likeDislike = 0;
+                    currentSong.setLikeDislike(0);
                 }
             }
         });
@@ -105,16 +121,16 @@ public class SongPlayerScreen extends AppCompatActivity {
         dislike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(likeDislike >= 0) {
+                if(currentSong.getLikeDislike() >= 0) {
                     like.setImageResource(R.drawable.like_black);
                     dislike.setImageResource(R.drawable.dislike_red);
-                    likeDislike = -1;
+                    currentSong.setLikeDislike(-1);
                 }
                 else
                 {
                     like.setImageResource(R.drawable.like_black);
                     dislike.setImageResource(R.drawable.dislike_black);
-                    likeDislike = 0;
+                    currentSong.setLikeDislike(0);
                 }
             }
         });

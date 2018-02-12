@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         albumMode = findViewById(R.id.navMid);
         flashbackMode = findViewById(R.id.navRight);
 
+
         musicList = new MusicArrayList();
 
         musicList.musicList.add(new Song("Windows Are the Eyes", "Trevor", "Forum", R.raw.windowsaretheeyestothehouse));
@@ -127,9 +128,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                anotherActivityIntent.putExtra("Position", i);
-
-                startActivity(anotherActivityIntent);
+                if(musicList.musicList.get(i).getLikeDislike() != -1) {
+                    anotherActivityIntent.putExtra("Position", i);
+                    startActivity(anotherActivityIntent);
+                }
 
             }
         });

@@ -71,10 +71,13 @@
 
 
 
+
+
     <ListView
         android:id="@+id/trackList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="#5a47025c"
         app:layout_constraintTop_toBottomOf="@id/navMid"
         app:layout_constraintBottom_toTopOf="@id/musicBar">
     </ListView>
