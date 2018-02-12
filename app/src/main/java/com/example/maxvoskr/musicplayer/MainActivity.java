@@ -1,7 +1,6 @@
 package com.example.maxvoskr.musicplayer;
 
 import android.Manifest;
-import android.app.ListActivity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -11,22 +10,21 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.view.View;
 import android.widget.ListView;
-import java.util.ArrayList;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     public static Context contextOfApplication;
 
+    private final int SONG_MODE = 0;
+    private final int ALBUM_MODE = 1;
+    private final int FLASHBACK_MODE = 2;
 
     public static LocationService locationService;
     public static DateService dateService;
@@ -39,6 +37,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView message;
     private DataAccess dataAccess;
     private Song exampleSong;
+    private View songMode;
+    private View albumMode;
+    private View flashbackMode;
+    private Intent songPlayer;
+    private Intent songList;
 
     //private ArrayList<Song> musicList;
     private MusicAdapter adapter;
@@ -95,12 +98,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
         final Intent anotherActivityIntent  = new Intent(this, SongPlayerScreen.class);
+        songList = new Intent(this, MainActivity.class);
+        songPlayer = new Intent(this, SongPlayerScreen.class);
 
         trackList = (ListView) findViewById(R.id.trackList);
+        songMode = findViewById(R.id.navLeft);
+        albumMode = findViewById(R.id.navMid);
+        flashbackMode = findViewById(R.id.navRight);
 
         musicList = new MusicArrayList();
 
@@ -123,6 +131,31 @@ public class MainActivity extends AppCompatActivity {
 
                 startActivity(anotherActivityIntent);
 
+            }
+        });
+
+
+
+        songMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                songPlayer.putExtra("playerMode", SONG_MODE);
+                startActivity(songPlayer);
+            }
+        });
+
+        albumMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        flashbackMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                songPlayer.putExtra("playerMode", FLASHBACK_MODE);
+                startActivity(songPlayer);
             }
         });
 

@@ -8,10 +8,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-
 public class SongPlayerScreen extends AppCompatActivity {
 
     private final int SONG_MODE = 0;
@@ -33,7 +29,8 @@ public class SongPlayerScreen extends AppCompatActivity {
     private View albumMode;
     private View flashbackMode;
     private View background;
-    Intent intent;
+    private Intent songPlayer;
+    private Intent songList;
 
     private TextView songTitleTextView;
     private TextView albumTitleTextView;
@@ -54,7 +51,8 @@ public class SongPlayerScreen extends AppCompatActivity {
         background = findViewById(R.id.background);
 
 
-        intent = new Intent(this, SongPlayerScreen.class);
+        songList = new Intent(this, MainActivity.class);
+        songPlayer = new Intent(this, SongPlayerScreen.class);
         playerMode = getIntent().getIntExtra("playerMode", SONG_MODE);
         if(playerMode == SONG_MODE)
             background.setBackgroundColor(Color.parseColor("#6e47025c"));
@@ -139,33 +137,31 @@ public class SongPlayerScreen extends AppCompatActivity {
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(playerMode != SONG_MODE) {
-                    intent.putExtra("playerMode", SONG_MODE);
-                    startActivity(intent);
-                }
+                startActivity(songList);
             }
         });
 
         albumMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(playerMode != ALBUM_MODE) {
-                    intent.putExtra("playerMode", ALBUM_MODE);
-                    startActivity(intent);
-                }
+
             }
         });
 
         flashbackMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(playerMode != FLASHBACK_MODE) {
-                    intent.putExtra("playerMode", FLASHBACK_MODE);
-                    startActivity(intent);
-                }
+            if(playerMode != FLASHBACK_MODE)
+            {
+                songPlayer.putExtra("playerMode", FLASHBACK_MODE);
+                startActivity(songPlayer);
+            }
             }
         });
     }
+
+
+
 }
 
 
