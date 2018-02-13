@@ -27,7 +27,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SongPlayerScreen"></activity>
+        <activity android:name=".SongPlayerScreen" />
+
         <service
             android:name=".LocationService"
             android:enabled="true"
@@ -35,7 +36,11 @@
         <service
             android:name=".DateService"
             android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".MusicPlayerService"
+            android:enabled="true"
             android:exported="false"></service>
     </application>
-    
+
 </manifest>
