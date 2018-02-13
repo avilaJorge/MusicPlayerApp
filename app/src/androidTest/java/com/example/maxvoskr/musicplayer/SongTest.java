@@ -1,13 +1,17 @@
 package com.example.maxvoskr.musicplayer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.IBinder;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.concurrent.TimeoutException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,6 +27,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4.class)
 public class SongTest {
     private Context context;
+    private DataObj dataObj;
     private SharedPreferences sharedPreferences;
     private DataAccess dataAccess;
     private Song song1;
@@ -36,9 +41,32 @@ public class SongTest {
         assertEquals("com.example.maxvoskr.musicplayer", appContext.getPackageName());
     }
 
+    @Test
+    public void testWithBoundService() throws TimeoutException {
+        // Create the service Intent.
+        Intent serviceIntent =
+                new Intent(InstrumentationRegistry.getTargetContext(),
+                        LocationService.class);
+
+        // Data can be passed to the service via the Intent.
+        serviceIntent.putExtra(LocationService.SEED_KEY, 42L);
+
+        // Bind the service and grab a reference to the binder.
+        IBinder binder = mServiceRule.bindService(serviceIntent);
+
+        // Get the reference to the service, or you can call
+        // public methods on the binder directly.
+        LocalService service =
+                ((LocalService.LocalBinder) binder).getService();
+
+        // Verify that the service is working correctly.
+        assertThat(service.getRandomInt(), is(any(Integer.class)));
+    }
+
     @Before
     public void before() {
         context = InstrumentationRegistry.getTargetContext();
+        dataObj = DataObj()
 
         song1 = new Song("Song Title", "Album Title", "Artist", 0);
         song1.setTimeMS();
