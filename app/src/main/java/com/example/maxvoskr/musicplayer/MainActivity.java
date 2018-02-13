@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         bindService(dateIntent, dateConnection, Context.BIND_AUTO_CREATE);
         Intent musicPlayerIntent = new Intent(this, MusicPlayerService.class);
         bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
+        //startService(musicPlayerIntent);
     }
 
     @Override

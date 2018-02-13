@@ -1,13 +1,30 @@
 package com.example.maxvoskr.musicplayer;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaPlayer;
 import android.os.Binder;
+import android.os.Build;
+import android.os.Environment;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.support.annotation.RequiresApi;
+import android.util.Log;
 
-public class MusicPlayerService extends Service {
+import java.util.ArrayList;
 
-    public MusicPlayerService() {
+public class MusicPlayerService extends Service implements MediaPlayer.OnPreparedListener {
+
+    private Context context;
+    private MediaPlayer mediaPlayer;
+    private static int MEDIA_RES_ID;
+    private ArrayList<Song> songs;
+    int songIndex;
+
+    public MusicPlayerService(Context context) {
+        this.context = context;
     }
 
     private final IBinder binder = new MusicPlayerBinder();
@@ -21,13 +38,21 @@ public class MusicPlayerService extends Service {
 
     @Override
     public void onCreate() {
-        //Code for setting up the MusicPlayer object
+        super.onCreate();
+        songIndex = 0;
+        mediaPlayer = MediaPlayer.create(context, getSongResourceId(songs.get(0)));
+        initMusicPlayer();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Will need to implement this if multiple activities will be binding to this service.
         return START_STICKY;
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        mp.start();
     }
 
     @Override
@@ -38,6 +63,67 @@ public class MusicPlayerService extends Service {
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
+        mediaPlayer.release();
+    }
 
+    public void initMusicPlayer() {
+        mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+        mediaPlayer.setOnPreparedListener(this);
+    }
+
+    public void setList(ArrayList<Song> playlist) {
+        songs = playlist;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void playSong() {
+        mediaPlayer.reset();
+        loadMedia(getSongResourceId(songs.get(songIndex)));
+        mediaPlayer.start();
+    }
+
+    public void pause() {
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void reset() {
+        if(mediaPlayer != null) {
+            mediaPlayer.reset();
+            loadMedia(getSongResourceId(songs.get(++songIndex)));
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void loadMedia(int resourceId) {
+        if(mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(context, getSongResourceId(songs.get(0)));
+            initMusicPlayer();
+        }
+
+        // TODO: Feel like this should go in onCreate but this is what the lab writeup does.
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mediaPlayer.reset();
+                loadMedia(getSongResourceId(songs.get(++songIndex)));
+            }
+        });
+
+        AssetFileDescriptor assetFileDescriptor = this.getResources().openRawResourceFd(resourceId);
+        try {
+            mediaPlayer.setDataSource(assetFileDescriptor);
+            mediaPlayer.prepareAsync();
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            Log.e("MUSIC SERVICE", "Error setting data source", e);
+        }
+    }
+
+    public int getSongResourceId(Song song) {
+        return getResources().getIdentifier(song.getName(), "raw", getPackageName());
     }
 }
