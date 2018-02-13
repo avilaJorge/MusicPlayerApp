@@ -1,31 +1,35 @@
 package com.example.maxvoskr.musicplayer;
 
-import java.util.HashMap;
-import java.util.Vector;
+
+import java.util.ArrayList;
 
 /**
  * Created by mdavi on 2/7/2018.
  */
 
 public class FlashbackPlaylist {
-    private Vector<Song> listOfSongs;
-    FlashbackPlaylist(Vector<Song> listOfSongs){
+    private ArrayList<Song> listOfSongs;
+    FlashbackPlaylist(ArrayList<Song> listOfSongs){
         this.listOfSongs = listOfSongs;
         for(Song s : listOfSongs){
             s.unsetPlayed();
         }
     }
-    /*
-     * getsNextSong for flashback mode (trigger on song end)
-     * input(dataObj that contains the user location and time info)
-     */
-    //TODO
-   /* public Song getNextSong(DataObj dataObj){
+
+    /* sets the weights of all songs based on the current location/time/etc */
+    public void setCurrentWeights(CurrentDataObj dataObj){
         for(Song s : listOfSongs){
             if (!s.beenPlayed())
                 s.findWeight(dataObj);
         }
-        Song next;
+    }
+    /*
+     * getsNextSong for flashback mode (trigger on song end)
+     * input(dataObj that contains the user location and time info)
+     * output nextSong obj
+     */
+    public Song getNextSong(){
+        Song next = null;
         int maxWeight = 0;
         for(Song s : listOfSongs){
             if(s.beenPlayed() || s.getLikeDislike()==-1 || s.getWeight() == 0)continue;
@@ -39,5 +43,5 @@ public class FlashbackPlaylist {
             }
         }
         return next;
-    }*/
+    }
 }

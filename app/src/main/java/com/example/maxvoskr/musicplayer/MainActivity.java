@@ -10,20 +10,21 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.ListView;
-import java.util.ArrayList;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     public static Context contextOfApplication;
 
+    private final int SONG_MODE = 0;
+    private final int ALBUM_MODE = 1;
+    private final int FLASHBACK_MODE = 2;
 
     public static LocationService locationService;
     public static DateService dateService;
@@ -36,10 +37,18 @@ public class MainActivity extends AppCompatActivity {
     private TextView message;
     private DataAccess dataAccess;
     private Song exampleSong;
-    /*private ArrayList<Song> musicList;
+    private View songMode;
+    private View albumMode;
+    private View flashbackMode;
+    private Intent songPlayer;
+    private Intent songList;
+
+    //private ArrayList<Song> musicList;
     private MusicAdapter adapter;
     private ListView trackList;
-    */
+
+    private MusicArrayList musicList;
+
 
     private ServiceConnection locConnection = new ServiceConnection() {
         @Override
@@ -89,25 +98,69 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
-        Intent i = new Intent(this, SongPlayerScreen.class);
-        startActivity(i);
+        final Intent anotherActivityIntent  = new Intent(this, SongPlayerScreen.class);
+        songList = new Intent(this, MainActivity.class);
+        songPlayer = new Intent(this, SongPlayerScreen.class);
 
-        /*
         trackList = (ListView) findViewById(R.id.trackList);
-        musicList = new ArrayList<>();
-        musicList.add(new Song("Windows Are the Eyes", "Max", "Forum", R.raw.windowsaretheeyestothehouse));
-        musicList.add(new Song("Dead Dove, Do Not Eat", "Max","Forum", R.raw.deaddovedonoteat));
-        musicList.add(new Song("Sisters of the Sun", "Max","Forum",  R.raw.sistersofthesun));
-        musicList.add(new Song("Sky Full of Ghosts", "Max", "Forum",  R.raw.skyfullofghosts));
-        musicList.add(new Song("Dreamatorium", "Max","Forum", R.raw.dreamatorium));
-        musicList.add(new Song("I just Want to Tell You", "Max","Forum", R.raw.ijustwanttotellyoubothgoodluck));
+        songMode = findViewById(R.id.navLeft);
+        albumMode = findViewById(R.id.navMid);
+        flashbackMode = findViewById(R.id.navRight);
 
-        adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList);
+
+        musicList = new MusicArrayList();
+
+        musicList.musicList.add(new Song("Windows Are the Eyes", "Trevor", "Forum", R.raw.windowsaretheeyestothehouse));
+        musicList.musicList.add(new Song("Dead Dove, Do Not Eat", "Max","Forum", R.raw.deaddovedonoteat));
+        musicList.musicList.add(new Song("Sisters of the Sun", "Adi","Forum",  R.raw.sistersofthesun));
+        musicList.musicList.add(new Song("Sky Full of Ghosts", "Matt", "Forum",  R.raw.skyfullofghosts));
+        musicList.musicList.add(new Song("Dreamatorium", "Tim","Forum", R.raw.dreamatorium));
+        musicList.musicList.add(new Song("I just Want to Tell You", "Jorge","Forum", R.raw.ijustwanttotellyoubothgoodluck));
+
+        adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList.musicList);
         trackList.setAdapter(adapter);
-        */
+
+        trackList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if(musicList.musicList.get(i).getLikeDislike() != -1) {
+                    anotherActivityIntent.putExtra("Position", i);
+                    startActivity(anotherActivityIntent);
+                }
+
+            }
+        });
+
+
+
+        songMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                songPlayer.putExtra("playerMode", SONG_MODE);
+                startActivity(songPlayer);
+            }
+        });
+
+        albumMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        flashbackMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                songPlayer.putExtra("playerMode", FLASHBACK_MODE);
+                startActivity(songPlayer);
+            }
+        });
+
     }
 
     @Override
