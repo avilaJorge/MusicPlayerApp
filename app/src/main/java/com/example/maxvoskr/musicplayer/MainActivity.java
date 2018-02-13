@@ -28,8 +28,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static LocationService locationService;
     public static DateService dateService;
+    public static MusicPlayerService musicPlayerService;
     private boolean locBound = false;
     private boolean dateBound = false;
+    private boolean musicPlayerBound = false;
     private Button storeButton;
     private Button retrieveButton;
     private EditText keyText;
@@ -74,6 +76,19 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceDisconnected(ComponentName componentName) { dateBound = false; }
     };
 
+    private ServiceConnection musicPlayerConnection= new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            MusicPlayerService.MusicPlayerBinder musicPlayerBinder =
+                    (MusicPlayerService.MusicPlayerBinder) iBinder;
+            musicPlayerService = musicPlayerBinder.getMusicPlayerService();
+            musicPlayerBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) { musicPlayerBound = false; }
+    };
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -92,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
         }
         Intent dateIntent = new Intent(this, DateService.class);
         bindService(dateIntent, dateConnection, Context.BIND_AUTO_CREATE);
+        Intent musicPlayerIntent = new Intent(this, MusicPlayerService.class);
+        bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -163,15 +180,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onPause() {
-
-    }
-
-    @Override
-    protected void onResume() {
-
-    }
+// TODO: Will implement these when we have multiple activities binding to the same service.
+//    @Override
+//    protected void onPause() {
+//
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//
+//    }
 
     @Override
     protected void onStop() {
@@ -183,6 +201,10 @@ public class MainActivity extends AppCompatActivity {
         if(dateBound) {
             unbindService(dateConnection);
             dateBound = false;
+        }
+        if(musicPlayerBound) {
+            unbindService(musicPlayerConnection);
+            musicPlayerBound = false;
         }
     }
 }
