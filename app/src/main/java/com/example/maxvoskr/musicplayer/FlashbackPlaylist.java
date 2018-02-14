@@ -17,7 +17,7 @@ public class FlashbackPlaylist {
     }
 
     /* sets the weights of all songs based on the current location/time/etc */
-    public void setCurrentWeights(CurrentDataObj dataObj){
+    public void setCurrentWeights(CurrentLocationTimeData dataObj){
         for(Song s : listOfSongs){
             if (!s.beenPlayed())
                 s.findWeight(dataObj);

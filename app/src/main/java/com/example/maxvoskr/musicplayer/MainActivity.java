@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText keyText;
     private EditText storeText;
     private TextView message;
-    private DataAccess dataAccess;
+    private SongHistorySharedPreferenceManager songHistorySharedPreferenceManager;
     private Song exampleSong;
     private View songMode;
     private View albumMode;
