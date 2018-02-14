@@ -20,7 +20,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     private Context context;
     private MediaPlayer mediaPlayer;
     private ArrayList<Song> songs;
-    private int Player_Mode;
+    private boolean fbMode;
     int songIndex;
 
     public MusicPlayerService() {}
@@ -112,9 +112,13 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
-                mediaPlayer.reset();
-                if(++songIndex != songs.size() && !songs.isEmpty()) {
-                    loadMedia(songs.get(songIndex).getSong());
+                if(!fbMode) {
+                    mediaPlayer.reset();
+                    if (++songIndex != songs.size() && !songs.isEmpty()) {
+                        loadMedia(songs.get(songIndex).getSong());
+                    }
+                } else {
+                    i
                 }
             }
         });
