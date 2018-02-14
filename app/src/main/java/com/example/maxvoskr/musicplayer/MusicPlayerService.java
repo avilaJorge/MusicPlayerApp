@@ -19,8 +19,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     private Context context;
     private MediaPlayer mediaPlayer;
-    private static int MEDIA_RES_ID;
     private ArrayList<Song> songs;
+    private boolean fbMode;
     int songIndex;
 
     public MusicPlayerService() {}
@@ -39,8 +39,10 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         super.onCreate();
         songIndex = 0;
         context = getBaseContext();
-        mediaPlayer = MediaPlayer.create(context, getSongResourceId(songs.get(0)));
-        initMusicPlayer();
+        if(!songs.isEmpty()) {
+            mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
+            initMusicPlayer();
+        }
     }
 
     @Override
@@ -66,40 +68,47 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         mediaPlayer.release();
     }
 
-    public void initMusicPlayer() {
+    private void initMusicPlayer() {
         mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         mediaPlayer.setOnPreparedListener(this);
     }
 
+    /* Set playlist for MusicPlayer to play throught */
     public void setList(ArrayList<Song> playlist) {
         songs = playlist;
+        songIndex = 0;
     }
 
+    /* Play current song */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void playSong() {
-        mediaPlayer.reset();
-        loadMedia(getSongResourceId(songs.get(songIndex)));
-        mediaPlayer.start();
+        if(mediaPlayer != null && songIndex != songs.size() && !songs.isEmpty()) {
+            mediaPlayer.reset();
+            loadMedia(songs.get(songIndex).getSong());
+            mediaPlayer.start();
+        }
     }
 
+    /* Pause the song */
     public void pause() {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
         }
     }
 
+    /* Restart song */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void reset() {
-        if(mediaPlayer != null) {
+        if(mediaPlayer != null && songIndex != songs.size() && !songs.isEmpty()) {
             mediaPlayer.reset();
-            loadMedia(getSongResourceId(songs.get(++songIndex)));
+            loadMedia(songs.get(songIndex).getSong());
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void loadMedia(int resourceId) {
-        if(mediaPlayer == null) {
-            mediaPlayer = MediaPlayer.create(context, getSongResourceId(songs.get(0)));
+    private void loadMedia(int resourceId) {
+        if(mediaPlayer == null && !songs.isEmpty() && songIndex != songs.size()) {
+            mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
             initMusicPlayer();
         }
 
@@ -107,8 +116,14 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
-                mediaPlayer.reset();
-                loadMedia(getSongResourceId(songs.get(++songIndex)));
+                if(!fbMode) {
+                    mediaPlayer.reset();
+                    if (++songIndex != songs.size() && !songs.isEmpty()) {
+                        loadMedia(songs.get(songIndex).getSong());
+                    }
+                } else {
+                    //TODO: Implement songComplete method in class that is handling flashback mode song selection
+                }
             }
         });
 
@@ -120,9 +135,5 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
             System.out.println(e.toString());
             Log.e("MUSIC SERVICE", "Error setting data source", e);
         }
-    }
-
-    public int getSongResourceId(Song song) {
-        return getResources().getIdentifier(song.getName(), "raw", getPackageName());
     }
 }
