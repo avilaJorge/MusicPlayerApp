@@ -50,7 +50,6 @@ public class SongPlayerScreen extends AppCompatActivity {
         flashbackMode = findViewById(R.id.navRight);
         background = findViewById(R.id.background);
 
-
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
         playerMode = getIntent().getIntExtra("playerMode", SONG_MODE);

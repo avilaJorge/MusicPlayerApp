@@ -18,6 +18,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     public static Context contextOfApplication;
@@ -48,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     //private ArrayList<Song> musicList;
     private MusicAdapter adapter;
     private ListView trackList;
+
+    private ArrayList<Album> albumList;
 
     private MusicArrayList musicList;
 
