@@ -1,5 +1,6 @@
 package com.example.maxvoskr.musicplayer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,10 +10,10 @@ import java.util.List;
 public class Album {
 
     public String albumName;
-    public static List<Song> musicList;
+    public static MusicArrayList musicList;
     public String artist;
 
-    public Album(String albumName, List<Song> musicList, String artist) {
+    public Album(String albumName, MusicArrayList musicList, String artist) {
         this.albumName = albumName;
         this.musicList = musicList;
         this.artist = artist;
@@ -26,11 +27,11 @@ public class Album {
         this.albumName = albumName;
     }
 
-    public List<Song> getMusicList() {
+    public MusicArrayList getMusicList() {
         return musicList;
     }
 
-    public void setMusicList(List<Song> musicList) {
+    public void setMusicList(MusicArrayList musicList) {
         this.musicList = musicList;
     }
 
