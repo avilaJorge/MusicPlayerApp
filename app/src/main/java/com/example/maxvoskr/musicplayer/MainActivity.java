@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceDisconnected(ComponentName componentName) { dateBound = false; }
     };
 
-/*    private ServiceConnection musicPlayerConnection= new ServiceConnection() {
+    private ServiceConnection musicPlayerConnection= new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             MusicPlayerService.MusicPlayerBinder musicPlayerBinder =
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) { musicPlayerBound = false; }
-    };*/
+    };
 
     @Override
     protected void onStart() {
@@ -107,11 +109,12 @@ public class MainActivity extends AppCompatActivity {
         }
         Intent dateIntent = new Intent(this, DateService.class);
         bindService(dateIntent, dateConnection, Context.BIND_AUTO_CREATE);
-        //Intent musicPlayerIntent = new Intent(this, MusicPlayerService.class);
-        //bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
-        //startService(musicPlayerIntent);
+        Intent musicPlayerIntent = new Intent(this, MusicPlayerService.class);
+        bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
+        startService(musicPlayerIntent);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList.musicList);
         trackList.setAdapter(adapter);
+
 
         trackList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -179,17 +183,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
     }
 
 // TODO: Will implement these when we have multiple activities binding to the same service.
 //    @Override
 //    protected void onPause() {
-//
+//        super.onPause();
 //    }
 //
 //    @Override
 //    protected void onResume() {
-//
+//        super.onResume();
 //    }
 
     @Override
@@ -203,9 +208,9 @@ public class MainActivity extends AppCompatActivity {
             unbindService(dateConnection);
             dateBound = false;
         }
-//        if(musicPlayerBound) {
-//            unbindService(musicPlayerConnection);
-//            musicPlayerBound = false;
-//        }
+        if(musicPlayerBound) {
+            unbindService(musicPlayerConnection);
+            musicPlayerBound = false;
+        }
     }
 }

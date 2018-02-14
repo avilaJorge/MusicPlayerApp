@@ -39,10 +39,12 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         super.onCreate();
         songIndex = 0;
         context = getBaseContext();
-        if(!songs.isEmpty()) {
-            mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
-            initMusicPlayer();
-        }
+        //songs = MusicArrayList.musicList;
+
+        //if(!songs.isEmpty()) {
+        //    mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
+        //    initMusicPlayer();
+        //}
     }
 
     @Override
@@ -82,7 +84,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     /* Play current song */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void playSong() {
-        if(mediaPlayer != null && songIndex != songs.size() && !songs.isEmpty()) {
+        if(songs != null && mediaPlayer != null && songIndex != songs.size() && !songs.isEmpty()) {
             mediaPlayer.reset();
             loadMedia(songs.get(songIndex).getSong());
             mediaPlayer.start();
