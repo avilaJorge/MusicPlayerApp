@@ -20,6 +20,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     public static Context contextOfApplication;
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     //private ArrayList<Song> musicList;
     private MusicAdapter adapter;
     private ListView trackList;
+
+    private ArrayList<Album> albumList;
 
     private MusicArrayList musicList;
 
@@ -131,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
         albumMode = findViewById(R.id.navMid);
         flashbackMode = findViewById(R.id.navRight);
 
-
         musicList = new MusicArrayList();
 
         musicList.musicList.add(new Song("Windows Are the Eyes", "Trevor", "Forum", R.raw.windowsaretheeyestothehouse));
@@ -157,8 +160,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
 
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
