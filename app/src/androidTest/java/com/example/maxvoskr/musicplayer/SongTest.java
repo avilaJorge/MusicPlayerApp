@@ -27,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4.class)
 public class SongTest {
     private Context context;
-    private DataObj dataObj;
+    private CurrentDataObj dataObj;
     private SharedPreferences sharedPreferences;
     private DataAccess dataAccess;
     private Song song1;
@@ -66,7 +66,7 @@ public class SongTest {
     @Before
     public void before() {
         context = InstrumentationRegistry.getTargetContext();
-        dataObj = DataObj()
+        dataObj = CurrentDataObj()
 
         song1 = new Song("Song Title", "Album Title", "Artist", 0);
         song1.setTimeMS();
