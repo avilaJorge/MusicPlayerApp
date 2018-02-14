@@ -29,8 +29,8 @@ public class FlashbackPlaylistTest {
     private Song song6;
     private ArrayList<Song> list;
 
-    //create a CurrentDataObj to set weights of all song objects and verify correctness
-    // private CurrentDataObj dataObj;
+    //create a CurrentLocationTimeData to set weights of all song objects and verify correctness
+    // private CurrentLocationTimeData dataObj;
     @Before
     public void before(){
 

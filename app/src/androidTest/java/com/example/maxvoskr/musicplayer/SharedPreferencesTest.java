@@ -21,7 +21,7 @@ public class SharedPreferencesTest {
     private static final String PREFS_NAME = "SongData";
     private static final String KEY_PREF = "KEY_PREF";
     private SharedPreferences sharedPreferences;
-    private DataAccess dataAccess;
+    private SongHistorySharedPreferenceManager songHistorySharedPreferenceManager;
     private Song song1;
     private Song song2;
     private Context context;
@@ -44,53 +44,53 @@ public class SharedPreferencesTest {
         song2.setLikeDislike(0);
         song2.setLocation("");
 
-        dataAccess = new DataAccess(context);
+        songHistorySharedPreferenceManager = new SongHistorySharedPreferenceManager(context);
     }
 
     @Test
     public void testRetrieveLocation() throws Exception {
         song1.setLocation("Mars");
-        dataAccess.writeData(song1);
-        dataAccess.updateData(song2);
+        songHistorySharedPreferenceManager.writeData(song1);
+        songHistorySharedPreferenceManager.updateData(song2);
 
         assertEquals(song1.getLocation(), song2.getLocation());
     }
     @Test
     public void testRetrieveTimeMS() throws Exception {
         song1.setLocation("Mars");
-        dataAccess.writeData(song1);
-        dataAccess.updateData(song2);
+        songHistorySharedPreferenceManager.writeData(song1);
+        songHistorySharedPreferenceManager.updateData(song2);
 
         assertEquals(song1.getLocation(), song2.getLocation());
     }
     @Test
     public void testRetrieveDayOfWeek() throws Exception {
         song1.setDayOfWeek(3);
-        dataAccess.writeData(song1);
-        dataAccess.updateData(song2);
+        songHistorySharedPreferenceManager.writeData(song1);
+        songHistorySharedPreferenceManager.updateData(song2);
 
         assertEquals(song1.getLocation(), song2.getLocation());
     }
     @Test
     public void testRetrieveTimeOfDay() throws Exception {
         song1.setTimeOfDay(2);
-        dataAccess.writeData(song1);
-        dataAccess.updateData(song2);
+        songHistorySharedPreferenceManager.writeData(song1);
+        songHistorySharedPreferenceManager.updateData(song2);
 
         assertEquals(song1.getLocation(), song2.getLocation());
     }
     @Test
     public void testRetrieveLikeDislike() throws Exception {
         song1.setLikeDislike(-1);
-        dataAccess.writeData(song1);
-        dataAccess.updateData(song2);
+        songHistorySharedPreferenceManager.writeData(song1);
+        songHistorySharedPreferenceManager.updateData(song2);
 
         assertEquals(song1.getLocation(), song2.getLocation());
     }
     @Test
     public void testWriteNullSong() throws Exception {
         try{
-            dataAccess.writeData(null);
+            songHistorySharedPreferenceManager.writeData(null);
             fail("Writing a null song should throw exception");
         }
         catch (NullPointerException e){
@@ -100,7 +100,7 @@ public class SharedPreferencesTest {
     public void testRetrieveNullSong() throws Exception {
         try{
             Song song3;
-            dataAccess.updateData(null);
+            songHistorySharedPreferenceManager.updateData(null);
             fail("Retrieving a null song should throw exception");
         }
         catch (NullPointerException e){

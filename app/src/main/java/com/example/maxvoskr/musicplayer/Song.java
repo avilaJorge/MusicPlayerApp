@@ -145,7 +145,7 @@ public class Song {
         else
             throw new IllegalArgumentException();
     }
-    public void findWeight(CurrentDataObj dataObj) {
+    public void findWeight(CurrentLocationTimeData dataObj) {
         weight = 0;
         if (dataObj.getLocation() == location) weight++;
         if (dataObj.getDayOfWeek() == dayOfWeek) weight++;
@@ -160,4 +160,5 @@ public class Song {
     public int getWeight() {
         return weight;
     }
+
 }
