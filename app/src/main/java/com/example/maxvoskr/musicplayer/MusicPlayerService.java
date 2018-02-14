@@ -7,7 +7,6 @@ import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Build;
-import android.os.Environment;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.RequiresApi;
@@ -118,7 +117,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                         loadMedia(songs.get(songIndex).getSong());
                     }
                 } else {
-                    i
+
                 }
             }
         });

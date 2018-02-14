@@ -18,6 +18,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
     public static Context contextOfApplication;
@@ -129,9 +131,12 @@ public class MainActivity extends AppCompatActivity {
         flashbackMode = findViewById(R.id.navRight);
 
 
+        Date currentDate = new Date();
+        long time = currentDate.getTime();
+
         musicList = new MusicArrayList();
 
-        musicList.musicList.add(new Song("Windows Are the Eyes", "Trevor", "Forum", R.raw.windowsaretheeyestothehouse));
+        musicList.musicList.add(new Song("Giesel", time, 3, 1, 0, "Windows Are the Eyes", "Trevor", "Forum", R.raw.windowsaretheeyestothehouse));
         musicList.musicList.add(new Song("Dead Dove, Do Not Eat", "Max","Forum", R.raw.deaddovedonoteat));
         musicList.musicList.add(new Song("Sisters of the Sun", "Adi","Forum",  R.raw.sistersofthesun));
         musicList.musicList.add(new Song("Sky Full of Ghosts", "Matt", "Forum",  R.raw.skyfullofghosts));
@@ -148,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if(musicList.musicList.get(i).getLikeDislike() != -1) {
                     anotherActivityIntent.putExtra("Position", i);
+                    anotherActivityIntent.putExtra("changeSong", true);
                     startActivity(anotherActivityIntent);
                 }
 
@@ -159,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                songPlayer.putExtra("changeSong", false);
                 songPlayer.putExtra("playerMode", SONG_MODE);
                 startActivity(songPlayer);
             }
