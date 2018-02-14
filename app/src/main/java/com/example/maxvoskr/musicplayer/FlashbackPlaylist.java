@@ -29,9 +29,11 @@ public class FlashbackPlaylist {
      * output nextSong obj
      */
     public Song getNextSong(){
+        boolean repeatFlag = false;
         Song next = null;
         int maxWeight = 0;
         for(Song s : listOfSongs){
+            if(s.getWeight() != 0 && s.getLikeDislike()!=-1) repeatFlag = true;
             if(s.beenPlayed() || s.getLikeDislike()==-1 || s.getWeight() == 0)continue;
             if (s.getWeight()>=maxWeight){
                 if(s.getWeight()>maxWeight) {
@@ -42,6 +44,13 @@ public class FlashbackPlaylist {
                 else if (s.getTimeMS()>next.getTimeMS()) next = s;
             }
         }
+        if (next == null && repeatFlag == true){
+            for(Song s : listOfSongs){
+                s.unsetPlayed();
+            }
+            return this.getNextSong();
+        }
+        else
         return next;
     }
 }
