@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceDisconnected(ComponentName componentName) { dateBound = false; }
     };
 
-    private ServiceConnection musicPlayerConnection= new ServiceConnection() {
+/*    private ServiceConnection musicPlayerConnection= new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             MusicPlayerService.MusicPlayerBinder musicPlayerBinder =
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) { musicPlayerBound = false; }
-    };
+    };*/
 
     @Override
     protected void onStart() {
@@ -107,8 +107,8 @@ public class MainActivity extends AppCompatActivity {
         }
         Intent dateIntent = new Intent(this, DateService.class);
         bindService(dateIntent, dateConnection, Context.BIND_AUTO_CREATE);
-        Intent musicPlayerIntent = new Intent(this, MusicPlayerService.class);
-        bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
+        //Intent musicPlayerIntent = new Intent(this, MusicPlayerService.class);
+        //bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
         //startService(musicPlayerIntent);
     }
 
@@ -203,9 +203,9 @@ public class MainActivity extends AppCompatActivity {
             unbindService(dateConnection);
             dateBound = false;
         }
-        if(musicPlayerBound) {
-            unbindService(musicPlayerConnection);
-            musicPlayerBound = false;
-        }
+//        if(musicPlayerBound) {
+//            unbindService(musicPlayerConnection);
+//            musicPlayerBound = false;
+//        }
     }
 }
