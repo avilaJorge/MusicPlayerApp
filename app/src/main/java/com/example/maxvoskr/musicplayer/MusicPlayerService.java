@@ -23,9 +23,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     private ArrayList<Song> songs;
     int songIndex;
 
-    public MusicPlayerService(Context context) {
-        this.context = context;
-    }
+    public MusicPlayerService() {}
 
     private final IBinder binder = new MusicPlayerBinder();
 
@@ -40,6 +38,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     public void onCreate() {
         super.onCreate();
         songIndex = 0;
+        context = getBaseContext();
         mediaPlayer = MediaPlayer.create(context, getSongResourceId(songs.get(0)));
         initMusicPlayer();
     }
