@@ -56,11 +56,11 @@ public class DateService extends Service {
     }
 
     public int getCurrentDayOfWeek() {
-        if(day_Of_Week != Calendar.DAY_OF_WEEK) {
+        if(day_Of_Week != calendar.get(Calendar.DAY_OF_WEEK)) {
             updateTime();
-            return (day_Of_Week = Calendar.DAY_OF_WEEK);
+            return (day_Of_Week = calendar.get(Calendar.DAY_OF_WEEK));
         }
-        return Calendar.DAY_OF_WEEK;
+        return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
     private void updateTime() {

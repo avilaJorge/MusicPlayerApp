@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -86,6 +87,7 @@ public class CurrentLocationTimeData {
 
     //Use if song ends
     public void updateSongUsingTemp(Song song) {
+        Log.d("STATE", "tempDayOfWeek contains " + Integer.toString(tempDayOfWeek));
         song.setLocation(tempLocation);
         song.setDayOfWeek(tempDayOfWeek);
         song.setTimeMS(tempTimeMS);

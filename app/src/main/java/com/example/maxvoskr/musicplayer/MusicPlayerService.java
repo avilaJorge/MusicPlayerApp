@@ -129,6 +129,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                 } else {
                     mediaPlayer.release();
                 }
+                activity.updateUI();
                 Toast.makeText(context, "In onCompletion", Toast.LENGTH_SHORT).show();
             }
         });
