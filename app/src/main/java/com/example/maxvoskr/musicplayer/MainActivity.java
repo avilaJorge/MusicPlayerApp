@@ -19,10 +19,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MusicPlayerService.Callbacks{
 
     public static Context contextOfApplication;
 
@@ -30,11 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private final int ALBUM_MODE = 1;
     private final int FLASHBACK_MODE = 2;
 
-    public static LocationService locationService;
-    public static DateService dateService;
-    public static MusicPlayerService musicPlayerService;
-    private boolean locBound = false;
-    private boolean dateBound = false;
+    public MusicPlayerService musicPlayerService;
     private boolean musicPlayerBound = false;
     private Button storeButton;
     private Button retrieveButton;
@@ -57,38 +54,15 @@ public class MainActivity extends AppCompatActivity {
 
     private MusicArrayList musicList;
 
-
-    private ServiceConnection locConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder binder) {
-            LocationService.LocationBinder locationBinder = (LocationService.LocationBinder) binder;
-            locationService = locationBinder.getLocationService();
-            locBound = true;
-        }
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            locBound = false;
-        }
-    };
-    private ServiceConnection dateConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            DateService.DateBinder dateBinder = (DateService.DateBinder) iBinder;
-            dateService = dateBinder.getDateService();
-            dateBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) { dateBound = false; }
-    };
-
     private ServiceConnection musicPlayerConnection= new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             MusicPlayerService.MusicPlayerBinder musicPlayerBinder =
                     (MusicPlayerService.MusicPlayerBinder) iBinder;
             musicPlayerService = musicPlayerBinder.getMusicPlayerService();
+            musicPlayerService.registerClient(MainActivity.this);
             musicPlayerBound = true;
+            Toast.makeText(MainActivity.this, "Service almost connected", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -108,14 +82,11 @@ public class MainActivity extends AppCompatActivity {
             return;
         } else {
             Log.d("test2", "out");
-            Intent locIntent = new Intent(this, LocationService.class);
-            bindService(locIntent, locConnection, Context.BIND_AUTO_CREATE);
         }
-        Intent dateIntent = new Intent(this, DateService.class);
-        bindService(dateIntent, dateConnection, Context.BIND_AUTO_CREATE);
         Intent musicPlayerIntent = new Intent(this, MusicPlayerService.class);
         bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
         startService(musicPlayerIntent);
+        Toast.makeText(MainActivity.this, "Service now connected", Toast.LENGTH_SHORT).show();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -183,8 +154,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(songPlayer);
             }
         });
-
-
     }
 
 // TODO: Will implement these when we have multiple activities binding to the same service.
@@ -199,16 +168,13 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     @Override
+    public void updateUI() {
+        Toast.makeText(MainActivity.this, "This is when the UI will be notified that a new song is being played", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
-        if(locBound) {
-            unbindService(locConnection);
-            locBound = false;
-        }
-        if(dateBound) {
-            unbindService(dateConnection);
-            dateBound = false;
-        }
         if(musicPlayerBound) {
             unbindService(musicPlayerConnection);
             musicPlayerBound = false;
