@@ -24,44 +24,23 @@ import java.util.ArrayList;
 
 public class MusicPlayerService extends Service implements MediaPlayer.OnPreparedListener {
 
+    private final int SONG_MODE = 0;
+    private final int ALBUM_MODE = 1;
+    private final int FLASHBACK_MODE = 2;
+    private int mode = SONG_MODE;
+
     private Context context;
-    public LocationService locationService;
-    public DateService dateService;
-    private boolean locBound = false;
-    private boolean dateBound = false;
-    public static CurrentLocationTimeData currentLocationTimeData;
     Callbacks activity;
+
+    int songIndex;
+    private boolean paused = false;
     private MediaPlayer mediaPlayer;
     private ArrayList<Song> songs;
     private FlashbackPlaylist flashbackPlaylist;
-    private boolean fbMode;
-    int songIndex;
+    public static CurrentLocationTimeData currentLocationTimeData;
 
     public MusicPlayerService() {}
 
-    private ServiceConnection locConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder binder) {
-            LocationService.LocationBinder locationBinder = (LocationService.LocationBinder) binder;
-            locationService = locationBinder.getLocationService();
-            locBound = true;
-        }
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            locBound = false;
-        }
-    };
-    private ServiceConnection dateConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            DateService.DateBinder dateBinder = (DateService.DateBinder) iBinder;
-            dateService = dateBinder.getDateService();
-            dateBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) { dateBound = false; }
-    };
 
     private final IBinder binder = new MusicPlayerBinder();
 
@@ -77,15 +56,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         super.onCreate();
         songIndex = 0;
         context = getApplicationContext();
+        currentLocationTimeData = new CurrentLocationTimeData(context);
         flashbackPlaylist = new FlashbackPlaylist(MusicArrayList.musicList);
-        Intent locIntent = new Intent(this, LocationService.class);
-        bindService(locIntent, locConnection, Context.BIND_AUTO_CREATE);
-        Intent dateIntent = new Intent(this, DateService.class);
-        bindService(dateIntent, dateConnection, Context.BIND_AUTO_CREATE);
-        currentLocationTimeData = new CurrentLocationTimeData(dateService, locationService);
-        //if(!songs.isEmpty()) {
-        //    mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
-        //}
     }
 
     @Override
@@ -96,9 +68,9 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-
-        initMusicPlayer();
+        Toast.makeText(context, "In onPrepared", Toast.LENGTH_SHORT).show();
         mp.start();
+        currentLocationTimeData.updateTempData();
     }
 
     @Override
@@ -110,20 +82,11 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(locBound) {
-            unbindService(locConnection);
-            locBound = false;
-        }
-        if(dateBound) {
-            unbindService(dateConnection);
-            dateBound = false;
-        }
         mediaPlayer.release();
     }
 
     private void initMusicPlayer() {
         mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
-        mediaPlayer.setOnPreparedListener(this);
     }
 
     /* Set playlist for MusicPlayer to play through */
@@ -135,62 +98,65 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     /* Play current song */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void playSong() {
-        if(songs != null && mediaPlayer != null && songIndex != songs.size() && !songs.isEmpty()) {
-            loadMedia(songs.get(songIndex++).getSong());
+        if(paused) {
+            paused = false;
             mediaPlayer.start();
-        } else {
-            mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
-            initMusicPlayer();
+            return;
         }
+        if(mediaPlayer != null) {
+            if(mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer.release();
+        }
+
+        mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
+        mediaPlayer.setOnPreparedListener(this);
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+
+                currentLocationTimeData.updateSongUsingTemp(songs.get(songIndex));
+                if(mode == ALBUM_MODE) {
+                    if (++songIndex >= songs.size() && !songs.isEmpty()) {
+                        playSong();
+                    }
+                } else if (mode == FLASHBACK_MODE) {
+                    songs = new ArrayList<Song>(1);
+                    songs.set(0, flashbackPlaylist.getNextSong());
+                    songIndex = 0;
+                    playSong();
+                } else {
+                    mediaPlayer.release();
+                }
+                Toast.makeText(context, "In onCompletion", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /* Pause the song */
     public void pause() {
         if (mediaPlayer.isPlaying()) {
+            paused = true;
             mediaPlayer.pause();
         }
     }
 
-    public void setFlashbackMode(boolean on) {
-        fbMode = on;
+    /* Set the mode of the MusicPlayerService according to the following constants.
+           private final int SONG_MODE = 0;
+           private final int ALBUM_MODE = 1;
+           private final int FLASHBACK_MODE = 2;
+     */
+    public void setMode(int mode) {
+        this.mode = mode;
     }
 
     /* Restart song */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void reset() {
-        if(mediaPlayer != null && songIndex != songs.size() && !songs.isEmpty()) {
+        if(mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.reset();
-            loadMedia(songs.get(songIndex).getSong());
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    private void loadMedia(int resourceId) {
-        if(mediaPlayer == null && !songs.isEmpty() && songIndex != songs.size()) {
-        }
-
-        // TODO: Feel like this should go in onCreate but this is what the lab writeup does.
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                if(!fbMode) {
-                    mediaPlayer.reset();
-                    if (++songIndex != songs.size() && !songs.isEmpty()) {
-                        loadMedia(songs.get(songIndex).getSong());
-                    }
-                } else {
-                    loadMedia(flashbackPlaylist.getNextSong().getSong());
-                }
-            }
-        });
-
-        AssetFileDescriptor assetFileDescriptor = this.getResources().openRawResourceFd(resourceId);
-        try {
-            mediaPlayer.setDataSource(assetFileDescriptor);
-            mediaPlayer.prepareAsync();
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            Log.e("MUSIC SERVICE", "Error setting data source", e);
+            playSong();
         }
     }
 

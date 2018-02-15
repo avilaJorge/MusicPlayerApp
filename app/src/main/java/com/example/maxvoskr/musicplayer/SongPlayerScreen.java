@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -115,6 +117,7 @@ public class SongPlayerScreen extends AppCompatActivity {
         }
 
         play.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
                 if(playing)
@@ -122,10 +125,14 @@ public class SongPlayerScreen extends AppCompatActivity {
                 else
                     play.setImageResource(R.drawable.pause);
 
-                playing = !playing;
+                if(playing) {
+                    musicPlayerService.setList(MusicArrayList.musicList);
+                    musicPlayerService.playSong();
+                } else {
+                    musicPlayerService.pause();
+                }
 
-                musicPlayerService.setList(MusicArrayList.musicList);
-                musicPlayerService.playSong();
+                playing = !playing;
                 Toast.makeText(SongPlayerScreen.this, "Should play!", Toast.LENGTH_SHORT).show();
             }
         });

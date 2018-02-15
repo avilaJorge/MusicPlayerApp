@@ -72,6 +72,14 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -87,13 +95,6 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
         startService(musicPlayerIntent);
         Toast.makeText(MainActivity.this, "Service now connected", Toast.LENGTH_SHORT).show();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
