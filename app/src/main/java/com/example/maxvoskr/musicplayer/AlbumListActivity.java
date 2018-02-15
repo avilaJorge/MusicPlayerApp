@@ -22,7 +22,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+/**
+ * Created by maxvoskr on 2/14/18.
+ */
+
+public class AlbumListActivity extends AppCompatActivity {
 
     public static Context contextOfApplication;
 
@@ -41,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText keyText;
     private EditText storeText;
     private TextView message;
-    private SongHistorySharedPreferenceManager songHistorySharedPreferenceManager;
+    private DataAccess dataAccess;
     private Song exampleSong;
     private View songMode;
     private View albumMode;
@@ -50,13 +56,12 @@ public class MainActivity extends AppCompatActivity {
     private Intent songList;
 
     //private ArrayList<Song> musicList;
-    private MusicAdapter adapter;
-    private ListView trackList;
+    private AlbumAdapter adapter;
+    private ListView albumListView;
 
     private ArrayList<Album> albumList;
 
     private MusicArrayList musicList;
-
 
     private ServiceConnection locConnection = new ServiceConnection() {
         @Override
@@ -122,20 +127,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.album_list);
+
+        System.out.println("hey Max");
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
-        final Intent anotherActivityIntent  = new Intent(this, SongPlayerScreen.class);
-        songList = new Intent(this, MainActivity.class);
-        songPlayer = new Intent(this, SongPlayerScreen.class);
+        /*final Intent anotherActivityIntent  = new Intent(this, SongPlayerScreen.class);
+        songList = new Intent(this, com.example.maxvoskr.musicplayer.MainActivity.class);
+        songPlayer = new Intent(this, SongPlayerScreen.class);*/
 
-        trackList = (ListView) findViewById(R.id.trackList);
+        albumListView = (ListView) findViewById(R.id.albumListDisplay);
         songMode = findViewById(R.id.navLeft);
         albumMode = findViewById(R.id.navMid);
         flashbackMode = findViewById(R.id.navRight);
 
+        albumList = new ArrayList<>();
         musicList = new MusicArrayList();
 
         musicList.musicList.add(new Song("Windows Are the Eyes", "Trevor", "Forum", R.raw.windowsaretheeyestothehouse));
@@ -145,11 +153,12 @@ public class MainActivity extends AppCompatActivity {
         musicList.musicList.add(new Song("Dreamatorium", "Tim","Forum", R.raw.dreamatorium));
         musicList.musicList.add(new Song("I just Want to Tell You", "Jorge","Forum", R.raw.ijustwanttotellyoubothgoodluck));
 
-        adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList.musicList);
-        trackList.setAdapter(adapter);
+        albumList.add(new Album("Max Album Name", musicList, "Max (artist)"));
 
+        adapter = new AlbumAdapter(this, R.layout.custom_album_cell, albumList);
+        albumListView.setAdapter(adapter);
 
-        trackList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*albumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -160,12 +169,12 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-        });
+        });*/
 
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                songPlayer.putExtra("playerMode", SONG_MODE);
+                songPlayer.putExtra("albumMode", SONG_MODE);
                 startActivity(songPlayer);
             }
         });
@@ -180,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
         flashbackMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                songPlayer.putExtra("playerMode", FLASHBACK_MODE);
+                songPlayer.putExtra("albumMode", FLASHBACK_MODE);
                 startActivity(songPlayer);
             }
         });
@@ -216,3 +225,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
+

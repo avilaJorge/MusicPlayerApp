@@ -31,6 +31,7 @@ public class SongPlayerScreen extends AppCompatActivity {
     private View background;
     private Intent songPlayer;
     private Intent songList;
+    private Intent albumList;
 
     private TextView songTitleTextView;
     private TextView albumTitleTextView;
@@ -52,6 +53,7 @@ public class SongPlayerScreen extends AppCompatActivity {
 
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
+        albumList = new Intent(this, AlbumListActivity.class);
         playerMode = getIntent().getIntExtra("playerMode", SONG_MODE);
         if(playerMode == SONG_MODE)
             background.setBackgroundColor(Color.parseColor("#5a47025c"));
@@ -146,6 +148,7 @@ public class SongPlayerScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+
             }
         });
 
@@ -159,7 +162,7 @@ public class SongPlayerScreen extends AppCompatActivity {
         albumMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(albumList);
             }
         });
 

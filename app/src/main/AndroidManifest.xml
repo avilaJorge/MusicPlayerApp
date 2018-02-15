@@ -29,6 +29,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SongPlayerScreen" />
+        <activity android:name=".AlbumListActivity" />
 
         <service
             android:name=".LocationService"
