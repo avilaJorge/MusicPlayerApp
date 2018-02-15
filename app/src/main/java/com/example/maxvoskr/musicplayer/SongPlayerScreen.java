@@ -126,6 +126,7 @@ public class SongPlayerScreen extends AppCompatActivity {
 
                 musicPlayerService.setList(MusicArrayList.musicList);
                 musicPlayerService.playSong();
+                Toast.makeText(SongPlayerScreen.this, "Should play!", Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -136,9 +136,11 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void playSong() {
         if(songs != null && mediaPlayer != null && songIndex != songs.size() && !songs.isEmpty()) {
-            mediaPlayer.reset();
             loadMedia(songs.get(songIndex++).getSong());
             mediaPlayer.start();
+        } else {
+            mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
+            initMusicPlayer();
         }
     }
 
@@ -165,8 +167,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void loadMedia(int resourceId) {
         if(mediaPlayer == null && !songs.isEmpty() && songIndex != songs.size()) {
-            mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
-            initMusicPlayer();
         }
 
         // TODO: Feel like this should go in onCreate but this is what the lab writeup does.
