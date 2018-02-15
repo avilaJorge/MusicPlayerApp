@@ -34,6 +34,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     int songIndex;
     private boolean paused = false;
+    private boolean playerReleased = true;
     private MediaPlayer mediaPlayer;
     private ArrayList<Song> songs;
     private FlashbackPlaylist flashbackPlaylist;
@@ -83,6 +84,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     public void onDestroy() {
         super.onDestroy();
         mediaPlayer.release();
+        playerReleased = true;
     }
 
     private void initMusicPlayer() {
@@ -98,19 +100,21 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     /* Play current song */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void playSong() {
-        if(paused) {
+        if(!playerReleased && paused) {
             paused = false;
             mediaPlayer.start();
             return;
         }
-        if(mediaPlayer != null) {
+        if(mediaPlayer != null && !playerReleased) {
             if(mediaPlayer.isPlaying()) {
                 mediaPlayer.stop();
             }
             mediaPlayer.release();
+            playerReleased = true;
         }
 
         mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
+        playerReleased = false;
         mediaPlayer.setOnPreparedListener(this);
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -128,6 +132,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                     playSong();
                 } else {
                     mediaPlayer.release();
+                    playerReleased = true;
                 }
                 activity.updateUI();
                 Toast.makeText(context, "In onCompletion", Toast.LENGTH_SHORT).show();
@@ -137,9 +142,11 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     /* Pause the song */
     public void pause() {
-        if (mediaPlayer.isPlaying()) {
-            paused = true;
-            mediaPlayer.pause();
+        if(!playerReleased && mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                paused = true;
+                mediaPlayer.pause();
+            }
         }
     }
 
@@ -155,7 +162,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     /* Restart song */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void reset() {
-        if(mediaPlayer != null && mediaPlayer.isPlaying()) {
+        if(!playerReleased && mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.reset();
             playSong();
         }
