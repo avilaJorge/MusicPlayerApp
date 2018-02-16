@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         Date currentDate = new Date();
         long time = currentDate.getTime();
 
-        musicList = new MusicArrayList();
+/*        musicList = new MusicArrayList();
 
         musicList.musicList.add(new Song("Giesel", time, 3, 1, 0, "Windows Are the Eyes", "Trevor", "Forum", R.raw.windowsaretheeyestothehouse));
         musicList.musicList.add(new Song("Dead Dove, Do Not Eat", "Max","Forum", R.raw.deaddovedonoteat));
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         musicList.musicList.add(new Song("Sky Full of Ghosts", "Matt", "Forum",  R.raw.skyfullofghosts));
         musicList.musicList.add(new Song("Dreamatorium", "Tim","Forum", R.raw.dreamatorium));
         musicList.musicList.add(new Song("I just Want to Tell You", "Jorge","Forum", R.raw.ijustwanttotellyoubothgoodluck));
-
+*/
         adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList.musicList);
         trackList.setAdapter(adapter);
 
