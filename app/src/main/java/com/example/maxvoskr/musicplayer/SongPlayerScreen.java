@@ -1,12 +1,19 @@
 package com.example.maxvoskr.musicplayer;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Date;
 
@@ -40,6 +47,23 @@ public class SongPlayerScreen extends AppCompatActivity {
     private TextView LP_dayOfWeek;
     private TextView LP_date;
     private TextView LP_location;
+
+    public MusicPlayerService musicPlayerService;
+    boolean musicPlayerBound = false;
+
+    private ServiceConnection musicPlayerConnection= new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            MusicPlayerService.MusicPlayerBinder musicPlayerBinder =
+                    (MusicPlayerService.MusicPlayerBinder) iBinder;
+            musicPlayerService = musicPlayerBinder.getMusicPlayerService();
+//            musicPlayerService.registerClient(SongPlayerScreen.this);
+            musicPlayerBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) { musicPlayerBound = false; }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +114,10 @@ public class SongPlayerScreen extends AppCompatActivity {
             background.setBackgroundColor(Color.parseColor("#6eff6701"));
 
 
+        Intent musicPlayerIntent = new Intent(this, MusicPlayerService.class);
+        bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
+        startService(musicPlayerIntent);
+        Toast.makeText(SongPlayerScreen.this, "Service now connected", Toast.LENGTH_SHORT).show();
 
         if(currentSong != null) {
             updateText();
@@ -123,6 +151,7 @@ public class SongPlayerScreen extends AppCompatActivity {
 
 
         play.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
                 if(playing)
@@ -130,7 +159,15 @@ public class SongPlayerScreen extends AppCompatActivity {
                 else
                     play.setImageResource(R.drawable.pause);
 
+                if(playing) {
+                    musicPlayerService.setList(MusicArrayList.musicList);
+                    musicPlayerService.playSong();
+                } else {
+                    musicPlayerService.pause();
+                }
+
                 playing = !playing;
+                Toast.makeText(SongPlayerScreen.this, "Should play!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -210,7 +247,6 @@ public class SongPlayerScreen extends AppCompatActivity {
         });
     }
 
-
     private void updateText() {
         String[] day = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
         String[] month = {"January", "February", "March", "April", "May", "June", "July", "August",
@@ -245,5 +281,15 @@ public class SongPlayerScreen extends AppCompatActivity {
             LP_location.setText("");
         }
 
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(musicPlayerBound) {
+            unbindService(musicPlayerConnection);
+            musicPlayerBound = false;
+        }
     }
 }

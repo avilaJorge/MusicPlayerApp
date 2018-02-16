@@ -9,7 +9,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by evor on 2/4/2018.
  */
 
-public class DataAccess {
+public class SongHistorySharedPreferenceManager {
 
     static final String LOCATION = "LOC";
     static final String TIME_MS = "T_MS";
@@ -19,7 +19,7 @@ public class DataAccess {
 
     final SharedPreferences SongData;
     final SharedPreferences.Editor SongDataEditor;
-    DataAccess(Context contextOfApplication)
+    SongHistorySharedPreferenceManager(Context contextOfApplication)
     {
         SongData = contextOfApplication.getSharedPreferences("SongData", MODE_PRIVATE);
         SongDataEditor = SongData.edit();
