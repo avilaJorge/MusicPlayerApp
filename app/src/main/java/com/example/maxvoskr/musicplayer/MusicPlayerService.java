@@ -1,8 +1,13 @@
 package com.example.maxvoskr.musicplayer;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Binder;
@@ -11,19 +16,32 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MusicPlayerService extends Service implements MediaPlayer.OnPreparedListener {
 
+    private final int SONG_MODE = 0;
+    private final int ALBUM_MODE = 1;
+    private final int FLASHBACK_MODE = 2;
+    private int mode = SONG_MODE;
+
     private Context context;
+    Callbacks activity;
+
+    int songIndex;
+    private boolean paused = false;
+    private boolean playerReleased = true;
     private MediaPlayer mediaPlayer;
     private ArrayList<Song> songs;
-    private boolean fbMode;
-    int songIndex;
+    private FlashbackPlaylist flashbackPlaylist;
+    public static CurrentLocationTimeData currentLocationTimeData;
 
     public MusicPlayerService() {}
+
 
     private final IBinder binder = new MusicPlayerBinder();
 
@@ -38,13 +56,9 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     public void onCreate() {
         super.onCreate();
         songIndex = 0;
-        context = getBaseContext();
-        //songs = MusicArrayList.musicList;
-
-        //if(!songs.isEmpty()) {
-        //    mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
-        //    initMusicPlayer();
-        //}
+        context = getApplicationContext();
+        currentLocationTimeData = new CurrentLocationTimeData(context);
+        flashbackPlaylist = new FlashbackPlaylist(MusicArrayList.musicList);
     }
 
     @Override
@@ -55,7 +69,9 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     @Override
     public void onPrepared(MediaPlayer mp) {
+        Toast.makeText(context, "In onPrepared", Toast.LENGTH_SHORT).show();
         mp.start();
+        currentLocationTimeData.updateTempData();
     }
 
     @Override
@@ -68,14 +84,14 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     public void onDestroy() {
         super.onDestroy();
         mediaPlayer.release();
+        playerReleased = true;
     }
 
     private void initMusicPlayer() {
         mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
-        mediaPlayer.setOnPreparedListener(this);
     }
 
-    /* Set playlist for MusicPlayer to play throught */
+    /* Set playlist for MusicPlayer to play through */
     public void setList(ArrayList<Song> playlist) {
         songs = playlist;
         songIndex = 0;
@@ -84,58 +100,80 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     /* Play current song */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void playSong() {
-        if(songs != null && mediaPlayer != null && songIndex != songs.size() && !songs.isEmpty()) {
-            mediaPlayer.reset();
-            loadMedia(songs.get(songIndex).getSong());
+        if(!playerReleased && paused) {
+            paused = false;
             mediaPlayer.start();
+            return;
         }
+        if(mediaPlayer != null && !playerReleased) {
+            if(mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer.release();
+            playerReleased = true;
+        }
+
+        mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
+        playerReleased = false;
+        mediaPlayer.setOnPreparedListener(this);
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+
+                currentLocationTimeData.updateSongUsingTemp(songs.get(songIndex));
+                if(mode == ALBUM_MODE) {
+                    if (++songIndex >= songs.size() && !songs.isEmpty()) {
+                        playSong();
+                    }
+                } else if (mode == FLASHBACK_MODE) {
+                    songs = new ArrayList<Song>(1);
+                    songs.set(0, flashbackPlaylist.getNextSong());
+                    songIndex = 0;
+                    playSong();
+                } else {
+                    mediaPlayer.release();
+                    playerReleased = true;
+                }
+                activity.updateUI();
+                Toast.makeText(context, "In onCompletion", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /* Pause the song */
     public void pause() {
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
+        if(!playerReleased && mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                paused = true;
+                mediaPlayer.pause();
+            }
         }
+    }
+
+    /* Set the mode of the MusicPlayerService according to the following constants.
+           private final int SONG_MODE = 0;
+           private final int ALBUM_MODE = 1;
+           private final int FLASHBACK_MODE = 2;
+     */
+    public void setMode(int mode) {
+        this.mode = mode;
     }
 
     /* Restart song */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void reset() {
-        if(mediaPlayer != null && songIndex != songs.size() && !songs.isEmpty()) {
+        if(!playerReleased && mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.reset();
-            loadMedia(songs.get(songIndex).getSong());
+            playSong();
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    private void loadMedia(int resourceId) {
-        if(mediaPlayer == null && !songs.isEmpty() && songIndex != songs.size()) {
-            mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
-            initMusicPlayer();
-        }
+    public void registerClient(Activity activity) {
+       this.activity = (Callbacks)activity;
+    }
 
-        // TODO: Feel like this should go in onCreate but this is what the lab writeup does.
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                if(!fbMode) {
-                    mediaPlayer.reset();
-                    if (++songIndex != songs.size() && !songs.isEmpty()) {
-                        loadMedia(songs.get(songIndex).getSong());
-                    }
-                } else {
-                    //TODO: Implement songComplete method in class that is handling flashback mode song selection
-                }
-            }
-        });
-
-        AssetFileDescriptor assetFileDescriptor = this.getResources().openRawResourceFd(resourceId);
-        try {
-            mediaPlayer.setDataSource(assetFileDescriptor);
-            mediaPlayer.prepareAsync();
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            Log.e("MUSIC SERVICE", "Error setting data source", e);
-        }
+    // callbacks interface for communicating with activities
+    public interface Callbacks {
+        public void updateUI();
     }
 }
