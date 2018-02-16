@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
                 if(musicList.musicList.get(i).getLikeDislike() != -1) {
                     anotherActivityIntent.putExtra("Position", i);
                     anotherActivityIntent.putExtra("changeSong", true);
+                    songPlayer.putExtra("playerMode", ALBUM_MODE);
                     startActivity(anotherActivityIntent);
                 }
 
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             @Override
             public void onClick(View view) {
                 songPlayer.putExtra("changeSong", false);
-                songPlayer.putExtra("playerMode", SONG_MODE);
+                songPlayer.putExtra("playerMode", ALBUM_MODE); // should be song mode
                 startActivity(songPlayer);
             }
         });
@@ -174,9 +175,9 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
 //        super.onResume();
 //    }
 
-    @Override
-    public void updateUI() {
-        Toast.makeText(MainActivity.this, "This is when the UI will be notified that a new song is being played", Toast.LENGTH_SHORT).show();
+    //@Override
+    public void updateUI(Song song) {
+        Toast.makeText(MainActivity.this, "This is not a good sign....", Toast.LENGTH_SHORT).show();
     }
 
     @Override

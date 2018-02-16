@@ -1,22 +1,15 @@
 package com.example.maxvoskr.musicplayer;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
-import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -99,6 +92,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     /* Play current song */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void playSong() {
+        Toast.makeText(context, "In playSong", Toast.LENGTH_SHORT).show();
         if(!playerReleased && paused) {
             paused = false;
             mediaPlayer.start();
@@ -121,19 +115,21 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
                 currentLocationTimeData.updateSongUsingTemp(songs.get(songIndex));
                 if(mode == ALBUM_MODE) {
-                    if (++songIndex >= songs.size() && !songs.isEmpty()) {
+                    if (++songIndex <= songs.size() && !songs.isEmpty()) {
+                        activity.updateUI(getCurrentSong());
                         playSong();
                     }
                 } else if (mode == FLASHBACK_MODE) {
                     songs = new ArrayList<Song>(1);
                     songs.set(0, flashbackPlaylist.getNextSong());
                     songIndex = 0;
+                    activity.updateUI(getCurrentSong());
                     playSong();
                 } else {
                     mediaPlayer.release();
                     playerReleased = true;
                 }
-                activity.updateUI();
+
                 Toast.makeText(context, "In onCompletion", Toast.LENGTH_SHORT).show();
             }
         });
@@ -149,6 +145,48 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void skip() {
+        if(!playerReleased && mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.reset();
+                if(mode == ALBUM_MODE) {
+                    if (++songIndex <= songs.size() && !songs.isEmpty() &&
+                            songs.get(songIndex).getLikeDislike() != -1) {
+                        activity.updateUI(getCurrentSong());
+                        playSong();
+                    }
+                    else
+                    {
+                        stop();
+                    }
+                }
+
+            }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void previous() {
+        if(!playerReleased && mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.reset();
+                if(mode == ALBUM_MODE) {
+                    if (--songIndex >= 0 && !songs.isEmpty() &&
+                                songs.get(songIndex).getLikeDislike() != -1) {
+                        activity.updateUI(getCurrentSong());
+                        playSong();
+
+                    }
+                    else
+                    {
+                        stop();
+                    }
+                }
+            }
+        }
+    }
+
     /* Set the mode of the MusicPlayerService according to the following constants.
            private final int SONG_MODE = 0;
            private final int ALBUM_MODE = 1;
@@ -156,6 +194,14 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
      */
     public void setMode(int mode) {
         this.mode = mode;
+    }
+
+    public Song getCurrentSong()
+    {
+        if(songs != null && !songs.isEmpty())
+            return songs.get(songIndex);
+        else
+            return null;
     }
 
     /* Restart song */
@@ -167,6 +213,13 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void stop() {
+        if(!playerReleased && mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.reset();
+        }
+    }
+
 
     public void registerClient(Activity activity) {
        this.activity = (Callbacks)activity;
@@ -174,6 +227,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     // callbacks interface for communicating with activities
     public interface Callbacks {
-        public void updateUI();
+        public void updateUI(Song nextSong);
     }
 }

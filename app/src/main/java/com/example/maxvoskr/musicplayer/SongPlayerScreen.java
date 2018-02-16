@@ -1,5 +1,6 @@
 package com.example.maxvoskr.musicplayer;
 
+import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -15,9 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Date;
 
-public class SongPlayerScreen extends AppCompatActivity {
+@TargetApi(24)
+public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerService.Callbacks {
 
     private final int SONG_MODE = 0;
     private final int ALBUM_MODE = 1;
@@ -57,8 +60,30 @@ public class SongPlayerScreen extends AppCompatActivity {
             MusicPlayerService.MusicPlayerBinder musicPlayerBinder =
                     (MusicPlayerService.MusicPlayerBinder) iBinder;
             musicPlayerService = musicPlayerBinder.getMusicPlayerService();
-//            musicPlayerService.registerClient(SongPlayerScreen.this);
+            musicPlayerService.registerClient(SongPlayerScreen.this);
             musicPlayerBound = true;
+
+            musicPlayerService.setMode(playerMode);
+           // musicPlayerService.setMode(ALBUM_MODE); // to test changing songs
+
+            if(changeSong) {
+                currentSong = MusicArrayList.musicList.get(getIntent().getExtras().getInt("Position"));
+
+                //if(playerMode == SONG_MODE)
+                //{
+                    ArrayList<Song> songs = new ArrayList<Song>();
+                    songs.add(currentSong);
+                    songs.add(MusicArrayList.musicList.get(getIntent().getExtras().getInt("Position") + 1));
+                    songs.add(MusicArrayList.musicList.get(getIntent().getExtras().getInt("Position") + 2));
+                    musicPlayerService.setList(songs);
+                    musicPlayerService.playSong();
+                //}
+            }
+            else {
+                currentSong = musicPlayerService.getCurrentSong(); // get currently played song from media player service
+            }
+
+            updateUI(currentSong);
         }
 
         @Override
@@ -89,6 +114,14 @@ public class SongPlayerScreen extends AppCompatActivity {
         LP_date = findViewById(R.id.date);
         LP_location = findViewById(R.id.location);
 
+
+
+
+        Intent musicPlayerIntent = new Intent(this, MusicPlayerService.class);
+        bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
+        startService(musicPlayerIntent);
+        Toast.makeText(SongPlayerScreen.this, "Service now connected", Toast.LENGTH_SHORT).show();
+
         // get passed in intent values
         Intent intent = getIntent();
         playerMode = intent.getIntExtra("playerMode", SONG_MODE);
@@ -98,52 +131,17 @@ public class SongPlayerScreen extends AppCompatActivity {
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
 
-        if(changeSong) {
-            currentSong = MusicArrayList.musicList.get(getIntent().getExtras().getInt("Position"));
-        }
-        else {
-            currentSong = null; // get currently played song from media player service
-        }
+
 
         // set background
         if(playerMode == SONG_MODE)
             background.setBackgroundColor(Color.parseColor("#5a47025c"));
         else if(playerMode == ALBUM_MODE)
-            background.setBackgroundColor(Color.parseColor("#5a0208c6"));
+            background.setBackgroundColor(Color.parseColor("#6e0208c6"));
         else
             background.setBackgroundColor(Color.parseColor("#6eff6701"));
 
 
-        Intent musicPlayerIntent = new Intent(this, MusicPlayerService.class);
-        bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
-        startService(musicPlayerIntent);
-        Toast.makeText(SongPlayerScreen.this, "Service now connected", Toast.LENGTH_SHORT).show();
-
-        if(currentSong != null) {
-            updateText();
-
-            if (currentSong.getLikeDislike() == -1) {
-                like.setImageResource(R.drawable.like_black);
-                dislike.setImageResource(R.drawable.dislike_red);
-            } else if (currentSong.getLikeDislike() == 1) {
-                like.setImageResource(R.drawable.like_green);
-                dislike.setImageResource(R.drawable.dislike_black);
-            } else {
-                like.setImageResource(R.drawable.like_black);
-                dislike.setImageResource(R.drawable.dislike_black);
-            }
-        }
-        else {
-            songTitleTextView.setText("No Song Playing");
-            albumTitleTextView.setText("");
-            LP_time.setText("");
-            LP_dayOfWeek.setText("");
-            LP_date.setText("");
-            LP_location.setText("");
-
-            like.setImageResource(R.drawable.like_black);
-            dislike.setImageResource(R.drawable.dislike_black);
-        }
 
 
 
@@ -159,8 +157,7 @@ public class SongPlayerScreen extends AppCompatActivity {
                 else
                     play.setImageResource(R.drawable.pause);
 
-                if(playing) {
-                    musicPlayerService.setList(MusicArrayList.musicList);
+                if(!playing) {
                     musicPlayerService.playSong();
                 } else {
                     musicPlayerService.pause();
@@ -197,6 +194,7 @@ public class SongPlayerScreen extends AppCompatActivity {
                     like.setImageResource(R.drawable.like_black);
                     dislike.setImageResource(R.drawable.dislike_red);
                     currentSong.setLikeDislike(-1);
+                    musicPlayerService.skip();
                 }
                 else
                 {
@@ -210,14 +208,14 @@ public class SongPlayerScreen extends AppCompatActivity {
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                musicPlayerService.previous();
             }
         });
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                musicPlayerService.skip();
             }
         });
 
@@ -290,6 +288,40 @@ public class SongPlayerScreen extends AppCompatActivity {
         if(musicPlayerBound) {
             unbindService(musicPlayerConnection);
             musicPlayerBound = false;
+        }
+    }
+
+    @Override
+    public void updateUI(Song nextSong)
+    {
+        Toast.makeText(this, "If the song stuff doesn't update you have my permission to let out an internal scream and then go to bed", Toast.LENGTH_SHORT).show();
+
+        currentSong = nextSong;
+
+        if(currentSong != null) {
+            updateText();
+
+            if (currentSong.getLikeDislike() == -1) {
+                like.setImageResource(R.drawable.like_black);
+                dislike.setImageResource(R.drawable.dislike_red);
+            } else if (currentSong.getLikeDislike() == 1) {
+                like.setImageResource(R.drawable.like_green);
+                dislike.setImageResource(R.drawable.dislike_black);
+            } else {
+                like.setImageResource(R.drawable.like_black);
+                dislike.setImageResource(R.drawable.dislike_black);
+            }
+        }
+        else {
+            songTitleTextView.setText("No Song Playing");
+            albumTitleTextView.setText("");
+            LP_time.setText("");
+            LP_dayOfWeek.setText("");
+            LP_date.setText("");
+            LP_location.setText("");
+
+            like.setImageResource(R.drawable.like_black);
+            dislike.setImageResource(R.drawable.dislike_black);
         }
     }
 }
