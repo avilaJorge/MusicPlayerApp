@@ -92,44 +92,6 @@ public class SwitchModesTest {
     }*/
 
 
-
-
-
-
-    /*@Test
-    public void switchToFlashbackModeTest() {
-        ViewInteraction view = onView(
-                allOf(withId(R.id.navRight),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
-                                        1),
-                                4),
-                        isDisplayed()));
-        view.check(matches(isDisplayed()));
-
-        ViewInteraction view2 = onView(
-                allOf(withId(R.id.navRight),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.support.constraint.ConstraintLayout")),
-                                        0),
-                                2),
-                        isDisplayed()));
-        view2.perform(click());
-
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.lastPlayed), withText("Last Played:"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                5),
-                        isDisplayed()));
-        textView.check(matches(isDisplayed()));
-
-    }*/
-
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
 
