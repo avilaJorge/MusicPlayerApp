@@ -1,12 +1,19 @@
 package com.example.maxvoskr.musicplayer;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SongPlayerScreen extends AppCompatActivity {
 
@@ -31,9 +38,27 @@ public class SongPlayerScreen extends AppCompatActivity {
     private View background;
     private Intent songPlayer;
     private Intent songList;
+    private Intent albumList;
 
     private TextView songTitleTextView;
     private TextView albumTitleTextView;
+
+    public MusicPlayerService musicPlayerService;
+    boolean musicPlayerBound = false;
+
+    private ServiceConnection musicPlayerConnection= new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            MusicPlayerService.MusicPlayerBinder musicPlayerBinder =
+                    (MusicPlayerService.MusicPlayerBinder) iBinder;
+            musicPlayerService = musicPlayerBinder.getMusicPlayerService();
+//            musicPlayerService.registerClient(SongPlayerScreen.this);
+            musicPlayerBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) { musicPlayerBound = false; }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +77,7 @@ public class SongPlayerScreen extends AppCompatActivity {
 
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
+        albumList = new Intent(this, AlbumListActivity.class);
         playerMode = getIntent().getIntExtra("playerMode", SONG_MODE);
         if(playerMode == SONG_MODE)
             background.setBackgroundColor(Color.parseColor("#5a47025c"));
@@ -63,6 +89,12 @@ public class SongPlayerScreen extends AppCompatActivity {
 
         final Intent intent = getIntent();
         pos = intent.getExtras().getInt("Position");
+
+
+        Intent musicPlayerIntent = new Intent(this, MusicPlayerService.class);
+        bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
+        startService(musicPlayerIntent);
+        Toast.makeText(SongPlayerScreen.this, "Service now connected", Toast.LENGTH_SHORT).show();
 
         songTitleTextView = findViewById(R.id.songTitle);
         albumTitleTextView = findViewById(R.id.albumTitle);
@@ -87,6 +119,7 @@ public class SongPlayerScreen extends AppCompatActivity {
         }
 
         play.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
                 if(playing)
@@ -94,7 +127,15 @@ public class SongPlayerScreen extends AppCompatActivity {
                 else
                     play.setImageResource(R.drawable.pause);
 
+                if(playing) {
+                    musicPlayerService.setList(MusicArrayList.musicList);
+                    musicPlayerService.playSong();
+                } else {
+                    musicPlayerService.pause();
+                }
+
                 playing = !playing;
+                Toast.makeText(SongPlayerScreen.this, "Should play!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -146,6 +187,7 @@ public class SongPlayerScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+
             }
         });
 
@@ -159,7 +201,7 @@ public class SongPlayerScreen extends AppCompatActivity {
         albumMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(albumList);
             }
         });
 
@@ -175,8 +217,14 @@ public class SongPlayerScreen extends AppCompatActivity {
         });
     }
 
-
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(musicPlayerBound) {
+            unbindService(musicPlayerConnection);
+            musicPlayerBound = false;
+        }
+    }
 }
 
 

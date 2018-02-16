@@ -19,11 +19,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MusicPlayerService.Callbacks{
+import java.util.ArrayList;
+
+/**
+ * Created by maxvoskr on 2/14/18.
+ */
+
+public class AlbumListActivity extends AppCompatActivity {
 
     public static Context contextOfApplication;
 
@@ -31,14 +36,18 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
     private final int ALBUM_MODE = 1;
     private final int FLASHBACK_MODE = 2;
 
-    public MusicPlayerService musicPlayerService;
+    public static LocationService locationService;
+    public static DateService dateService;
+    public static MusicPlayerService musicPlayerService;
+    private boolean locBound = false;
+    private boolean dateBound = false;
     private boolean musicPlayerBound = false;
     private Button storeButton;
     private Button retrieveButton;
     private EditText keyText;
     private EditText storeText;
     private TextView message;
-    private SongHistorySharedPreferenceManager songHistorySharedPreferenceManager;
+    private DataAccess dataAccess;
     private Song exampleSong;
     private View songMode;
     private View albumMode;
@@ -47,12 +56,36 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
     private Intent songList;
 
     //private ArrayList<Song> musicList;
-    private MusicAdapter adapter;
-    private ListView trackList;
+    private AlbumAdapter adapter;
+    private ListView albumListView;
 
     private ArrayList<Album> albumList;
 
     private MusicArrayList musicList;
+
+    private ServiceConnection locConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder binder) {
+            LocationService.LocationBinder locationBinder = (LocationService.LocationBinder) binder;
+            locationService = locationBinder.getLocationService();
+            locBound = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            locBound = false;
+        }
+    };
+    private ServiceConnection dateConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            DateService.DateBinder dateBinder = (DateService.DateBinder) iBinder;
+            dateService = dateBinder.getDateService();
+            dateBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) { dateBound = false; }
+    };
 
     private ServiceConnection musicPlayerConnection= new ServiceConnection() {
         @Override
@@ -60,9 +93,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             MusicPlayerService.MusicPlayerBinder musicPlayerBinder =
                     (MusicPlayerService.MusicPlayerBinder) iBinder;
             musicPlayerService = musicPlayerBinder.getMusicPlayerService();
-            musicPlayerService.registerClient(MainActivity.this);
             musicPlayerBound = true;
-            Toast.makeText(MainActivity.this, "Service almost connected", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -72,14 +103,6 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
     @Override
     protected void onStart() {
         super.onStart();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -90,24 +113,37 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             return;
         } else {
             Log.d("test2", "out");
+            Intent locIntent = new Intent(this, LocationService.class);
+            bindService(locIntent, locConnection, Context.BIND_AUTO_CREATE);
         }
+        Intent dateIntent = new Intent(this, DateService.class);
+        bindService(dateIntent, dateConnection, Context.BIND_AUTO_CREATE);
         Intent musicPlayerIntent = new Intent(this, MusicPlayerService.class);
         bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
         startService(musicPlayerIntent);
-        Toast.makeText(MainActivity.this, "Service now connected", Toast.LENGTH_SHORT).show();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.album_list);
+
+        System.out.println("hey Max");
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
-        final Intent anotherActivityIntent  = new Intent(this, SongPlayerScreen.class);
-        songList = new Intent(this, MainActivity.class);
-        songPlayer = new Intent(this, SongPlayerScreen.class);
+        /*final Intent anotherActivityIntent  = new Intent(this, SongPlayerScreen.class);
+        songList = new Intent(this, com.example.maxvoskr.musicplayer.MainActivity.class);
+        songPlayer = new Intent(this, SongPlayerScreen.class);*/
 
-        trackList = (ListView) findViewById(R.id.trackList);
+        albumListView = (ListView) findViewById(R.id.albumListDisplay);
         songMode = findViewById(R.id.navLeft);
         albumMode = findViewById(R.id.navMid);
         flashbackMode = findViewById(R.id.navRight);
 
+        albumList = new ArrayList<>();
         musicList = new MusicArrayList();
 
         musicList.musicList.add(new Song("Windows Are the Eyes", "Trevor", "Forum", R.raw.windowsaretheeyestothehouse));
@@ -117,11 +153,12 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         musicList.musicList.add(new Song("Dreamatorium", "Tim","Forum", R.raw.dreamatorium));
         musicList.musicList.add(new Song("I just Want to Tell You", "Jorge","Forum", R.raw.ijustwanttotellyoubothgoodluck));
 
-        adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList.musicList);
-        trackList.setAdapter(adapter);
+        albumList.add(new Album("Max Album Name", musicList, "Max (artist)"));
 
+        adapter = new AlbumAdapter(this, R.layout.custom_album_cell, albumList);
+        albumListView.setAdapter(adapter);
 
-        trackList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*albumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -132,12 +169,12 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
                 }
 
             }
-        });
+        });*/
 
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                songPlayer.putExtra("playerMode", SONG_MODE);
+                songPlayer.putExtra("albumMode", SONG_MODE);
                 startActivity(songPlayer);
             }
         });
@@ -152,10 +189,12 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         flashbackMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                songPlayer.putExtra("playerMode", FLASHBACK_MODE);
+                songPlayer.putExtra("albumMode", FLASHBACK_MODE);
                 startActivity(songPlayer);
             }
         });
+
+
     }
 
 // TODO: Will implement these when we have multiple activities binding to the same service.
@@ -170,16 +209,20 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
 //    }
 
     @Override
-    public void updateUI() {
-        Toast.makeText(MainActivity.this, "This is when the UI will be notified that a new song is being played", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
+        if(locBound) {
+            unbindService(locConnection);
+            locBound = false;
+        }
+        if(dateBound) {
+            unbindService(dateConnection);
+            dateBound = false;
+        }
         if(musicPlayerBound) {
             unbindService(musicPlayerConnection);
             musicPlayerBound = false;
         }
     }
 }
+
