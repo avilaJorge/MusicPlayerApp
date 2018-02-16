@@ -2,6 +2,8 @@ package com.example.maxvoskr.musicplayer;
 
 import android.test.suitebuilder.annotation.SmallTest;
 
+import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +28,6 @@ public class FlashbackPlaylistTest {
     private Song song3;
     private Song song4;
     private Song song5;
-    private Song song6;
     private ArrayList<Song> list;
 
     //create a CurrentLocationTimeData to set weights of all song objects and verify correctness
@@ -49,16 +50,13 @@ public class FlashbackPlaylistTest {
         song5 = new Song("Place 5", 200, 0, 2,0,"Song Title 5", "Album Title 4", "Artist 4", 0);
 
 
-        song6 = new Song("Place 5", 300, 0, 2,-1,"Song Title 5", "Album Title 4", "Artist 4", 0);
 
         list = new ArrayList<Song>();
-
         list.add(song1);
         list.add(song2);
         list.add(song3);
         list.add(song4);
         list.add(song5);
-        list.add(song6);
     }
 
     @Test
@@ -68,9 +66,8 @@ public class FlashbackPlaylistTest {
         song3.setWeight(1);
         song4.setWeight(4);
         song5.setWeight(6);
-        song6.setWeight(10);
         FlashbackPlaylist flashback = new FlashbackPlaylist(list);
-        assertEquals(song5, flashback.getNextSong());
+        Assert.assertEquals(song5, flashback.getNextSong());
     }
     @Test
     public void TestGetNextSongBreakTieByTime(){
@@ -79,20 +76,8 @@ public class FlashbackPlaylistTest {
         song3.setWeight(1);
         song4.setWeight(6);
         song5.setWeight(6);
-        song6.setWeight(10);
         FlashbackPlaylist flashback = new FlashbackPlaylist(list);
-        assertEquals(song4, flashback.getNextSong());
-    }
-    @Test
-    public void TestGetNextSongBreakTieByLikeDislike(){
-        song1.setWeight(2);
-        song2.setWeight(6);
-        song3.setWeight(1);
-        song4.setWeight(4);
-        song5.setWeight(6);
-        song6.setWeight(10);
-        FlashbackPlaylist flashback = new FlashbackPlaylist(list);
-        assertEquals(song2, flashback.getNextSong());
+        Assert.assertEquals(song4, flashback.getNextSong());
     }
     @Test
     public void TestGetNextSongNoNext(){
@@ -101,9 +86,36 @@ public class FlashbackPlaylistTest {
         song3.setWeight(0);
         song4.setWeight(0);
         song5.setWeight(0);
-        song6.setWeight(10);
         FlashbackPlaylist flashback = new FlashbackPlaylist(list);
-        assertEquals(null, flashback.getNextSong());
+        Assert.assertEquals(null, flashback.getNextSong());
+    }
+
+    @Test
+    public void TestGetNextSongRepeatList(){
+        song1.setWeight(5);
+        song1.setPlayed();
+        song2.setWeight(6);
+        song2.setPlayed();
+        song3.setWeight(2);
+        song3.setPlayed();
+        song4.setWeight(3);
+        song4.setPlayed();
+        song5.setWeight(1);
+        song5.setPlayed();
+        FlashbackPlaylist flashback = new FlashbackPlaylist(list);
+        Assert.assertEquals(song2, flashback.getNextSong());
+    }
+    @Test
+    public void TestGetNextSongSomePlayed(){
+        song1.setWeight(5);
+        song2.setPlayed();
+        song2.setWeight(6);
+        song2.setPlayed();
+        song3.setWeight(2);
+        song4.setWeight(3);
+        song5.setWeight(1);
+        FlashbackPlaylist flashback = new FlashbackPlaylist(list);
+        Assert.assertEquals(song4, flashback.getNextSong());
     }
 
 }

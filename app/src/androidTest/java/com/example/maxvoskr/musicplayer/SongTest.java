@@ -23,6 +23,10 @@ import static org.junit.Assert.assertEquals;
  * Instrumented test, which will execute on an Android device.
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ *
+ *
+ * TODO no need for instrumented just spoof location and time using setters in CurrentLocTimeData
+ * and check get weight method
  */
 @RunWith(AndroidJUnit4.class)
 public class SongTest {

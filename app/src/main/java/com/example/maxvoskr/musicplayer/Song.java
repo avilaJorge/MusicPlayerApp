@@ -88,6 +88,10 @@ public class Song {
 
     public boolean beenPlayed(){return played;}
 
+    public int getWeight() {
+        return weight;
+    }
+
     //reference to song
   
     public int getSong() {
@@ -150,15 +154,15 @@ public class Song {
         if (dataObj.getLocation() == location) weight++;
         if (dataObj.getDayOfWeek() == dayOfWeek) weight++;
         if (dataObj.getTimeOfDay() == timeOfDay) weight++;
-        if (likeDislike == 1) weight++;
+        //Like Dislike Breaks Ties Only
+        //if (likeDislike == 1) weight++;
     }
 
+    //ONLY TO BE USED BY TESTERS
     public void setWeight(int weight){
         this.weight = weight;
     }
 
-    public int getWeight() {
-        return weight;
-    }
+
 
 }

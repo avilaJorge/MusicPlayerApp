@@ -24,6 +24,18 @@ public class CurrentLocationTimeData {
     private int tempDayOfWeek;
     private int tempTimeOfDay;
 
+    private String location;
+    private int dayOfWeek;
+    private int timeOfDay;
+    private long timeMS;
+
+/*
+    //Tested Using GPX
+    public CurrentLocationTimeData(DateService dateService, LocationService locationService){
+        this.dateService = dateService;
+        this.locationService = locationService;
+*/
+
     private boolean locBound = false;
     private boolean dateBound = false;
 
@@ -60,20 +72,34 @@ public class CurrentLocationTimeData {
         context.bindService(dateIntent, dateConnection, Context.BIND_AUTO_CREATE);
     }
 
+    //Used for tests involving CurrentLocationTimeData
+    public CurrentLocationTimeData(String location, int dayOfWeek, int timeOfDay, long timeMS){
+        this.location = location;
+        this.dayOfWeek = dayOfWeek;
+        this.timeOfDay = timeOfDay;
+        this.timeMS = timeMS;
+    }
+
     public String getLocation(){
         return locationService.getLocationName();
     }
 
     public int getDayOfWeek(){
-        return dateService.getCurrentDayOfWeek();
+        if (dateService != null)
+        dayOfWeek = dateService.getCurrentDayOfWeek();
+        return dayOfWeek;
     }
 
     public int getTimeOfDay(){
-        return dateService.getCurrentTimeOfDay();
+        if (dateService != null)
+        timeOfDay = dateService.getCurrentTimeOfDay();
+        return timeOfDay;
     }
 
     public long getTimeMS() {
-        return dateService.getCurrentTime();
+        if (dateService != null)
+        timeMS = dateService.getCurrentTime();
+        return timeMS;
     }
 
     //Use at start of song
