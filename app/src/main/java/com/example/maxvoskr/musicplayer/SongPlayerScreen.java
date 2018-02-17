@@ -86,7 +86,11 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
 
                 }
                 else if (playerMode == FLASHBACK_MODE) {
+                    musicPlayerService.stop();
+                    musicPlayerService.setList(new ArrayList<Song>());
+                    musicPlayerService.playSong();
 
+                    currentSong = musicPlayerService.getCurrentSong();
                 }
             }
             else {
@@ -275,39 +279,45 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         String[] month = {"January", "February", "March", "April", "May", "June", "July", "August",
                 "September", "October", "November", "December"};
 
-        songTitleTextView.setText(currentSong.getName());
-        artistTextView.setText(currentSong.getArtist());
-        albumTitleTextView.setText(currentSong.getAlbum());
-        if(currentSong.getTimeMS() != 0) {
-            Date songDate = new Date(currentSong.getTimeMS());
+        if(currentSong != null) {
+            songTitleTextView.setText(currentSong.getName());
+            artistTextView.setText(currentSong.getArtist());
+            albumTitleTextView.setText(currentSong.getAlbum());
+            if (currentSong.getTimeMS() != 0) {
+                Date songDate = new Date(currentSong.getTimeMS());
 
-            String minutes = Integer.toString(songDate.getMinutes());
-            if(songDate.getMinutes() < 10)
-                minutes = "0" + songDate.getMinutes();
+                String minutes = Integer.toString(songDate.getMinutes());
+                if (songDate.getMinutes() < 10)
+                    minutes = "0" + songDate.getMinutes();
 
-            String AM_PM = "am";
-            int hour = songDate.getHours();
-            if(hour > 12) {
-                hour -= 12;
-                AM_PM = "pm";
+                String AM_PM = "am";
+                int hour = songDate.getHours();
+                if (hour > 12) {
+                    hour -= 12;
+                    AM_PM = "pm";
+                }
+
+                String location = currentSong.getLocation();
+
+                if (location.length() > 30)
+                    location = location.substring(0, 26) + "...";
+
+                LP_time.setText((hour + ":" + minutes + " " + AM_PM));
+                LP_dayOfWeek.setText(day[songDate.getDay()]);
+                LP_date.setText((month[songDate.getMonth()] + " " +
+                        songDate.getDate() + ", " + (1900 + songDate.getYear())));
+                LP_location.setText(location);
+            } else {
+                LP_time.setText(("Song has not been played before"));
+                LP_dayOfWeek.setText("");
+                LP_date.setText("");
+                LP_location.setText("");
             }
-
-            String location = currentSong.getLocation();
-
-            if(location.length() > 30)
-                location = location.substring(0, 26) + "...";
-
-            LP_time.setText((hour + ":" + minutes + " " + AM_PM));
-            LP_dayOfWeek.setText(day[songDate.getDay()]);
-            LP_date.setText((month[songDate.getMonth()] + " " +
-                    songDate.getDate() + ", " + (1900 + songDate.getYear())));
-            LP_location.setText(location);
         }
         else {
-            LP_time.setText(("Song has not been played before"));
-            LP_dayOfWeek.setText("");
-            LP_date.setText("");
-            LP_location.setText("");
+            songTitleTextView.setText("No Song");
+            artistTextView.setText("");
+            albumTitleTextView.setText("");
         }
 
     }

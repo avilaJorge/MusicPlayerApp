@@ -102,51 +102,68 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     /* Play current song */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void playSong() {
+
+
         Toast.makeText(context, "In playSong", Toast.LENGTH_SHORT).show();
-        if(!playerReleased && paused) {
+        if (!playerReleased && paused) {
             paused = false;
             mediaPlayer.start();
             return;
         }
-        if(mediaPlayer != null && !playerReleased) {
-            if(mediaPlayer.isPlaying()) {
+        if (mediaPlayer != null && !playerReleased) {
+            if (mediaPlayer.isPlaying()) {
                 mediaPlayer.stop();
             }
             mediaPlayer.release();
             playerReleased = true;
         }
 
-        mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
-        playerReleased = false;
-        mediaPlayer.setOnPreparedListener(this);
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-
-                currentLocationTimeData.updateSongUsingTemp(songs.get(songIndex));
-                if(mode == ALBUM_MODE) {
-                    if (++songIndex <= songs.size() && !songs.isEmpty()) {
-                        activity.updateUI(getCurrentSong());
-                        playSong();
-                    }
-                } else if (mode == FLASHBACK_MODE) {
-                    songs = new ArrayList<Song>(1);
-                    songs.set(0, flashbackPlaylist.getNextSong());
-                    songIndex = 0;
-                    activity.updateUI(getCurrentSong());
-                    playSong();
-                } else {
-                    mediaPlayer.release();
-                    playerReleased = true;
-                }
-
-                Toast.makeText(context, "In onCompletion", Toast.LENGTH_SHORT).show();
+        if (mode == FLASHBACK_MODE && songs.isEmpty()) {
+            flashbackPlaylist = new FlashbackPlaylist(MusicArrayList.musicList);
+            flashbackPlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
+            Song next = flashbackPlaylist.getNextSong();
+            if(next != null) {
+                songs.add(next);
             }
-        });
-        // TODO: Erase this before demo.
-        double time = mediaPlayer.getDuration() * 0.9;
-        mediaPlayer.seekTo((int)time);
-    }
+            songIndex = 0;
+        }
+
+       // if (songs != null && songs.size() < songIndex) {
+            mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
+            playerReleased = false;
+            mediaPlayer.setOnPreparedListener(this);
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+
+                    currentLocationTimeData.updateSongUsingTemp(songs.get(songIndex));
+                    if (mode == ALBUM_MODE) {
+                        if (++songIndex <= songs.size() && !songs.isEmpty()) {
+                            activity.updateUI(getCurrentSong());
+                            playSong();
+                        }
+                    } else if (mode == FLASHBACK_MODE) {
+                        flashbackPlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
+                        Song next = flashbackPlaylist.getNextSong();
+                        if(next != null) {
+                            songs.set(0, next);
+                            songIndex = 0;
+                            activity.updateUI(getCurrentSong());
+                            playSong();
+                        }
+                    } else {
+                        mediaPlayer.release();
+                        playerReleased = true;
+                    }
+
+                    Toast.makeText(context, "In onCompletion", Toast.LENGTH_SHORT).show();
+                }
+            });
+            // TODO: Erase this before demo.
+            double time = mediaPlayer.getDuration() * 0.9;
+            mediaPlayer.seekTo((int) time);
+        }
+   // }
 
     /* Pause the song */
     public void pause() {
