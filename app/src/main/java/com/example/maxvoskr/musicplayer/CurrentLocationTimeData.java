@@ -82,7 +82,7 @@ public class CurrentLocationTimeData {
         tempTimeMS = getTimeMS();
         tempDayOfWeek = getDayOfWeek();
         tempTimeOfDay = getTimeOfDay();
-        Toast.makeText(context, "Your location: " + tempLocation, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Your location: " + tempLocation + "Day of Week " + tempDayOfWeek, Toast.LENGTH_SHORT).show();
     }
 
     //Use if song ends
