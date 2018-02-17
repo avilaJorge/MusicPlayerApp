@@ -100,6 +100,7 @@ public class LocationService extends Service {
             locManager = null;
             listener = null;
         }
+        super.onDestroy();
     }
 
     public String getLocationName() { return this.locName; }

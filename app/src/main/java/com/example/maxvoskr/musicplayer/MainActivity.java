@@ -270,18 +270,6 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
 
     }
 
-// TODO: Will implement these when we have multiple activities binding to the same service.
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//    }
-
-    @Override
     public void updateUI(Song song) {
         currentSong = song;
 
@@ -300,10 +288,10 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if(musicPlayerBound) {
             unbindService(musicPlayerConnection);
             musicPlayerBound = false;
         }
+        super.onDestroy();
     }
 }
