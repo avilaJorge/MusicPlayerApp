@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private View flashbackMode;
     private Intent songPlayer;
     private Intent songList;
+    private Intent albumIntent;
 
     //private ArrayList<Song> musicList;
     private MusicAdapter adapter;
@@ -130,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
         final Intent anotherActivityIntent  = new Intent(this, SongPlayerScreen.class);
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
+        albumIntent = new Intent(this, AlbumListActivity.class);
 
         trackList = (ListView) findViewById(R.id.trackList);
         songMode = findViewById(R.id.navLeft);
@@ -173,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
         albumMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(albumIntent);
             }
         });
 

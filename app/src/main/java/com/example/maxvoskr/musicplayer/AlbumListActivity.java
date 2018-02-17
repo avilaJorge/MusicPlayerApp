@@ -47,7 +47,7 @@ public class AlbumListActivity extends AppCompatActivity {
     private EditText keyText;
     private EditText storeText;
     private TextView message;
-    private DataAccess dataAccess;
+    //private DataAccess dataAccess;
     private Song exampleSong;
     private View songMode;
     private View albumMode;
@@ -129,7 +129,8 @@ public class AlbumListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.album_list);
 
-        System.out.println("hey Max");
+        songList = new Intent(this, MainActivity.class);
+        songPlayer = new Intent(this, SongPlayerScreen.class);
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);

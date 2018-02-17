@@ -55,6 +55,7 @@ public class SongPlayerScreen extends AppCompatActivity {
         songPlayer = new Intent(this, SongPlayerScreen.class);
         albumList = new Intent(this, AlbumListActivity.class);
         playerMode = getIntent().getIntExtra("playerMode", SONG_MODE);
+
         if(playerMode == SONG_MODE)
             background.setBackgroundColor(Color.parseColor("#5a47025c"));
         else if(playerMode == ALBUM_MODE)
