@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +47,12 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
     private Intent songPlayer;
     private Intent songList;
 
+    private ImageView play;
+    private ImageView next;
+    private ImageView previous;
+    private ImageView like;
+    private ImageView dislike;
+
     //private ArrayList<Song> musicList;
     private MusicAdapter adapter;
     private ListView trackList;
@@ -53,6 +60,11 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
     private ArrayList<Album> albumList;
 
     private MusicArrayList musicList;
+
+    private Song currentSong;
+    private boolean playing;
+
+    private SongHistorySharedPreferenceManager sharedPref;
 
     private ServiceConnection musicPlayerConnection= new ServiceConnection() {
         @Override
@@ -63,6 +75,10 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             musicPlayerService.registerClient(MainActivity.this);
             musicPlayerBound = true;
             Toast.makeText(MainActivity.this, "Service almost connected", Toast.LENGTH_SHORT).show();
+
+            currentSong = musicPlayerService.getCurrentSong();
+
+            updateUI(currentSong);
         }
 
         @Override
@@ -99,23 +115,33 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
+
+        Intent intent = getIntent();
+        playing = intent.getBooleanExtra("playingStatus", false);
+
+        sharedPref = new SongHistorySharedPreferenceManager(getApplicationContext());
+
         final Intent anotherActivityIntent  = new Intent(this, SongPlayerScreen.class);
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
+
 
         trackList = (ListView) findViewById(R.id.trackList);
         songMode = findViewById(R.id.navLeft);
         albumMode = findViewById(R.id.navMid);
         flashbackMode = findViewById(R.id.navRight);
+        play = findViewById(R.id.play);
+        next = findViewById(R.id.next);
+        previous = findViewById(R.id.previous);
+        like = findViewById(R.id.like);
+        dislike = findViewById(R.id.dislike);
 
-        musicList = new MusicArrayList();
+        if(!playing)
+            play.setImageResource(R.drawable.play);
+        else
+            play.setImageResource(R.drawable.pause);
 
-        musicList.musicList.add(new Song("Windows Are the Eyes", "Trevor", "Forum", R.raw.windowsaretheeyestothehouse));
-        musicList.musicList.add(new Song("Dead Dove, Do Not Eat", "Max","Forum", R.raw.deaddovedonoteat));
-        musicList.musicList.add(new Song("Sisters of the Sun", "Adi","Forum",  R.raw.sistersofthesun));
-        musicList.musicList.add(new Song("Sky Full of Ghosts", "Matt", "Forum",  R.raw.skyfullofghosts));
-        musicList.musicList.add(new Song("Dreamatorium", "Tim","Forum", R.raw.dreamatorium));
-        musicList.musicList.add(new Song("I just Want to Tell You", "Jorge","Forum", R.raw.ijustwanttotellyoubothgoodluck));
+
 
         adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList.musicList);
         trackList.setAdapter(adapter);
@@ -128,16 +154,23 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
 
                 if(musicList.musicList.get(i).getLikeDislike() != -1) {
                     anotherActivityIntent.putExtra("Position", i);
+                    anotherActivityIntent.putExtra("changeSong", true);
+                    anotherActivityIntent.putExtra("playerMode", SONG_MODE);
+                    anotherActivityIntent.putExtra("playingStatus", true);
                     startActivity(anotherActivityIntent);
                 }
 
             }
         });
 
+
+
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                songPlayer.putExtra("playerMode", SONG_MODE);
+                songPlayer.putExtra("changeSong", false);
+                songPlayer.putExtra("playerMode", SONG_MODE); // should be song mode
+                songPlayer.putExtra("playingStatus", playing);
                 startActivity(songPlayer);
             }
         });
@@ -156,30 +189,110 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
                 startActivity(songPlayer);
             }
         });
+
+
+
+
+        play.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                if(playing)
+                    play.setImageResource(R.drawable.play);
+                else
+                    play.setImageResource(R.drawable.pause);
+
+                if(!playing) {
+                    musicPlayerService.playSong();
+                } else {
+                    musicPlayerService.pause();
+                }
+
+                playing = !playing;
+            }
+        });
+
+
+        like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(currentSong.getLikeDislike() <= 0) {
+                    like.setImageResource(R.drawable.like_green);
+                    dislike.setImageResource(R.drawable.dislike_black);
+                    currentSong.setLikeDislike(1);
+                }
+                else
+                {
+                    like.setImageResource(R.drawable.like_black);
+                    dislike.setImageResource(R.drawable.dislike_black);
+                    currentSong.setLikeDislike(0);
+                }
+
+               // sharedPref.writeData(currentSong);
+                startActivity(songList);
+            }
+        });
+
+
+        dislike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(currentSong.getLikeDislike() >= 0) {
+                    like.setImageResource(R.drawable.like_black);
+                    dislike.setImageResource(R.drawable.dislike_red);
+                    currentSong.setLikeDislike(-1);
+                    musicPlayerService.skip();
+                }
+                else
+                {
+                    like.setImageResource(R.drawable.like_black);
+                    dislike.setImageResource(R.drawable.dislike_black);
+                    currentSong.setLikeDislike(0);
+                }
+
+                //sharedPref.writeData(currentSong);
+                startActivity(songList);
+            }
+        });
+
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                musicPlayerService.previous();
+            }
+        });
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                musicPlayerService.skip();
+            }
+        });
+
     }
 
-// TODO: Will implement these when we have multiple activities binding to the same service.
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//    }
+    public void updateUI(Song song) {
+        currentSong = song;
 
-    @Override
-    public void updateUI() {
-        Toast.makeText(MainActivity.this, "This is when the UI will be notified that a new song is being played", Toast.LENGTH_SHORT).show();
+        if (song != null && song.getLikeDislike() == -1) {
+            like.setImageResource(R.drawable.like_black);
+            dislike.setImageResource(R.drawable.dislike_red);
+        } else if (song != null && song.getLikeDislike() == 1) {
+            like.setImageResource(R.drawable.like_green);
+            dislike.setImageResource(R.drawable.dislike_black);
+        } else {
+            like.setImageResource(R.drawable.like_black);
+            dislike.setImageResource(R.drawable.dislike_black);
+        }
+
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
         if(musicPlayerBound) {
             unbindService(musicPlayerConnection);
             musicPlayerBound = false;
         }
+        super.onDestroy();
     }
 }

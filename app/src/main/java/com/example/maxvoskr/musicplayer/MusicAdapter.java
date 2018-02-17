@@ -23,11 +23,13 @@ public class MusicAdapter extends BaseAdapter {
     private ArrayList<Song> musicList;
     private MediaPlayer mediaPlayer;
     private Boolean flag = true;
+    private static SongHistorySharedPreferenceManager sharedPref;
 
     public MusicAdapter(Context context, int layout, ArrayList<Song> musicList) {
         this.context = context;
         this.layout = layout;
         this.musicList = musicList;
+        sharedPref = new SongHistorySharedPreferenceManager(context);
     }
 
     @Override
@@ -107,6 +109,8 @@ public class MusicAdapter extends BaseAdapter {
                     viewHolder.likeButton.setImageResource(R.drawable.like_black);
                     music.setLikeDislike(0);
                 }
+
+               // sharedPref.writeData(music);
             }
         });
 
@@ -124,6 +128,8 @@ public class MusicAdapter extends BaseAdapter {
                     viewHolder.dislikeButton.setImageResource(R.drawable.dislike_black);
                     music.setLikeDislike(0);
                 }
+
+              //  sharedPref.writeData(music);
             }
         });
 

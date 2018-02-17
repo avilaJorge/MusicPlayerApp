@@ -1,26 +1,21 @@
 package com.example.maxvoskr.musicplayer;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
-import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Build;
-import android.os.Environment;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import static com.example.maxvoskr.musicplayer.LoadingActivity.currentLocationTimeData;
 
 public class MusicPlayerService extends Service implements MediaPlayer.OnPreparedListener {
 
@@ -38,7 +33,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     private MediaPlayer mediaPlayer;
     private ArrayList<Song> songs;
     private FlashbackPlaylist flashbackPlaylist;
-    public static CurrentLocationTimeData currentLocationTimeData;
 
     public MusicPlayerService() {}
 
@@ -57,7 +51,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         super.onCreate();
         songIndex = 0;
         context = getApplicationContext();
-        currentLocationTimeData = new CurrentLocationTimeData(context);
         flashbackPlaylist = new FlashbackPlaylist(MusicArrayList.musicList);
     }
 
@@ -82,9 +75,18 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         mediaPlayer.release();
         playerReleased = true;
+        Log.d("ClearFromRecentService", "Service Destroyed");
+        super.onDestroy();
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        Log.e("ClearFromRecentService", "END");
+        mediaPlayer.release();
+        playerReleased = true;
+        stopSelf();
     }
 
     private void initMusicPlayer() {
@@ -100,45 +102,68 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     /* Play current song */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void playSong() {
-        if(!playerReleased && paused) {
+
+
+        Toast.makeText(context, "In playSong", Toast.LENGTH_SHORT).show();
+        if (!playerReleased && paused) {
             paused = false;
             mediaPlayer.start();
             return;
         }
-        if(mediaPlayer != null && !playerReleased) {
-            if(mediaPlayer.isPlaying()) {
+        if (mediaPlayer != null && !playerReleased) {
+            if (mediaPlayer.isPlaying()) {
                 mediaPlayer.stop();
             }
             mediaPlayer.release();
             playerReleased = true;
         }
 
-        mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
-        playerReleased = false;
-        mediaPlayer.setOnPreparedListener(this);
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-
-                currentLocationTimeData.updateSongUsingTemp(songs.get(songIndex));
-                if(mode == ALBUM_MODE) {
-                    if (++songIndex >= songs.size() && !songs.isEmpty()) {
-                        playSong();
-                    }
-                } else if (mode == FLASHBACK_MODE) {
-                    songs = new ArrayList<Song>(1);
-                    songs.set(0, flashbackPlaylist.getNextSong());
-                    songIndex = 0;
-                    playSong();
-                } else {
-                    mediaPlayer.release();
-                    playerReleased = true;
-                }
-                activity.updateUI();
-                Toast.makeText(context, "In onCompletion", Toast.LENGTH_SHORT).show();
+        if (mode == FLASHBACK_MODE && songs.isEmpty()) {
+            flashbackPlaylist = new FlashbackPlaylist(MusicArrayList.musicList);
+            flashbackPlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
+            Song next = flashbackPlaylist.getNextSong();
+            if(next != null) {
+                songs.add(next);
             }
-        });
-    }
+            songIndex = 0;
+        }
+
+       // if (songs != null && songs.size() < songIndex) {
+            mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
+            playerReleased = false;
+            mediaPlayer.setOnPreparedListener(this);
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+
+                    currentLocationTimeData.updateSongUsingTemp(songs.get(songIndex));
+                    if (mode == ALBUM_MODE) {
+                        if (++songIndex <= songs.size() && !songs.isEmpty()) {
+                            activity.updateUI(getCurrentSong());
+                            playSong();
+                        }
+                    } else if (mode == FLASHBACK_MODE) {
+                        flashbackPlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
+                        Song next = flashbackPlaylist.getNextSong();
+                        if(next != null) {
+                            songs.set(0, next);
+                            songIndex = 0;
+                            activity.updateUI(getCurrentSong());
+                            playSong();
+                        }
+                    } else {
+                        mediaPlayer.release();
+                        playerReleased = true;
+                    }
+
+                    Toast.makeText(context, "In onCompletion", Toast.LENGTH_SHORT).show();
+                }
+            });
+            // TODO: Erase this before demo.
+            double time = mediaPlayer.getDuration() * 0.9;
+            mediaPlayer.seekTo((int) time);
+        }
+   // }
 
     /* Pause the song */
     public void pause() {
@@ -146,6 +171,48 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
             if (mediaPlayer.isPlaying()) {
                 paused = true;
                 mediaPlayer.pause();
+            }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void skip() {
+        if(!playerReleased && mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.reset();
+                if(mode == ALBUM_MODE) {
+                    if (++songIndex <= songs.size() && !songs.isEmpty() &&
+                            songs.get(songIndex).getLikeDislike() != -1) {
+                        activity.updateUI(getCurrentSong());
+                        playSong();
+                    }
+                    else
+                    {
+                        stop();
+                    }
+                }
+
+            }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void previous() {
+        if(!playerReleased && mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.reset();
+                if(mode == ALBUM_MODE) {
+                    if (--songIndex >= 0 && !songs.isEmpty() &&
+                                songs.get(songIndex).getLikeDislike() != -1) {
+                        activity.updateUI(getCurrentSong());
+                        playSong();
+
+                    }
+                    else
+                    {
+                        stop();
+                    }
+                }
             }
         }
     }
@@ -159,6 +226,14 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         this.mode = mode;
     }
 
+    public Song getCurrentSong()
+    {
+        if(songs != null && !songs.isEmpty())
+            return songs.get(songIndex);
+        else
+            return null;
+    }
+
     /* Restart song */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void reset() {
@@ -168,12 +243,20 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void stop() {
+        if(!playerReleased && mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.reset();
+        }
+    }
+
+
     public void registerClient(Activity activity) {
        this.activity = (Callbacks)activity;
     }
 
     // callbacks interface for communicating with activities
     public interface Callbacks {
-        public void updateUI();
+        public void updateUI(Song nextSong);
     }
 }

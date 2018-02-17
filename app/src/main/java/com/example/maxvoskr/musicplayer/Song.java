@@ -110,6 +110,7 @@ public class Song {
     }
   
     public void setDayOfWeek(int dayOfWeek) {
+
         if (dayOfWeek >= 1 && dayOfWeek<8)
             this.dayOfWeek = dayOfWeek;
         else throw new IllegalArgumentException();
