@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
     private View flashbackMode;
     private Intent songPlayer;
     private Intent songList;
+    private Intent albumIntent;
 
     private ImageView play;
     private ImageView next;
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         final Intent anotherActivityIntent  = new Intent(this, SongPlayerScreen.class);
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
+        albumIntent = new Intent(this, AlbumListActivity.class);
 
 
         trackList = (ListView) findViewById(R.id.trackList);
@@ -178,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         albumMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(albumIntent);
             }
         });
 
