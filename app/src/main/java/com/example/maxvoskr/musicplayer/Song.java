@@ -110,7 +110,7 @@ public class Song {
     }
   
     public void setDayOfWeek(int dayOfWeek) {
-        if (dayOfWeek >= 0 && dayOfWeek<7)
+        if (dayOfWeek >= 1 && dayOfWeek<8)
             this.dayOfWeek = dayOfWeek;
         else throw new IllegalArgumentException();
 
@@ -151,7 +151,9 @@ public class Song {
     }
     public void findWeight(CurrentLocationTimeData dataObj) {
         weight = 0;
-        if (dataObj.getLocation() == location) weight++;
+        if (timeMS == 0) return;
+        else weight ++;
+        if (dataObj.getLocation() == location && dataObj.getLocation().isEmpty()) weight++;
         if (dataObj.getDayOfWeek() == dayOfWeek) weight++;
         if (dataObj.getTimeOfDay() == timeOfDay) weight++;
         //Like Dislike Breaks Ties Only
