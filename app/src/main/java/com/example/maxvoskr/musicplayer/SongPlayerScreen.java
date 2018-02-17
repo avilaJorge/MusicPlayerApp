@@ -150,10 +150,9 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         //create intent references
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
+        albumList = new Intent(this, AlbumListActivity.class);
+        playerMode = getIntent().getIntExtra("playerMode", SONG_MODE);
 
-
-
-        // set background
         if(playerMode == SONG_MODE)
             background.setBackgroundColor(Color.parseColor("#5a47025c"));
         else if(playerMode == ALBUM_MODE)

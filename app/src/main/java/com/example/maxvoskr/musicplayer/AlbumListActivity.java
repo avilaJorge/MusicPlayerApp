@@ -126,7 +126,8 @@ public class AlbumListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.album_list);
 
-        System.out.println("hey Max");
+        songList = new Intent(this, MainActivity.class);
+        songPlayer = new Intent(this, SongPlayerScreen.class);
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
