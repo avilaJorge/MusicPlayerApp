@@ -59,7 +59,8 @@ public class FlashbackPlaylist {
             return this.getNextSong();
         }
         else {
-            next.setPlayed();
+            if (next != null)
+                next.setPlayed();
             return next;
         }
     }
