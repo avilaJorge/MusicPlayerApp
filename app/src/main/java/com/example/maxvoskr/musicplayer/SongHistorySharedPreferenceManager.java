@@ -43,11 +43,11 @@ public class SongHistorySharedPreferenceManager {
             throw new NullPointerException("Cannot update a uninitialized song");
         }
         try{
-            songObj.setLocation(SongData.getString(songObj.getName()+LOCATION, null));
-            songObj.setTimeMS(Long.parseLong(SongData.getString(songObj.getName()+TIME_MS, null)));
-            songObj.setDayOfWeek(Integer.parseInt(SongData.getString(songObj.getName()+DAY_OF_WEEK, null)));
-            songObj.setTimeOfDay(Integer.parseInt(SongData.getString(songObj.getName()+TIME_OF_DAY, null)));
-            songObj.setLikeDislike(Integer.parseInt(SongData.getString(songObj.getName()+LIKE_DISLIKE, null)));
+            songObj.setLocation(SongData.getString(songObj.getName()+LOCATION, songObj.getName()));
+            songObj.setTimeMS(Long.parseLong(SongData.getString(songObj.getName()+TIME_MS, Long.toString(songObj.getTimeMS()))));
+            songObj.setDayOfWeek(Integer.parseInt(SongData.getString(songObj.getName()+DAY_OF_WEEK, Integer.toString(songObj.getDayOfWeek()))));
+            songObj.setTimeOfDay(Integer.parseInt(SongData.getString(songObj.getName()+TIME_OF_DAY, Integer.toString(songObj.getTimeOfDay()))));
+            songObj.setLikeDislike(Integer.parseInt(SongData.getString(songObj.getName()+LIKE_DISLIKE, Integer.toString(songObj.getLikeDislike()))));
         }
         catch (Exception e){
             System.out.println("Unable to retrieve last play information");

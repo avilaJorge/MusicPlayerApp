@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             @Override
             public void onClick(View view) {
                 songPlayer.putExtra("changeSong", false);
-                songPlayer.putExtra("playerMode", ALBUM_MODE); // should be song mode
+                songPlayer.putExtra("playerMode", SONG_MODE); // should be song mode
                 startActivity(songPlayer);
             }
         });
@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         flashbackMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                songPlayer.putExtra("changeSong", false);
                 songPlayer.putExtra("playerMode", FLASHBACK_MODE);
                 startActivity(songPlayer);
             }

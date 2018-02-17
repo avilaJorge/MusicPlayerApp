@@ -1,6 +1,9 @@
 package com.example.maxvoskr.musicplayer;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.Resources;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,13 +19,18 @@ import java.util.Hashtable;
 public class LoadingActivity extends AppCompatActivity {
 
     MusicArrayList musicList;
+    Context context;
+    SongHistorySharedPreferenceManager sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_laoding);
-
+        setContentView(R.layout.activity_loading);
+        context = getApplicationContext();
         musicList = new MusicArrayList();
+        sharedPref = new SongHistorySharedPreferenceManager(context);
+
+
 
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         ArrayList<String> rawFileNames = new ArrayList<>();
@@ -33,7 +41,7 @@ public class LoadingActivity extends AppCompatActivity {
         for(Field field : fields){
             try {
                 rawFileNames.add(field.getName());
-                songCodes.add(field.getInt(null));
+                songCodes.add(field.getInt(field));
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -45,11 +53,19 @@ public class LoadingActivity extends AppCompatActivity {
             nameToCode.put(rawFileNames.get(count), songCodes.get(count));
         }
 
+        int i = 0;
         for(String songName : rawFileNames) {
-            String rawString = "R.raw." + songName;
-            retriever.setDataSource(rawString);
-            musicList.musicList.add(new Song(retriever.extractMetadata(7), retriever.extractMetadata(1),
-                    retriever.extractMetadata(13), nameToCode.get(rawString)));
+
+            Resources res = getResources();
+            AssetFileDescriptor afd = res.openRawResourceFd(songCodes.get(i++));
+            retriever.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+
+
+            Song song = new Song(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE), retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
+                    retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST), nameToCode.get(songName));
+
+            sharedPref.updateData(song);
+            musicList.musicList.add(song);
         }
 
 

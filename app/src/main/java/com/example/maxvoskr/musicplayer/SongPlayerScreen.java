@@ -54,6 +54,8 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
     public MusicPlayerService musicPlayerService;
     boolean musicPlayerBound = false;
 
+    private static SongHistorySharedPreferenceManager sharedPref;
+
     private ServiceConnection musicPlayerConnection= new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -64,23 +66,28 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
             musicPlayerBound = true;
 
             musicPlayerService.setMode(playerMode);
-           // musicPlayerService.setMode(ALBUM_MODE); // to test changing songs
 
             if(changeSong) {
                 currentSong = MusicArrayList.musicList.get(getIntent().getExtras().getInt("Position"));
 
-                //if(playerMode == SONG_MODE)
-                //{
-                    ArrayList<Song> songs = new ArrayList<Song>();
-                    songs.add(currentSong);
-                    songs.add(MusicArrayList.musicList.get(getIntent().getExtras().getInt("Position") + 1));
-                    songs.add(MusicArrayList.musicList.get(getIntent().getExtras().getInt("Position") + 2));
-                    musicPlayerService.setList(songs);
-                    musicPlayerService.playSong();
-                //}
+                if(playerMode == SONG_MODE)
+                {
+                    if(currentSong.getLikeDislike() == -1) {
+                        currentSong = null;
+                    } else {
+                        ArrayList<Song> songs = new ArrayList<Song>();
+                        songs.add(currentSong);
+                        musicPlayerService.setList(songs);
+                        musicPlayerService.playSong();
+                    }
+                }
             }
             else {
                 currentSong = musicPlayerService.getCurrentSong(); // get currently played song from media player service
+
+                if(currentSong.getLikeDislike() == -1) {
+                    currentSong = null;
+                }
             }
 
             updateUI(currentSong);
@@ -94,6 +101,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_player_screen);
+        sharedPref = new SongHistorySharedPreferenceManager(getApplicationContext());
 
         // buttons
         play = findViewById(R.id.play);
@@ -183,6 +191,8 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                     dislike.setImageResource(R.drawable.dislike_black);
                     currentSong.setLikeDislike(0);
                 }
+
+                sharedPref.writeData(currentSong);
             }
         });
 
@@ -202,6 +212,8 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                     dislike.setImageResource(R.drawable.dislike_black);
                     currentSong.setLikeDislike(0);
                 }
+
+                sharedPref.writeData(currentSong);
             }
         });
 
