@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static com.example.maxvoskr.musicplayer.LoadingActivity.currentLocationTimeData;
+
 public class MusicPlayerService extends Service implements MediaPlayer.OnPreparedListener {
 
     private final int SONG_MODE = 0;
@@ -31,7 +33,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     private MediaPlayer mediaPlayer;
     private ArrayList<Song> songs;
     private FlashbackPlaylist flashbackPlaylist;
-    public static CurrentLocationTimeData currentLocationTimeData;
 
     public MusicPlayerService() {}
 
@@ -50,7 +51,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         super.onCreate();
         songIndex = 0;
         context = getApplicationContext();
-        currentLocationTimeData = new CurrentLocationTimeData(context);
         flashbackPlaylist = new FlashbackPlaylist(MusicArrayList.musicList);
     }
 
@@ -143,6 +143,9 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                 Toast.makeText(context, "In onCompletion", Toast.LENGTH_SHORT).show();
             }
         });
+        // TODO: Erase this before demo.
+        double time = mediaPlayer.getDuration() * 0.9;
+        mediaPlayer.seekTo((int)time);
     }
 
     /* Pause the song */

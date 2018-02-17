@@ -82,7 +82,7 @@ public class CurrentLocationTimeData {
         tempTimeMS = getTimeMS();
         tempDayOfWeek = getDayOfWeek();
         tempTimeOfDay = getTimeOfDay();
-        Toast.makeText(context, "Your location: " + tempLocation, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Your location: " + tempLocation + "Day of Week " + tempDayOfWeek, Toast.LENGTH_SHORT).show();
     }
 
     //Use if song ends
@@ -93,6 +93,17 @@ public class CurrentLocationTimeData {
         song.setTimeMS(tempTimeMS);
         song.setTimeOfDay(tempTimeOfDay);
         Toast.makeText(context, "Your location: " + tempLocation, Toast.LENGTH_SHORT).show();
+    }
+
+    public void unBindServices() {
+        if(locBound) {
+            context.unbindService(locConnection);
+            locBound = false;
+        }
+        if(dateBound) {
+            context.unbindService(dateConnection);
+            dateBound = false;
+        }
     }
 
 }

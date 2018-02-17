@@ -18,6 +18,7 @@ import java.util.Hashtable;
 
 public class LoadingActivity extends AppCompatActivity {
 
+    public static CurrentLocationTimeData currentLocationTimeData;
     MusicArrayList musicList;
     Context context;
     SongHistorySharedPreferenceManager sharedPref;
@@ -71,5 +72,15 @@ public class LoadingActivity extends AppCompatActivity {
 
         final Intent mainActivityIntent  = new Intent(this, MainActivity.class);
         startActivity(mainActivityIntent);
+
+        currentLocationTimeData = new CurrentLocationTimeData(this);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        currentLocationTimeData.unBindServices();
+    }
+
+
 }
