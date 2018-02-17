@@ -95,4 +95,15 @@ public class CurrentLocationTimeData {
         Toast.makeText(context, "Your location: " + tempLocation, Toast.LENGTH_SHORT).show();
     }
 
+    public void unBindServices() {
+        if(locBound) {
+            context.unbindService(locConnection);
+            locBound = false;
+        }
+        if(dateBound) {
+            context.unbindService(dateConnection);
+            dateBound = false;
+        }
+    }
+
 }

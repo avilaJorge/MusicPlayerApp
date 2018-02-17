@@ -143,7 +143,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                 Toast.makeText(context, "In onCompletion", Toast.LENGTH_SHORT).show();
             }
         });
-        // TODO: Erase this before demo.  
+        // TODO: Erase this before demo.
         double time = mediaPlayer.getDuration() * 0.9;
         mediaPlayer.seekTo((int)time);
     }

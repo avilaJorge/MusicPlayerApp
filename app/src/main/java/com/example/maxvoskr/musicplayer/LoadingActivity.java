@@ -75,4 +75,12 @@ public class LoadingActivity extends AppCompatActivity {
 
         currentLocationTimeData = new CurrentLocationTimeData(this);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        currentLocationTimeData.unBindServices();
+    }
+
+
 }
