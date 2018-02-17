@@ -75,10 +75,10 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         mediaPlayer.release();
         playerReleased = true;
         Log.d("ClearFromRecentService", "Service Destroyed");
+        super.onDestroy();
     }
 
     @Override

@@ -165,28 +165,16 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         });
     }
 
-// TODO: Will implement these when we have multiple activities binding to the same service.
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//    }
-
-    //@Override
     public void updateUI(Song song) {
         Toast.makeText(MainActivity.this, "This is not a good sign....", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if(musicPlayerBound) {
             unbindService(musicPlayerConnection);
             musicPlayerBound = false;
         }
+        super.onDestroy();
     }
 }

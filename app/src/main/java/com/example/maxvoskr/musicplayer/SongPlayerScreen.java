@@ -296,11 +296,11 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if(musicPlayerBound) {
             unbindService(musicPlayerConnection);
             musicPlayerBound = false;
         }
+        super.onDestroy();
     }
 
     @Override
