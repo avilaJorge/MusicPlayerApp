@@ -182,8 +182,8 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         if(musicPlayerBound) {
             unbindService(musicPlayerConnection);
             musicPlayerBound = false;

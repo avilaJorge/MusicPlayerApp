@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -77,6 +78,15 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         super.onDestroy();
         mediaPlayer.release();
         playerReleased = true;
+        Log.d("ClearFromRecentService", "Service Destroyed");
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        Log.e("ClearFromRecentService", "END");
+        mediaPlayer.release();
+        playerReleased = true;
+        stopSelf();
     }
 
     private void initMusicPlayer() {
