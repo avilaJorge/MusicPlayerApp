@@ -78,8 +78,14 @@ public class LoadingActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         currentLocationTimeData.unBindServices();
+
+        for(Song song: musicList.musicList)
+        {
+            sharedPref.writeData(song);
+        }
+
+        super.onDestroy();
     }
 
 

@@ -45,6 +45,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
     private Intent songList;
 
     private TextView songTitleTextView;
+    private TextView artistTextView;
     private TextView albumTitleTextView;
     private TextView LP_time;
     private TextView LP_dayOfWeek;
@@ -122,6 +123,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
 
         // text fields
         songTitleTextView = findViewById(R.id.songTitle);
+        artistTextView = findViewById(R.id.artistName);
         albumTitleTextView = findViewById(R.id.albumTitle);
         LP_time = findViewById(R.id.time);
         LP_dayOfWeek = findViewById(R.id.dayOfWeek);
@@ -201,7 +203,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                     currentSong.setLikeDislike(0);
                 }
 
-                sharedPref.writeData(currentSong);
+                //sharedPref.writeData(currentSong);
             }
         });
 
@@ -222,7 +224,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                     currentSong.setLikeDislike(0);
                 }
 
-                sharedPref.writeData(currentSong);
+                //sharedPref.writeData(currentSong);
                 startActivity(songList);
             }
         });
@@ -274,6 +276,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                 "September", "October", "November", "December"};
 
         songTitleTextView.setText(currentSong.getName());
+        artistTextView.setText(currentSong.getArtist());
         albumTitleTextView.setText(currentSong.getAlbum());
         if(currentSong.getTimeMS() != 0) {
             Date songDate = new Date(currentSong.getTimeMS());
@@ -289,11 +292,16 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                 AM_PM = "pm";
             }
 
+            String location = currentSong.getLocation();
+
+            if(location.length() > 30)
+                location = location.substring(0, 26) + "...";
+
             LP_time.setText((hour + ":" + minutes + " " + AM_PM));
             LP_dayOfWeek.setText(day[songDate.getDay()]);
             LP_date.setText((month[songDate.getMonth()] + " " +
                     songDate.getDate() + ", " + (1900 + songDate.getYear())));
-            LP_location.setText(("at " + currentSong.getLocation()));
+            LP_location.setText(location);
         }
         else {
             LP_time.setText(("Song has not been played before"));
@@ -317,6 +325,8 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
     @Override
     public void updateUI(Song nextSong)
     {
+        updateText();
+
         currentSong = nextSong;
 
         if(currentSong != null) {
@@ -335,6 +345,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         }
         else {
             songTitleTextView.setText("No Song Playing");
+            artistTextView.setText("");
             albumTitleTextView.setText("");
             LP_time.setText("");
             LP_dayOfWeek.setText("");

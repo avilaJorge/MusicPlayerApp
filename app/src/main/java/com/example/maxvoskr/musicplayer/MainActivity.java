@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
                     currentSong.setLikeDislike(0);
                 }
 
-                sharedPref.writeData(currentSong);
+               // sharedPref.writeData(currentSong);
                 startActivity(songList);
             }
         });
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
                     currentSong.setLikeDislike(0);
                 }
 
-                sharedPref.writeData(currentSong);
+                //sharedPref.writeData(currentSong);
                 startActivity(songList);
             }
         });

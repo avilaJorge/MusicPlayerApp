@@ -110,7 +110,7 @@ public class MusicAdapter extends BaseAdapter {
                     music.setLikeDislike(0);
                 }
 
-                sharedPref.writeData(music);
+               // sharedPref.writeData(music);
             }
         });
 
@@ -129,7 +129,7 @@ public class MusicAdapter extends BaseAdapter {
                     music.setLikeDislike(0);
                 }
 
-                sharedPref.writeData(music);
+              //  sharedPref.writeData(music);
             }
         });
 
