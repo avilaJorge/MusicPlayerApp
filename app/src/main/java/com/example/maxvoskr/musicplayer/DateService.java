@@ -43,6 +43,7 @@ public class DateService extends Service {
         timeZone.setStartRule(Calendar.APRIL, 1, Calendar.SUNDAY, 2 * 60 * 60 * 1000);
         timeZone.setEndRule(Calendar.OCTOBER, -1, Calendar.SUNDAY, 2 * 60 * 60 * 1000);
         calendar = new GregorianCalendar(timeZone);
+        updateTime();
     }
 
     public long getCurrentTime() {
@@ -56,11 +57,7 @@ public class DateService extends Service {
     }
 
     public int getCurrentDayOfWeek() {
-        if(day_Of_Week != Calendar.DAY_OF_WEEK) {
-            updateTime();
-            return (day_Of_Week = Calendar.DAY_OF_WEEK);
-        }
-        return Calendar.DAY_OF_WEEK;
+        return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
     private void updateTime() {

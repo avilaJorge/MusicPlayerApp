@@ -47,7 +47,7 @@ public class AlbumListActivity extends AppCompatActivity {
     private EditText keyText;
     private EditText storeText;
     private TextView message;
-    //private DataAccess dataAccess;
+    private SongHistorySharedPreferenceManager dataAccess;
     private Song exampleSong;
     private View songMode;
     private View albumMode;

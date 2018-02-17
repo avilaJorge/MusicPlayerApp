@@ -17,12 +17,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MusicPlayerService.Callbacks{
 
     public static Context contextOfApplication;
 
@@ -30,11 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private final int ALBUM_MODE = 1;
     private final int FLASHBACK_MODE = 2;
 
-    public static LocationService locationService;
-    public static DateService dateService;
-    public static MusicPlayerService musicPlayerService;
-    private boolean locBound = false;
-    private boolean dateBound = false;
+    public MusicPlayerService musicPlayerService;
     private boolean musicPlayerBound = false;
     private Button storeButton;
     private Button retrieveButton;
@@ -50,6 +48,12 @@ public class MainActivity extends AppCompatActivity {
     private Intent songList;
     private Intent albumIntent;
 
+    private ImageView play;
+    private ImageView next;
+    private ImageView previous;
+    private ImageView like;
+    private ImageView dislike;
+
     //private ArrayList<Song> musicList;
     private MusicAdapter adapter;
     private ListView trackList;
@@ -58,30 +62,10 @@ public class MainActivity extends AppCompatActivity {
 
     private MusicArrayList musicList;
 
+    private Song currentSong;
+    private boolean playing;
 
-    private ServiceConnection locConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder binder) {
-            LocationService.LocationBinder locationBinder = (LocationService.LocationBinder) binder;
-            locationService = locationBinder.getLocationService();
-            locBound = true;
-        }
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            locBound = false;
-        }
-    };
-    private ServiceConnection dateConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            DateService.DateBinder dateBinder = (DateService.DateBinder) iBinder;
-            dateService = dateBinder.getDateService();
-            dateBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) { dateBound = false; }
-    };
+    private SongHistorySharedPreferenceManager sharedPref;
 
     private ServiceConnection musicPlayerConnection= new ServiceConnection() {
         @Override
@@ -89,7 +73,13 @@ public class MainActivity extends AppCompatActivity {
             MusicPlayerService.MusicPlayerBinder musicPlayerBinder =
                     (MusicPlayerService.MusicPlayerBinder) iBinder;
             musicPlayerService = musicPlayerBinder.getMusicPlayerService();
+            musicPlayerService.registerClient(MainActivity.this);
             musicPlayerBound = true;
+            Toast.makeText(MainActivity.this, "Service almost connected", Toast.LENGTH_SHORT).show();
+
+            currentSong = musicPlayerService.getCurrentSong();
+
+            updateUI(currentSong);
         }
 
         @Override
@@ -99,6 +89,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -109,43 +107,43 @@ public class MainActivity extends AppCompatActivity {
             return;
         } else {
             Log.d("test2", "out");
-            Intent locIntent = new Intent(this, LocationService.class);
-            bindService(locIntent, locConnection, Context.BIND_AUTO_CREATE);
         }
-        Intent dateIntent = new Intent(this, DateService.class);
-        bindService(dateIntent, dateConnection, Context.BIND_AUTO_CREATE);
         Intent musicPlayerIntent = new Intent(this, MusicPlayerService.class);
         bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
         startService(musicPlayerIntent);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        Toast.makeText(MainActivity.this, "Service now connected", Toast.LENGTH_SHORT).show();
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
+
+
+        Intent intent = getIntent();
+        playing = intent.getBooleanExtra("playingStatus", false);
+
+        sharedPref = new SongHistorySharedPreferenceManager(getApplicationContext());
 
         final Intent anotherActivityIntent  = new Intent(this, SongPlayerScreen.class);
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
         albumIntent = new Intent(this, AlbumListActivity.class);
 
+
         trackList = (ListView) findViewById(R.id.trackList);
         songMode = findViewById(R.id.navLeft);
         albumMode = findViewById(R.id.navMid);
         flashbackMode = findViewById(R.id.navRight);
+        play = findViewById(R.id.play);
+        next = findViewById(R.id.next);
+        previous = findViewById(R.id.previous);
+        like = findViewById(R.id.like);
+        dislike = findViewById(R.id.dislike);
 
-        musicList = new MusicArrayList();
+        if(!playing)
+            play.setImageResource(R.drawable.play);
+        else
+            play.setImageResource(R.drawable.pause);
 
-        musicList.musicList.add(new Song("Windows Are the Eyes", "Trevor", "Forum", R.raw.windowsaretheeyestothehouse));
-        musicList.musicList.add(new Song("Dead Dove, Do Not Eat", "Max","Forum", R.raw.deaddovedonoteat));
-        musicList.musicList.add(new Song("Sisters of the Sun", "Adi","Forum",  R.raw.sistersofthesun));
-        musicList.musicList.add(new Song("Sky Full of Ghosts", "Matt", "Forum",  R.raw.skyfullofghosts));
-        musicList.musicList.add(new Song("Dreamatorium", "Tim","Forum", R.raw.dreamatorium));
-        musicList.musicList.add(new Song("I just Want to Tell You", "Jorge","Forum", R.raw.ijustwanttotellyoubothgoodluck));
+
 
         adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList.musicList);
         trackList.setAdapter(adapter);
@@ -158,16 +156,23 @@ public class MainActivity extends AppCompatActivity {
 
                 if(musicList.musicList.get(i).getLikeDislike() != -1) {
                     anotherActivityIntent.putExtra("Position", i);
+                    anotherActivityIntent.putExtra("changeSong", true);
+                    anotherActivityIntent.putExtra("playerMode", SONG_MODE);
+                    anotherActivityIntent.putExtra("playingStatus", true);
                     startActivity(anotherActivityIntent);
                 }
 
             }
         });
 
+
+
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                songPlayer.putExtra("playerMode", SONG_MODE);
+                songPlayer.putExtra("changeSong", false);
+                songPlayer.putExtra("playerMode", SONG_MODE); // should be song mode
+                songPlayer.putExtra("playingStatus", playing);
                 startActivity(songPlayer);
             }
         });
@@ -188,33 +193,108 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
+
+        play.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                if(playing)
+                    play.setImageResource(R.drawable.play);
+                else
+                    play.setImageResource(R.drawable.pause);
+
+                if(!playing) {
+                    musicPlayerService.playSong();
+                } else {
+                    musicPlayerService.pause();
+                }
+
+                playing = !playing;
+            }
+        });
+
+
+        like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(currentSong.getLikeDislike() <= 0) {
+                    like.setImageResource(R.drawable.like_green);
+                    dislike.setImageResource(R.drawable.dislike_black);
+                    currentSong.setLikeDislike(1);
+                }
+                else
+                {
+                    like.setImageResource(R.drawable.like_black);
+                    dislike.setImageResource(R.drawable.dislike_black);
+                    currentSong.setLikeDislike(0);
+                }
+
+               // sharedPref.writeData(currentSong);
+                startActivity(songList);
+            }
+        });
+
+
+        dislike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(currentSong.getLikeDislike() >= 0) {
+                    like.setImageResource(R.drawable.like_black);
+                    dislike.setImageResource(R.drawable.dislike_red);
+                    currentSong.setLikeDislike(-1);
+                    musicPlayerService.skip();
+                }
+                else
+                {
+                    like.setImageResource(R.drawable.like_black);
+                    dislike.setImageResource(R.drawable.dislike_black);
+                    currentSong.setLikeDislike(0);
+                }
+
+                //sharedPref.writeData(currentSong);
+                startActivity(songList);
+            }
+        });
+
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                musicPlayerService.previous();
+            }
+        });
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                musicPlayerService.skip();
+            }
+        });
+
     }
 
-// TODO: Will implement these when we have multiple activities binding to the same service.
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//    }
+    public void updateUI(Song song) {
+        currentSong = song;
+
+        if (song != null && song.getLikeDislike() == -1) {
+            like.setImageResource(R.drawable.like_black);
+            dislike.setImageResource(R.drawable.dislike_red);
+        } else if (song != null && song.getLikeDislike() == 1) {
+            like.setImageResource(R.drawable.like_green);
+            dislike.setImageResource(R.drawable.dislike_black);
+        } else {
+            like.setImageResource(R.drawable.like_black);
+            dislike.setImageResource(R.drawable.dislike_black);
+        }
+
+    }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        if(locBound) {
-            unbindService(locConnection);
-            locBound = false;
-        }
-        if(dateBound) {
-            unbindService(dateConnection);
-            dateBound = false;
-        }
+    protected void onDestroy() {
         if(musicPlayerBound) {
             unbindService(musicPlayerConnection);
             musicPlayerBound = false;
         }
+        super.onDestroy();
     }
 }
