@@ -43,6 +43,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
     private View background;
     private Intent songPlayer;
     private Intent songList;
+    private Intent albumList;
 
     private TextView songTitleTextView;
     private TextView artistTextView;
@@ -133,8 +134,6 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         LP_dayOfWeek = findViewById(R.id.dayOfWeek);
         LP_date = findViewById(R.id.date);
         LP_location = findViewById(R.id.location);
-
-
 
 
         Intent musicPlayerIntent = new Intent(this, MusicPlayerService.class);
@@ -259,7 +258,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         albumMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(albumList);
             }
         });
 

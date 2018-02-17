@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
         startService(musicPlayerIntent);
         Toast.makeText(MainActivity.this, "Service now connected", Toast.LENGTH_SHORT).show();
+
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
