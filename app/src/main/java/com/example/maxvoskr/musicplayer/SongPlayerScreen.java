@@ -68,10 +68,10 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
             musicPlayerService.setMode(playerMode);
 
             if(changeSong) {
-                currentSong = MusicArrayList.musicList.get(getIntent().getExtras().getInt("Position"));
-
                 if(playerMode == SONG_MODE)
                 {
+                    currentSong = MusicArrayList.musicList.get(getIntent().getExtras().getInt("Position"));
+
                     if(currentSong.getLikeDislike() == -1) {
                         currentSong = null;
                     } else {
@@ -80,6 +80,12 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                         musicPlayerService.setList(songs);
                         musicPlayerService.playSong();
                     }
+                }
+                else if(playerMode == ALBUM_MODE) {
+
+                }
+                else if (playerMode == FLASHBACK_MODE) {
+
                 }
             }
             else {
@@ -132,6 +138,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
 
         // get passed in intent values
         Intent intent = getIntent();
+        playing = intent.getBooleanExtra("playingStatus", false);
         playerMode = intent.getIntExtra("playerMode", SONG_MODE);
         changeSong = intent.getBooleanExtra("changeSong", true);
 
@@ -149,8 +156,10 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         else
             background.setBackgroundColor(Color.parseColor("#6eff6701"));
 
-
-
+        if(!playing)
+            play.setImageResource(R.drawable.play);
+        else
+            play.setImageResource(R.drawable.pause);
 
 
 
@@ -214,6 +223,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                 }
 
                 sharedPref.writeData(currentSong);
+                startActivity(songList);
             }
         });
 
@@ -234,6 +244,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                songList.putExtra("playingStatus", playing);
                 startActivity(songList);
             }
         });
@@ -306,8 +317,6 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
     @Override
     public void updateUI(Song nextSong)
     {
-        Toast.makeText(this, "If the song stuff doesn't update you have my permission to let out an internal scream and then go to bed", Toast.LENGTH_SHORT).show();
-
         currentSong = nextSong;
 
         if(currentSong != null) {
