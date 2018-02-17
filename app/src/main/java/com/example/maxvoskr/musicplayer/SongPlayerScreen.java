@@ -68,10 +68,10 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
             musicPlayerService.setMode(playerMode);
 
             if(changeSong) {
-                currentSong = MusicArrayList.musicList.get(getIntent().getExtras().getInt("Position"));
-
                 if(playerMode == SONG_MODE)
                 {
+                    currentSong = MusicArrayList.musicList.get(getIntent().getExtras().getInt("Position"));
+
                     if(currentSong.getLikeDislike() == -1) {
                         currentSong = null;
                     } else {
@@ -80,6 +80,12 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                         musicPlayerService.setList(songs);
                         musicPlayerService.playSong();
                     }
+                }
+                else if(playerMode == ALBUM_MODE) {
+
+                }
+                else if (playerMode == FLASHBACK_MODE) {
+
                 }
             }
             else {
@@ -214,6 +220,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                 }
 
                 sharedPref.writeData(currentSong);
+                startActivity(songList);
             }
         });
 
