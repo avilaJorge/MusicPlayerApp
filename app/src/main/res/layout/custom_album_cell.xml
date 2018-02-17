@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,22 +12,27 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/trackimage"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="10dp" />
+        android:layout_marginLeft="18dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf = "parent"
+        app:layout_constraintTop_toTopOf = "parent"
+        android:src="@drawable/album" />
 
     <TextView
         android:id="@+id/albumName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/musicImage"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_toEndOf="@+id/musicImage"
         android:layout_toRightOf="@+id/musicImage"
+        app:layout_constraintLeft_toRightOf="@id/musicImage"
+        app:layout_constraintTop_toTopOf="@id/musicImage"
         android:text="Album Name"
         android:textColor="#000000"
-        android:textSize="12sp"
-        tools:layout_editor_absoluteX="81dp"
-        tools:layout_editor_absoluteY="16dp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/artistName"
@@ -36,10 +41,13 @@
         android:layout_alignLeft="@+id/trackName"
         android:layout_alignStart="@+id/trackName"
         android:layout_below="@+id/trackName"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="17dp"
+        app:layout_constraintLeft_toRightOf="@id/musicImage"
+        app:layout_constraintTop_toTopOf="@id/albumName"
         android:text="Artist Name"
         android:textColor="#000000"
-        android:textSize="10sp"
-        tools:layout_editor_absoluteX="81dp"
-        tools:layout_editor_absoluteY="43dp" />
+        android:textSize="10sp" />
+
 
 </android.support.constraint.ConstraintLayout>
