@@ -138,6 +138,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
 
         // get passed in intent values
         Intent intent = getIntent();
+        playing = intent.getBooleanExtra("playingStatus", false);
         playerMode = intent.getIntExtra("playerMode", SONG_MODE);
         changeSong = intent.getBooleanExtra("changeSong", true);
 
@@ -155,8 +156,10 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         else
             background.setBackgroundColor(Color.parseColor("#6eff6701"));
 
-
-
+        if(!playing)
+            play.setImageResource(R.drawable.play);
+        else
+            play.setImageResource(R.drawable.pause);
 
 
 
@@ -241,6 +244,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                songList.putExtra("playingStatus", playing);
                 startActivity(songList);
             }
         });
@@ -313,8 +317,6 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
     @Override
     public void updateUI(Song nextSong)
     {
-        Toast.makeText(this, "If the song stuff doesn't update you have my permission to let out an internal scream and then go to bed", Toast.LENGTH_SHORT).show();
-
         currentSong = nextSong;
 
         if(currentSong != null) {
