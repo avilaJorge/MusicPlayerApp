@@ -1,45 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/musicImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/trackimage"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="10dp" />
-
-    <TextView
-        android:id="@+id/albumName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/musicImage"
-        android:layout_toEndOf="@+id/musicImage"
-        android:layout_toRightOf="@+id/musicImage"
-        android:text="Album Name"
-        android:textColor="#000000"
-        android:textSize="12sp"
-        tools:layout_editor_absoluteX="81dp"
-        tools:layout_editor_absoluteY="16dp" />
-
-    <TextView
-        android:id="@+id/artistName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/trackName"
-        android:layout_alignStart="@+id/trackName"
-        android:layout_below="@+id/trackName"
-        android:text="Artist Name"
-        android:textColor="#000000"
-        android:textSize="10sp"
-        tools:layout_editor_absoluteX="81dp"
-        tools:layout_editor_absoluteY="43dp" />
 
 </android.support.constraint.ConstraintLayout>
