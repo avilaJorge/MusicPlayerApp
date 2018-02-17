@@ -250,6 +250,9 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(playerMode == FLASHBACK_MODE) {
+                    musicPlayerService.stop();
+                }
                 songList.putExtra("playingStatus", playing);
                 startActivity(songList);
             }
@@ -258,6 +261,9 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         albumMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(playerMode == FLASHBACK_MODE) {
+                    musicPlayerService.stop();
+                }
                 startActivity(albumList);
             }
         });
@@ -265,8 +271,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         flashbackMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            if(playerMode != FLASHBACK_MODE)
-            {
+            if(playerMode != FLASHBACK_MODE) {
                 songPlayer.putExtra("playerMode", FLASHBACK_MODE);
                 startActivity(songPlayer);
             }
