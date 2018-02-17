@@ -96,7 +96,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
             else {
                 currentSong = musicPlayerService.getCurrentSong(); // get currently played song from media player service
 
-                if(currentSong.getLikeDislike() == -1) {
+                if(currentSong != null && currentSong.getLikeDislike() == -1) {
                     currentSong = null;
                 }
             }
@@ -236,7 +236,8 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                musicPlayerService.previous();
+                if (playerMode != FLASHBACK_MODE)
+                    musicPlayerService.previous();
             }
         });
 
