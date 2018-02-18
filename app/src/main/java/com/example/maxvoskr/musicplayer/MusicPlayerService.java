@@ -119,6 +119,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         }
 
         if (mode == FLASHBACK_MODE && songs.isEmpty()) {
+            Toast.makeText(context, "Starting flashback mode over", Toast.LENGTH_SHORT).show();
             flashbackPlaylist = new FlashbackPlaylist(MusicArrayList.musicList);
             flashbackPlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
             Song next = flashbackPlaylist.getNextSong();

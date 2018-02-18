@@ -82,7 +82,9 @@ public class CurrentLocationTimeData {
 
     public String getLocation(){
         if(locationService != null)
-        location =  locationService.getLocationName();
+            location =  locationService.getLocationName();
+        else
+            location = "";
         return location;
     }
 
@@ -116,8 +118,8 @@ public class CurrentLocationTimeData {
     //Use if song ends
     public void updateSongUsingTemp(Song song) {
         Log.d("STATE", "tempDayOfWeek contains " + Integer.toString(tempDayOfWeek));
-        if (!tempLocation.isEmpty())
-            song.setLocation(tempLocation);
+        //if (!tempLocation.isEmpty())
+        song.setLocation(tempLocation);
         song.setDayOfWeek(tempDayOfWeek);
         song.setTimeMS(tempTimeMS);
         song.setTimeOfDay(tempTimeOfDay);

@@ -143,7 +143,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
 
         // get passed in intent values
         Intent intent = getIntent();
-        playing = intent.getBooleanExtra("playingStatus", false);
+        playing = intent.getBooleanExtra("playingStatus", true);
         playerMode = intent.getIntExtra("playerMode", SONG_MODE);
         changeSong = intent.getBooleanExtra("changeSong", true);
 
@@ -291,6 +291,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
             songTitleTextView.setText(currentSong.getName());
             artistTextView.setText(currentSong.getArtist());
             albumTitleTextView.setText(currentSong.getAlbum());
+
             if (currentSong.getTimeMS() != 0) {
                 Date songDate = new Date(currentSong.getTimeMS());
 
@@ -306,7 +307,6 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                 }
 
                 String location = currentSong.getLocation();
-
                 if (location.length() > 30)
                     location = location.substring(0, 26) + "...";
 
@@ -315,6 +315,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                 LP_date.setText((month[songDate.getMonth()] + " " +
                         songDate.getDate() + ", " + (1900 + songDate.getYear())));
                 LP_location.setText(location);
+
             } else {
                 LP_time.setText(("Song has not been played before"));
                 LP_dayOfWeek.setText("");
