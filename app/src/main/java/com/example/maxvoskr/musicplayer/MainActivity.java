@@ -63,7 +63,9 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
     private MusicArrayList musicList;
 
     private Song currentSong;
+    private Album currentAlbum;
     private boolean playing;
+    private int albumPosition = -1;
 
     private SongHistorySharedPreferenceManager sharedPref;
 
@@ -116,9 +118,10 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
-
+        // get passed in intent values
         Intent intent = getIntent();
         playing = intent.getBooleanExtra("playingStatus", false);
+        albumPosition = intent.getIntExtra("Position", -1);
 
         sharedPref = new SongHistorySharedPreferenceManager(getApplicationContext());
 
@@ -126,7 +129,6 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
         albumIntent = new Intent(this, AlbumListActivity.class);
-
 
         trackList = (ListView) findViewById(R.id.trackList);
         songMode = findViewById(R.id.navLeft);
@@ -143,29 +145,39 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         else
             play.setImageResource(R.drawable.pause);
 
-
-
-        adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList.musicList);
-        trackList.setAdapter(adapter);
-
+        if (albumPosition != -1) {
+            currentAlbum = musicList.albumList.get(albumPosition);
+            adapter = new MusicAdapter(this, R.layout.custom_track_cell, currentAlbum.getMusicList());
+            trackList.setAdapter(adapter);
+        } else {
+            adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList.musicList);
+            trackList.setAdapter(adapter);
+        }
 
         trackList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                if(musicList.musicList.get(i).getLikeDislike() != -1) {
-                    anotherActivityIntent.putExtra("Position", i);
-                    anotherActivityIntent.putExtra("changeSong", true);
-                    anotherActivityIntent.putExtra("playerMode", SONG_MODE);
-                    anotherActivityIntent.putExtra("playingStatus", true);
-                    startActivity(anotherActivityIntent);
+                if (albumPosition != -1) {
+                    if(currentAlbum.getMusicList().get(i).getLikeDislike() != -1) {
+                        anotherActivityIntent.putExtra("Position", i);
+                        anotherActivityIntent.putExtra("changeSong", true);
+                        anotherActivityIntent.putExtra("playerMode", SONG_MODE);
+                        anotherActivityIntent.putExtra("playingStatus", true);
+                        startActivity(anotherActivityIntent);
+                    }
+                } else {
+                    if (musicList.musicList.get(i).getLikeDislike() != -1) {
+                        anotherActivityIntent.putExtra("Position", i);
+                        anotherActivityIntent.putExtra("changeSong", true);
+                        anotherActivityIntent.putExtra("playerMode", SONG_MODE);
+                        anotherActivityIntent.putExtra("playingStatus", true);
+                        startActivity(anotherActivityIntent);
+                    }
                 }
-
             }
         });
-
-
 
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
