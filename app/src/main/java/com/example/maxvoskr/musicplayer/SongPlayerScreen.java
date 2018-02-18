@@ -69,7 +69,14 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
 
             musicPlayerService.setMode(playerMode);
 
-            if(changeSong) {
+            if (playerMode == FLASHBACK_MODE) {
+                musicPlayerService.stop();
+                musicPlayerService.setList(new ArrayList<Song>());
+                musicPlayerService.playSong();
+
+                currentSong = musicPlayerService.getCurrentSong();
+            }
+            else if(changeSong) {
                 if(playerMode == SONG_MODE)
                 {
                     currentSong = MusicArrayList.musicList.get(getIntent().getExtras().getInt("Position"));
@@ -85,13 +92,6 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                 }
                 else if(playerMode == ALBUM_MODE) {
 
-                }
-                else if (playerMode == FLASHBACK_MODE) {
-                    musicPlayerService.stop();
-                    musicPlayerService.setList(new ArrayList<Song>());
-                    musicPlayerService.playSong();
-
-                    currentSong = musicPlayerService.getCurrentSong();
                 }
             }
             else {
@@ -217,7 +217,6 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                     like.setImageResource(R.drawable.like_black);
                     dislike.setImageResource(R.drawable.dislike_red);
                     currentSong.setLikeDislike(-1);
-                    musicPlayerService.skip();
                 }
                 else
                 {
@@ -226,8 +225,13 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                     currentSong.setLikeDislike(0);
                 }
 
-                //sharedPref.writeData(currentSong);
-                startActivity(songList);
+                if(playerMode == FLASHBACK_MODE) {
+                    musicPlayerService.skip();
+                }
+                else {
+                    musicPlayerService.skip();
+                    startActivity(songList);
+                }
             }
         });
 

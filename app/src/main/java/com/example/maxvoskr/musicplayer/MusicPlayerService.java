@@ -190,8 +190,16 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                     {
                         stop();
                     }
+                } else if(mode == FLASHBACK_MODE) {
+                    flashbackPlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
+                    Song next = flashbackPlaylist.getNextSong();
+                    if(next != null) {
+                        songs.set(0, next);
+                        songIndex = 0;
+                        activity.updateUI(getCurrentSong());
+                        playSong();
+                    }
                 }
-
             }
         }
     }
