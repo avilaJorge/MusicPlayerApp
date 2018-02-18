@@ -79,7 +79,7 @@ public class SwitchModesTest {
     public void switchToAlbumModeTest() {
 
         // Perform switch to album mode mode
-        onView(withId(R.id.albumMode)).perform(click());
+        //onView(withId(R.id.albumMode)).perform(click());
 
         // Check for some object in album mode
 
