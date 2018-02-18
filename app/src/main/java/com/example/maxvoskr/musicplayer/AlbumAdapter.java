@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -61,8 +60,8 @@ public class AlbumAdapter extends BaseAdapter {
                     (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             view = layoutInflater.inflate(layout, null);
-            viewHolder.albumName = (TextView) view.findViewById(R.id.albumName);
-            viewHolder.artistName = (TextView) view.findViewById(R.id.artistName);
+            //viewHolder.albumName = (TextView) view.findViewById(R.id.albumName);
+            //viewHolder.artistName = (TextView) view.findViewById(R.id.artistName);
 
             view.setTag(viewHolder);
 

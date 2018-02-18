@@ -128,7 +128,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
             songIndex = 0;
         }
 
-       // if (songs != null && songs.size() < songIndex) {
+        if (songs != null && songIndex < songs.size()) {
             mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
             playerReleased = false;
             mediaPlayer.setOnPreparedListener(this);
@@ -163,7 +163,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
             double time = mediaPlayer.getDuration() * 0.9;
             mediaPlayer.seekTo((int) time);
         }
-   // }
+    }
 
     /* Pause the song */
     public void pause() {

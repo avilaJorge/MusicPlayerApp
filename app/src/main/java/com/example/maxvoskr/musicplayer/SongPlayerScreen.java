@@ -98,7 +98,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
             else {
                 currentSong = musicPlayerService.getCurrentSong(); // get currently played song from media player service
 
-                if(currentSong.getLikeDislike() == -1) {
+                if(currentSong != null && currentSong.getLikeDislike() == -1) {
                     currentSong = null;
                 }
             }
@@ -232,7 +232,8 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                musicPlayerService.previous();
+                if (playerMode != FLASHBACK_MODE)
+                    musicPlayerService.previous();
             }
         });
 
@@ -246,6 +247,9 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(playerMode == FLASHBACK_MODE) {
+                    musicPlayerService.stop();
+                }
                 songList.putExtra("playingStatus", playing);
                 startActivity(songList);
             }
@@ -254,6 +258,9 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         albumMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(playerMode == FLASHBACK_MODE) {
+                    musicPlayerService.stop();
+                }
                 startActivity(albumList);
             }
         });
@@ -261,8 +268,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         flashbackMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            if(playerMode != FLASHBACK_MODE)
-            {
+            if(playerMode != FLASHBACK_MODE) {
                 songPlayer.putExtra("playerMode", FLASHBACK_MODE);
                 startActivity(songPlayer);
             }
