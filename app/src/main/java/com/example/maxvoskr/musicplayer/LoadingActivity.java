@@ -10,7 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
 
 /*****
  * dev: Adi
@@ -19,6 +22,7 @@ import java.util.Hashtable;
 public class LoadingActivity extends AppCompatActivity {
 
     public static CurrentLocationTimeData currentLocationTimeData;
+    private Set<String> albumNamesSet = new HashSet<String>();
     MusicArrayList musicList;
     Context context;
     SongHistorySharedPreferenceManager sharedPref;
@@ -30,8 +34,6 @@ public class LoadingActivity extends AppCompatActivity {
         context = getApplicationContext();
         musicList = new MusicArrayList();
         sharedPref = new SongHistorySharedPreferenceManager(context);
-
-
 
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         ArrayList<String> rawFileNames = new ArrayList<>();
@@ -65,8 +67,27 @@ public class LoadingActivity extends AppCompatActivity {
             Song song = new Song(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE), retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
                     retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST), nameToCode.get(songName));
 
+            this.albumNamesSet.add(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM));
+            //musicList.albumSet.add(new Album(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
+            //        retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST)));
             sharedPref.updateData(song);
             musicList.musicList.add(song);
+        }
+
+        for (String albumName : albumNamesSet) {
+            System.out.println(albumName);
+            musicList.albumList.add(new Album(albumName, "Max"));
+        }
+
+        for (Album album : musicList.albumList) {
+
+            for (Song song : musicList.musicList) {
+
+                if (song.getAlbum().equals(album.getAlbumName())) {
+                    album.setArtist(song.getArtist());
+                    album.addSong(song);
+                }
+            }
         }
 
 
@@ -80,8 +101,8 @@ public class LoadingActivity extends AppCompatActivity {
     protected void onDestroy() {
         currentLocationTimeData.unBindServices();
 
-        for(Song song: musicList.musicList)
-        {
+        for (Song song : musicList.musicList) {
+
             sharedPref.writeData(song);
         }
 

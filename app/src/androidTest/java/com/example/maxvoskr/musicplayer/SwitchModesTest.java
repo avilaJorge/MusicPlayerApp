@@ -37,7 +37,7 @@ import static org.hamcrest.Matchers.is;
 public class SwitchModesTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<LoadingActivity> mActivityTestRule = new ActivityTestRule<>(LoadingActivity.class);
 
 
     @Rule
@@ -79,7 +79,7 @@ public class SwitchModesTest {
     public void switchToAlbumModeTest() {
 
         // Perform switch to album mode mode
-        onView(withId(R.id.albumMode)).perform(click());
+        //onView(withId(R.id.albumMode)).perform(click());
 
         // Check for some object in album mode
 

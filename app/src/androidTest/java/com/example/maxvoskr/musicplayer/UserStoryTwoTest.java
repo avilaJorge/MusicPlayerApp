@@ -13,13 +13,20 @@ import android.view.ViewParent;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onData;
+import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.maxvoskr.musicplayer.MusicArrayList.albumList;
+import static com.example.maxvoskr.musicplayer.MusicArrayList.musicList;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.instanceOf;
@@ -29,44 +36,91 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class UserStoryTwoTest {
 
+    private static Song song;
+    private static Album album;
+
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<LoadingActivity> mActivityTestRule = new ActivityTestRule<>(LoadingActivity.class);
 
 
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
 
+    @Before
+    public void before(){
+
+        album = albumList.get(0);
+        song = album.getMusicList().get(0);
+
+    }
+
+
+
     @Test
-    public void UserViewsTracksInAnAlbum() {
+    public void userViewsTracksInAnAlbum() {
 
         /*
             Given: app is open
             And the user is in playback mode
-            And the user is on the song menu
-            When "Hello World!" is selected
-            Then  the song playing page will open
-            And the song will play
-            And the user can then select to change to another song or listen till the end
+            And the user is on the Album menu
+            When "Hello World: The Album" is selected
+            Then all songs in the album will be listed in a new page
+            And the user can then select songs from that page to play
 
         */
 
-        // App should be open, cehck for song list mode and click first song
+        onView(withId(R.id.albumMode)).perform(click());
+
+
+        // Select first album
+        onData(anything()).inAdapterView(withId(R.id.albumListDisplay))
+                .atPosition(0)
+                .perform(click());
+
+
+        onView(withText(album.getAlbumName())).check(matches(isDisplayed()));
+
+        // Select first song of album
         onData(anything()).inAdapterView(withId(R.id.trackList))
                 .atPosition(0)
                 .perform(click());
 
         // check that we have switched
-        onData(allOf(is(instanceOf(String.class)), is("Last Played:")));
+        onView(withText(song.getName())).check(matches(isDisplayed()));
 
-        //
+    }
+
+    @Test
+    public void userSelectsAlbumToPlay(){
+
+/*
+        Given: The App is open
+        And the User is in playback mode
+        And the User is on the album menu
+        When "Hello World: The Album" is selected
+        Then the songs in the Album are listed along with a play album button
+        When the user selects the play album button
+        Then songs begin to play in order on the album
+*/
+
+        onView(withId(R.id.albumMode)).perform(click());
 
 
+        // Select first album
+        onData(anything()).inAdapterView(withId(R.id.albumListDisplay))
+                .atPosition(0)
+                .perform(click());
 
-        // Perform switch to flashBack mode
-        //onView(withId(R.id.flashbackMode)).perform(click());
 
-        // Check for Last played object
-        //onData(allOf(is(instanceOf(String.class)), is("Last Played:")));
+        onView(withText(album.getAlbumName())).check(matches(isDisplayed()));
+
+        // Select first song of album
+        onData(anything()).inAdapterView(withId(R.id.trackList))
+                .atPosition(0)
+                .perform(click());
+
+        // check that we have switched
+        onView(withText(song.getName())).check(matches(isDisplayed()));
 
     }
 
