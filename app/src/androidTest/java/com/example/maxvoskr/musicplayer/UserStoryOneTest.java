@@ -58,37 +58,23 @@ public class UserStoryOneTest {
 
         */
 
+        // App should be open, check for song list mode and click first song
         onData(anything()).inAdapterView(withId(R.id.trackList))
                 .atPosition(0)
                 .perform(click());
 
+        // check that we have switched
+        onData(allOf(is(instanceOf(String.class)), is("Last Played:")));
 
-
-        // onData(allOf(is(instanceOf(String.class)), is("Last Played:")));
-
-
+        //
 
 
 
         // Perform switch to flashBack mode
-        onView(withId(R.id.flashbackMode)).perform(click());
+        //onView(withId(R.id.flashbackMode)).perform(click());
 
         // Check for Last played object
-        onData(allOf(is(instanceOf(String.class)), is("Last Played:")));
-
-    }
-
-    @Test
-    public void switchToPlayingSongTest() {
-
-
-
-    }
-
-
-    @Test
-    public void switchToAlbumModeTest() {
-
+        //onData(allOf(is(instanceOf(String.class)), is("Last Played:")));
 
     }
 
