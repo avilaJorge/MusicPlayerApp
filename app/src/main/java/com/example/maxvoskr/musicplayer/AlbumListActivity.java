@@ -14,13 +14,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 
 import java.util.ArrayList;
 
@@ -146,14 +143,14 @@ public class AlbumListActivity extends AppCompatActivity {
 
         albumList = new ArrayList<>();
         musicList = new MusicArrayList();
-
+/*
         musicList.musicList.add(new Song("Windows Are the Eyes", "Trevor", "Forum", R.raw.windowsaretheeyestothehouse));
         musicList.musicList.add(new Song("Dead Dove, Do Not Eat", "Max","Forum", R.raw.deaddovedonoteat));
         musicList.musicList.add(new Song("Sisters of the Sun", "Adi","Forum",  R.raw.sistersofthesun));
         musicList.musicList.add(new Song("Sky Full of Ghosts", "Matt", "Forum",  R.raw.skyfullofghosts));
         musicList.musicList.add(new Song("Dreamatorium", "Tim","Forum", R.raw.dreamatorium));
         musicList.musicList.add(new Song("I just Want to Tell You", "Jorge","Forum", R.raw.ijustwanttotellyoubothgoodluck));
-
+*/
         albumList.add(new Album("Max Album Name", musicList, "Max (artist)"));
 
         adapter = new AlbumAdapter(this, R.layout.custom_album_cell, albumList);
