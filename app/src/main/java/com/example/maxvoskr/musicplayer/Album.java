@@ -10,12 +10,14 @@ import java.util.List;
 public class Album {
 
     public String albumName;
-    public static MusicArrayList musicList;
+    //public MusicArrayList musicList;
+    public ArrayList<Song> musicList;
     public String artist;
 
-    public Album(String albumName, MusicArrayList musicList, String artist) {
+    public Album(String albumName, String artist) {
         this.albumName = albumName;
-        this.musicList = musicList;
+        //this.musicList = musicList;
+        this.musicList = new ArrayList<Song>();
         this.artist = artist;
     }
 
@@ -27,11 +29,11 @@ public class Album {
         this.albumName = albumName;
     }
 
-    public MusicArrayList getMusicList() {
+    public ArrayList<Song> getMusicList() {
         return musicList;
     }
 
-    public void setMusicList(MusicArrayList musicList) {
+    public void setMusicList(ArrayList<Song> musicList) {
         this.musicList = musicList;
     }
 
@@ -41,5 +43,9 @@ public class Album {
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public void addSong(Song song) {
+        this.musicList.add(song);
     }
 }

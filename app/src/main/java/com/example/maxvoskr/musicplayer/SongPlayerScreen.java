@@ -82,6 +82,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                         musicPlayerService.setList(songs);
                         musicPlayerService.playSong();
                     }
+
                 }
                 else if(playerMode == ALBUM_MODE) {
 
@@ -164,9 +165,6 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
             play.setImageResource(R.drawable.play);
         else
             play.setImageResource(R.drawable.pause);
-
-
-
 
 
         play.setOnClickListener(new View.OnClickListener() {

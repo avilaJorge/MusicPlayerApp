@@ -10,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by maxvoskr on 2/14/18.
@@ -53,7 +55,6 @@ public class AlbumAdapter extends BaseAdapter {
 
         if (view == null) {
 
-            System.out.println("1");
             viewHolder = new AlbumAdapter.ViewHolder();
             LayoutInflater layoutInflater =
                     (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
