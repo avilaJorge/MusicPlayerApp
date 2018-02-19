@@ -104,6 +104,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                         musicPlayerService.setList(songs);
                         musicPlayerService.playSong();
 
+
                         currentSong = songs.get(0);
                     }
                 }
@@ -111,8 +112,9 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                     musicPlayerService.stop();
                     musicPlayerService.setList(new ArrayList<Song>());
                     musicPlayerService.playSong();
-
                     currentSong = musicPlayerService.getCurrentSong();
+                    if (currentSong != null)
+                        play.setImageResource(R.drawable.pause);
                 }
             }
             else {
@@ -390,6 +392,14 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
 
             like.setImageResource(R.drawable.like_black);
             dislike.setImageResource(R.drawable.dislike_black);
+        }
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        if(isChangingConfigurations()){
+            ;
         }
     }
 }

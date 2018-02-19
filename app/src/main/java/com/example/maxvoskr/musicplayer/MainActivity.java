@@ -318,4 +318,12 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         }
         super.onDestroy();
     }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        if(isChangingConfigurations()){
+            ;
+        }
+    }
 }

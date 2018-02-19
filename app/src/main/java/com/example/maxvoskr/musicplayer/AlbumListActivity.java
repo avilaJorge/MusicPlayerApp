@@ -306,6 +306,11 @@ public class AlbumListActivity extends AppCompatActivity {
             unbindService(musicPlayerConnection);
             musicPlayerBound = false;
         }
+        if(isChangingConfigurations()){
+                ;
+        }
     }
+
+
 }
 
