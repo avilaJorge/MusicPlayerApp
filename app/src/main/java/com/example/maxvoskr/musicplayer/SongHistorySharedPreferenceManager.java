@@ -43,7 +43,7 @@ public class SongHistorySharedPreferenceManager {
             throw new NullPointerException("Cannot update a uninitialized song");
         }
         try{
-            songObj.setLocation(SongData.getString(songObj.getName()+LOCATION, songObj.getName()));
+            songObj.setLocation(SongData.getString(songObj.getName()+LOCATION, songObj.getLocation()));
             songObj.setTimeMS(Long.parseLong(SongData.getString(songObj.getName()+TIME_MS, Long.toString(songObj.getTimeMS()))));
             songObj.setDayOfWeek(Integer.parseInt(SongData.getString(songObj.getName()+DAY_OF_WEEK, Integer.toString(songObj.getDayOfWeek()))));
             songObj.setTimeOfDay(Integer.parseInt(SongData.getString(songObj.getName()+TIME_OF_DAY, Integer.toString(songObj.getTimeOfDay()))));

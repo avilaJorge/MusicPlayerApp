@@ -19,7 +19,7 @@
         android:id="@+id/navMid"
         android:layout_width="0dp"
         android:layout_height="80dp"
-        android:background="#6e0208c6"
+        android:background="#5a0208c6"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toLeftOf="@id/navRight"
         app:layout_constraintLeft_toRightOf="@id/navLeft"

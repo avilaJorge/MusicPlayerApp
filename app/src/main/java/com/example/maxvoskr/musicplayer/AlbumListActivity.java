@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -54,6 +55,12 @@ public class AlbumListActivity extends AppCompatActivity {
     private Intent songList;
     private Intent songListActivityIntent;
 
+    private ImageView play;
+    private ImageView next;
+    private ImageView previous;
+    private ImageView like;
+    private ImageView dislike;
+
     //private ArrayList<Song> musicList;
     private AlbumAdapter adapter;
     private ListView albumListView;
@@ -61,6 +68,12 @@ public class AlbumListActivity extends AppCompatActivity {
     private ArrayList<Album> albumList;
 
     private MusicArrayList musicList;
+
+    private boolean playing;
+    private Song currentSong;
+
+    private SongHistorySharedPreferenceManager sharedPref;
+
 
     private ServiceConnection locConnection = new ServiceConnection() {
         @Override
@@ -93,6 +106,8 @@ public class AlbumListActivity extends AppCompatActivity {
                     (MusicPlayerService.MusicPlayerBinder) iBinder;
             musicPlayerService = musicPlayerBinder.getMusicPlayerService();
             musicPlayerBound = true;
+
+            currentSong = musicPlayerService.getCurrentSong();
         }
 
         @Override
@@ -133,10 +148,20 @@ public class AlbumListActivity extends AppCompatActivity {
 
         songListActivityIntent  = new Intent(this, MainActivity.class);
 
+        Intent intent = getIntent();
+        playing = intent.getBooleanExtra("playingStatus", false);
+
+        sharedPref = new SongHistorySharedPreferenceManager(getApplicationContext());
+
         albumListView = (ListView) findViewById(R.id.albumListDisplay);
         songMode = findViewById(R.id.navLeft);
         albumMode = findViewById(R.id.navMid);
         flashbackMode = findViewById(R.id.navRight);
+        play = findViewById(R.id.play);
+        next = findViewById(R.id.next);
+        previous = findViewById(R.id.previous);
+        like = findViewById(R.id.like);
+        dislike = findViewById(R.id.dislike);
 
         adapter = new AlbumAdapter(this, R.layout.custom_album_cell, musicList.albumList);
         albumListView.setAdapter(adapter);
@@ -157,15 +182,16 @@ public class AlbumListActivity extends AppCompatActivity {
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                songPlayer.putExtra("albumMode", SONG_MODE);
-                startActivity(songPlayer);
+                songList.putExtra("Position", -1);
+                startActivity(songList);
             }
         });
 
         albumMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                songPlayer.putExtra("albumMode", ALBUM_MODE);
+                startActivity(songPlayer);
             }
         });
 
@@ -177,6 +203,80 @@ public class AlbumListActivity extends AppCompatActivity {
             }
         });
 
+
+        play.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                if(!playing)
+                    play.setImageResource(R.drawable.play);
+                else
+                    play.setImageResource(R.drawable.pause);
+
+                if(playing) {
+                    musicPlayerService.playSong();
+                } else {
+                    musicPlayerService.pause();
+                }
+
+                playing = !playing;
+            }
+        });
+
+
+        like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(currentSong.getLikeDislike() <= 0) {
+                    like.setImageResource(R.drawable.like_green);
+                    dislike.setImageResource(R.drawable.dislike_black);
+                    currentSong.setLikeDislike(1);
+                }
+                else
+                {
+                    like.setImageResource(R.drawable.like_black);
+                    dislike.setImageResource(R.drawable.dislike_black);
+                    currentSong.setLikeDislike(0);
+                }
+
+                sharedPref.writeData(currentSong);
+            }
+        });
+
+
+        dislike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(currentSong.getLikeDislike() >= 0) {
+                    like.setImageResource(R.drawable.like_black);
+                    dislike.setImageResource(R.drawable.dislike_red);
+                    currentSong.setLikeDislike(-1);
+                    musicPlayerService.skip();
+                }
+                else
+                {
+                    like.setImageResource(R.drawable.like_black);
+                    dislike.setImageResource(R.drawable.dislike_black);
+                    currentSong.setLikeDislike(0);
+                }
+
+                sharedPref.writeData(currentSong);
+            }
+        });
+
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                musicPlayerService.previous();
+            }
+        });
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                musicPlayerService.skip();
+            }
+        });
 
     }
 

@@ -32,6 +32,10 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
     private boolean playing = true;
     private Song currentSong;
 
+    private int album;
+    private int trackNum;
+    private Album currentAlbum;
+
     private ImageView play;
     private ImageView next;
     private ImageView previous;
@@ -85,7 +89,23 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
 
                 }
                 else if(playerMode == ALBUM_MODE) {
+                    if(album != -1 && trackNum != -1)
+                    {
+                        currentAlbum = MusicArrayList.albumList.get(album);
+                        ArrayList<Song> songs = new ArrayList<Song>();
+                        ArrayList<Song> albumSongs = currentAlbum.getMusicList();
 
+                        for(int i = trackNum; i < albumSongs.size(); i++)
+                            songs.add(albumSongs.get(i));
+
+                        for(int i = 0; i < trackNum; i++)
+                            songs.add(albumSongs.get(i));
+
+                        musicPlayerService.setList(songs);
+                        musicPlayerService.playSong();
+
+                        currentSong = songs.get(0);
+                    }
                 }
                 else if (playerMode == FLASHBACK_MODE) {
                     musicPlayerService.stop();
@@ -147,6 +167,8 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         playing = intent.getBooleanExtra("playingStatus", false);
         playerMode = intent.getIntExtra("playerMode", SONG_MODE);
         changeSong = intent.getBooleanExtra("changeSong", true);
+        album = intent.getIntExtra("album", -1);
+        trackNum = intent.getIntExtra("track", -1);
 
         //create intent references
         songList = new Intent(this, MainActivity.class);
@@ -157,7 +179,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         if(playerMode == SONG_MODE)
             background.setBackgroundColor(Color.parseColor("#5a47025c"));
         else if(playerMode == ALBUM_MODE)
-            background.setBackgroundColor(Color.parseColor("#6e0208c6"));
+            background.setBackgroundColor(Color.parseColor("#5a0208c6"));
         else
             background.setBackgroundColor(Color.parseColor("#6eff6701"));
 
@@ -203,7 +225,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                     currentSong.setLikeDislike(0);
                 }
 
-                //sharedPref.writeData(currentSong);
+                sharedPref.writeData(currentSong);
             }
         });
 
@@ -224,7 +246,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                     currentSong.setLikeDislike(0);
                 }
 
-                //sharedPref.writeData(currentSong);
+                sharedPref.writeData(currentSong);
                 startActivity(songList);
             }
         });

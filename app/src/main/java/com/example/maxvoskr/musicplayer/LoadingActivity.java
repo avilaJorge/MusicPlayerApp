@@ -12,7 +12,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Set;
 
 /*****
@@ -32,6 +31,16 @@ public class LoadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
         context = getApplicationContext();
+
+
+        try {
+            wait(10000);
+        }
+        catch (Exception e)
+        {
+
+        }
+
         musicList = new MusicArrayList();
         sharedPref = new SongHistorySharedPreferenceManager(context);
 
@@ -63,7 +72,6 @@ public class LoadingActivity extends AppCompatActivity {
             AssetFileDescriptor afd = res.openRawResourceFd(songCodes.get(i++));
             retriever.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 
-
             Song song = new Song(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE), retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
                     retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST), nameToCode.get(songName));
 
@@ -79,6 +87,7 @@ public class LoadingActivity extends AppCompatActivity {
             musicList.albumList.add(new Album(albumName, "Max"));
         }
 
+
         for (Album album : musicList.albumList) {
 
             for (Song song : musicList.musicList) {
@@ -89,7 +98,6 @@ public class LoadingActivity extends AppCompatActivity {
                 }
             }
         }
-
 
         final Intent mainActivityIntent  = new Intent(this, MainActivity.class);
         startActivity(mainActivityIntent);
