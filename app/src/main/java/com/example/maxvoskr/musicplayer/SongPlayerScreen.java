@@ -247,7 +247,10 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                 }
 
                 sharedPref.writeData(currentSong);
-                startActivity(songList);
+
+                if(playerMode == SONG_MODE) {
+                    startActivity(songList);
+                }
             }
         });
 
