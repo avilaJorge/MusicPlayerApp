@@ -10,8 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
 
 /**
  * Created by maxvoskr on 2/14/18.
@@ -60,8 +58,8 @@ public class AlbumAdapter extends BaseAdapter {
                     (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             view = layoutInflater.inflate(layout, null);
-            //viewHolder.albumName = (TextView) view.findViewById(R.id.albumName);
-            //viewHolder.artistName = (TextView) view.findViewById(R.id.artistName);
+            viewHolder.albumName = (TextView) view.findViewById(R.id.albumName);
+            viewHolder.artistName = (TextView) view.findViewById(R.id.artistName);
 
             view.setTag(viewHolder);
 
@@ -71,8 +69,10 @@ public class AlbumAdapter extends BaseAdapter {
         }
 
         final Album album = albumList.get(i);
-        viewHolder.albumName.setText(album.getAlbumName());
-        viewHolder.artistName.setText(album.getArtist());
+        if(album != null) {
+            viewHolder.albumName.setText(album.getAlbumName());
+            viewHolder.artistName.setText(album.getArtist());
+        }
 
         return view;
     }

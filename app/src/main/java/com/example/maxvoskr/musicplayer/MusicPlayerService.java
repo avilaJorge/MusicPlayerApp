@@ -1,5 +1,6 @@
 package com.example.maxvoskr.musicplayer;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
@@ -175,13 +176,13 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    @TargetApi(24)
     public void skip() {
         if(!playerReleased && mediaPlayer != null) {
             if (mediaPlayer.isPlaying()) {
                 mediaPlayer.reset();
                 if(mode == ALBUM_MODE) {
-                    if (++songIndex <= songs.size() && !songs.isEmpty() &&
+                    if (++songIndex < songs.size() && !songs.isEmpty() &&
                             songs.get(songIndex).getLikeDislike() != -1) {
                         activity.updateUI(getCurrentSong());
                         playSong();
@@ -191,12 +192,19 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                         stop();
                     }
                 }
-
+                else if (mode == SONG_MODE)
+                {
+                    stop();
+                }
+                else
+                {
+                    stop();
+                }
             }
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    @TargetApi(24)
     public void previous() {
         if(!playerReleased && mediaPlayer != null) {
             if (mediaPlayer.isPlaying()) {
@@ -235,7 +243,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
     /* Restart song */
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    @TargetApi(24)
     public void reset() {
         if(!playerReleased && mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.reset();
@@ -243,7 +251,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    @TargetApi(24)
     public void stop() {
         if(!playerReleased && mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.reset();

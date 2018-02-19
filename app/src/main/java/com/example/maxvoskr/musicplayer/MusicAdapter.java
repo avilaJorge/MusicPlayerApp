@@ -110,11 +110,12 @@ public class MusicAdapter extends BaseAdapter {
                     music.setLikeDislike(0);
                 }
 
-               // sharedPref.writeData(music);
+                sharedPref.writeData(music);
             }
         });
 
         // pause music
+
         viewHolder.dislikeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,7 +130,7 @@ public class MusicAdapter extends BaseAdapter {
                     music.setLikeDislike(0);
                 }
 
-              //  sharedPref.writeData(music);
+                sharedPref.writeData(music);
             }
         });
 
