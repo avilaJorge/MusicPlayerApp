@@ -21,7 +21,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             musicPlayerService = musicPlayerBinder.getMusicPlayerService();
             musicPlayerService.registerClient(MainActivity.this);
             musicPlayerBound = true;
-            Toast.makeText(MainActivity.this, "Service almost connected", Toast.LENGTH_SHORT).show();
+            Log.d("log", "Service almost connected");
 
             currentSong = musicPlayerService.getCurrentSong();
 
@@ -116,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         Intent musicPlayerIntent = new Intent(this, MusicPlayerService.class);
         bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
         startService(musicPlayerIntent);
-        Toast.makeText(MainActivity.this, "Service now connected", Toast.LENGTH_SHORT).show();
+        Log.d("log", "Service Now connected");
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);

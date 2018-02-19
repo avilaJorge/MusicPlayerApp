@@ -12,7 +12,6 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -63,7 +62,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-        Toast.makeText(context, "In onPrepared", Toast.LENGTH_SHORT).show();
+        Log.d("log", "In On Prepared");
         mp.start();
         currentLocationTimeData.updateTempData();
     }
@@ -105,7 +104,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     public void playSong() {
 
 
-        Toast.makeText(context, "In playSong", Toast.LENGTH_SHORT).show();
+        Log.d("log", "Service now connected");
         if (!playerReleased && paused) {
             paused = false;
             mediaPlayer.start();
@@ -157,7 +156,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                         playerReleased = true;
                     }
 
-                    Toast.makeText(context, "In onCompletion", Toast.LENGTH_SHORT).show();
+                    Log.d("log", "in on completion");
                 }
             });
             // TODO: Erase this before demo.
