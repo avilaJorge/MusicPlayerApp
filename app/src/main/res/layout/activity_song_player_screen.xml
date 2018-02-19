@@ -27,7 +27,7 @@
 
     <LinearLayout
         android:id="@+id/layoutA"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/layoutB"
@@ -84,7 +84,7 @@
     </LinearLayout>
     <LinearLayout
         android:id="@+id/layoutB"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/layoutA"
