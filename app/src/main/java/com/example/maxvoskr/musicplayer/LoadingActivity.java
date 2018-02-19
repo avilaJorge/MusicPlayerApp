@@ -72,7 +72,6 @@ public class LoadingActivity extends AppCompatActivity {
             AssetFileDescriptor afd = res.openRawResourceFd(songCodes.get(i++));
             retriever.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 
-
             Song song = new Song(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE), retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
                     retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST), nameToCode.get(songName));
 
@@ -88,6 +87,7 @@ public class LoadingActivity extends AppCompatActivity {
             musicList.albumList.add(new Album(albumName, "Max"));
         }
 
+
         for (Album album : musicList.albumList) {
 
             for (Song song : musicList.musicList) {
@@ -98,7 +98,6 @@ public class LoadingActivity extends AppCompatActivity {
                 }
             }
         }
-
 
         final Intent mainActivityIntent  = new Intent(this, MainActivity.class);
         startActivity(mainActivityIntent);

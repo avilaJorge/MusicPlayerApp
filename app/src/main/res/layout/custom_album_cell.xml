@@ -30,6 +30,8 @@
         android:layout_toRightOf="@+id/musicImage"
         app:layout_constraintLeft_toRightOf="@id/musicImage"
         app:layout_constraintTop_toTopOf="@id/musicImage"
+        android:maxLength="50"
+        android:ellipsize="end"
         android:text="Album Name"
         android:textColor="#000000"
         android:textSize="12sp" />
@@ -45,6 +47,8 @@
         android:layout_marginLeft="17dp"
         app:layout_constraintLeft_toRightOf="@id/musicImage"
         app:layout_constraintTop_toTopOf="@id/albumName"
+        android:maxLength="50"
+        android:ellipsize="end"
         android:text="Artist Name"
         android:textColor="#000000"
         android:textSize="10sp" />
