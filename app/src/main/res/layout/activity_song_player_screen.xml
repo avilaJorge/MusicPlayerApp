@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     >
 
     <!--
@@ -18,7 +18,7 @@
     -->
     <View
         android:id="@+id/background"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_marginTop="80dp"
         android:background="#6eff6701"
@@ -27,7 +27,7 @@
 
     <LinearLayout
         android:id="@+id/layoutA"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/layoutB"
@@ -38,7 +38,7 @@
 
         <TextView
             android:id="@+id/songTitle"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight=".8"
             android:autoSizeMaxTextSize="50dp"
@@ -58,7 +58,7 @@
 
         <TextView
             android:id="@+id/artistName"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:ellipsize="end"
@@ -71,7 +71,7 @@
 
         <TextView
             android:id="@+id/albumTitle"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:ellipsize="end"
@@ -82,21 +82,21 @@
             android:textColor="#000000"
             android:textSize="24sp" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/layoutB"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/layoutA"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="80dp"
-        >
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutA">
 
         <TextView
             android:id="@+id/lastPlayed"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:autoSizeMaxTextSize="36dp"
@@ -114,18 +114,16 @@
 
         <TextView
             android:id="@+id/time"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:text="12:32"
-            android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="18sp"
-
             android:autoSizeMaxTextSize="36dp"
             android:autoSizeTextType="uniform"
+            android:text="12:32"
+            android:textAlignment="center"
+
+            android:textColor="#000000"
+            android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/dayOfWeek"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -133,18 +131,18 @@
 
         <TextView
             android:id="@+id/dayOfWeek"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:autoSizeMaxTextSize="36dp"
+            android:autoSizeTextType="uniform"
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Wednesday"
             android:textAlignment="center"
+
             android:textColor="#000000"
             android:textSize="18sp"
-
-            android:autoSizeMaxTextSize="36dp"
-            android:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/date"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -152,18 +150,18 @@
 
         <TextView
             android:id="@+id/date"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:autoSizeMaxTextSize="36dp"
+            android:autoSizeTextType="uniform"
             android:ellipsize="end"
             android:singleLine="true"
             android:text="September 31, 2018"
             android:textAlignment="center"
+
             android:textColor="#000000"
             android:textSize="18sp"
-
-            android:autoSizeMaxTextSize="36dp"
-            android:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/location"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -172,18 +170,18 @@
 
         <TextView
             android:id="@+id/location"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:autoSizeMaxTextSize="36dp"
+            android:autoSizeTextType="uniform"
             android:ellipsize="end"
             android:singleLine="true"
             android:text="The name of this location is extremely long for testing purposes"
             android:textAlignment="center"
+
             android:textColor="#000000"
             android:textSize="18sp"
-
-            android:autoSizeMaxTextSize="36dp"
-            android:autoSizeTextType="uniform"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
