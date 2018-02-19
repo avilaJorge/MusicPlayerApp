@@ -60,8 +60,8 @@ public class AlbumAdapter extends BaseAdapter {
                     (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             view = layoutInflater.inflate(layout, null);
-            //viewHolder.albumName = (TextView) view.findViewById(R.id.albumName);
-            //viewHolder.artistName = (TextView) view.findViewById(R.id.artistName);
+            viewHolder.albumName = (TextView) view.findViewById(R.id.albumName);
+            viewHolder.artistName = (TextView) view.findViewById(R.id.artistName);
 
             view.setTag(viewHolder);
 
