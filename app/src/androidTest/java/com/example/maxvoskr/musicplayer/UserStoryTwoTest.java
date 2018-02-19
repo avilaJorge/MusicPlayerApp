@@ -63,7 +63,7 @@ public class UserStoryTwoTest {
 
 
     @Test
-    public void userViewsTracksInAnAlbum() {
+    public void userViewsTracksInAnAlbumPlaysSong() {
 
         /*
             Given: app is open
@@ -84,52 +84,19 @@ public class UserStoryTwoTest {
                 .perform(click());
 
 
-        onView(withText(album.getAlbumName())).check(matches(isDisplayed()));
+        onView(withText(song.getName())).check(matches(isDisplayed()));
 
-        // Select first song of album
         onData(anything()).inAdapterView(withId(R.id.trackList))
                 .atPosition(0)
                 .perform(click());
 
-        // check that we have switched
         onView(withText(song.getName())).check(matches(isDisplayed()));
+
+
 
     }
 
-    @Test
-    public void userSelectsAlbumToPlay(){
-
-/*
-        Given: The App is open
-        And the User is in playback mode
-        And the User is on the album menu
-        When "Hello World: The Album" is selected
-        Then the songs in the Album are listed along with a play album button
-        When the user selects the play album button
-        Then songs begin to play in order on the album
-*/
-
-        onView(withId(R.id.albumMode)).perform(click());
-
-
-        // Select first album
-        onData(anything()).inAdapterView(withId(R.id.albumListDisplay))
-                .atPosition(0)
-                .perform(click());
-
-
-        onView(withText(album.getAlbumName())).check(matches(isDisplayed()));
-
-        // Select first song of album
-        onData(anything()).inAdapterView(withId(R.id.trackList))
-                .atPosition(0)
-                .perform(click());
-
-        // check that we have switched
-        onView(withText(song.getName())).check(matches(isDisplayed()));
-
-    }
-
+   
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
