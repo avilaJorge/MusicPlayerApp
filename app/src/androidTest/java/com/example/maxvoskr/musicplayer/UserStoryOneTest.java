@@ -49,7 +49,7 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class UserStoryOneTest {
 
-    private static Song song;
+    private Song song;
 
 
     @Rule

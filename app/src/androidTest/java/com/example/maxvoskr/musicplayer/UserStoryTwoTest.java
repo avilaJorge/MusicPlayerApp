@@ -2,6 +2,8 @@ package com.example.maxvoskr.musicplayer;
 
 
 import android.Manifest;
+import android.content.Context;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -36,8 +38,9 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class UserStoryTwoTest {
 
-    private static Song song;
-    private static Album album;
+    private Context context;
+    private Song song;
+    private Album album;
 
     @Rule
     public ActivityTestRule<LoadingActivity> mActivityTestRule = new ActivityTestRule<>(LoadingActivity.class);
@@ -48,6 +51,9 @@ public class UserStoryTwoTest {
 
     @Before
     public void before(){
+
+        context = InstrumentationRegistry.getTargetContext();
+
 
         album = albumList.get(0);
         song = album.getMusicList().get(0);

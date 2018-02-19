@@ -31,6 +31,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withParentIndex;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.maxvoskr.musicplayer.MusicArrayList.albumList;
+import static com.example.maxvoskr.musicplayer.MusicArrayList.musicList;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.instanceOf;
@@ -40,7 +41,7 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class UserStorySixTest {
 
-    private static Song song;
+    private Song song;
     private static Album album;
 
     @Rule
@@ -53,14 +54,14 @@ public class UserStorySixTest {
     @Before
     public void before(){
 
-        album = albumList.get(0);
-        song = album.getMusicList().get(0);
+        song = musicList.get(0);
 
     }
 
     @Test
     public void userDislikesNeutralSong() {
 
+        song.setLikeDislike(0);
         // App should be open, check for song list mode and click first song
         onData(anything()).inAdapterView(withId(R.id.trackList))
                 .atPosition(0)
@@ -77,12 +78,13 @@ public class UserStorySixTest {
     @Test
     public void userPlaysDislikedSongFromSongList(){
 
+        song.setLikeDislike(-1);
         // App should be open, check for song list mode and click first song
         onData(anything()).inAdapterView(withId(R.id.trackList))
                 .atPosition(0)
                 .perform(click());
 
-        onView(withText(song.getName())).check(doesNotExist());
+        onView(withText("Last Played")).check(doesNotExist());
 
 
     }
@@ -91,7 +93,7 @@ public class UserStorySixTest {
     @Test
     public void userMakesDislikedSongNeutral() {
 
-
+        //TODO Unable to find dislike button in hierarchy
 
 
     }
