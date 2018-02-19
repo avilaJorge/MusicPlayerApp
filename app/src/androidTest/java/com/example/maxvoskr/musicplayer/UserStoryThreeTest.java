@@ -27,6 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.maxvoskr.musicplayer.MusicArrayList.albumList;
+import static com.example.maxvoskr.musicplayer.MusicArrayList.musicList;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.instanceOf;
@@ -37,8 +38,7 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class UserStoryThreeTest {
 
-    private static Song song;
-    private static Album album;
+    private Song song;
 
     @Rule
     public ActivityTestRule<LoadingActivity> mActivityTestRule = new ActivityTestRule<>(LoadingActivity.class);
@@ -50,15 +50,14 @@ public class UserStoryThreeTest {
     @Before
     public void before(){
 
-        album = albumList.get(0);
-        song = album.getMusicList().get(0);
+        song = musicList.get(0);
 
     }
 
 
 
     @Test
-    public void UserNavigatesfromPlaybackToFlashBack() {
+    public void UserNavigatesFromPlaybackToFlashBack() {
 
         /*
             Given: The user is in the Playback Activity

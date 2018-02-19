@@ -132,4 +132,11 @@ public class CurrentLocationTimeData {
         }
     }
 
+    public void setTestCurrentLocationTimeData(String location, int dayOfWeek, int timeOfDay, long timeMS){
+        this.location = location;
+        this.dayOfWeek = dayOfWeek;
+        this.timeOfDay = timeOfDay;
+        this.timeMS = timeMS;
+    }
+
 }
