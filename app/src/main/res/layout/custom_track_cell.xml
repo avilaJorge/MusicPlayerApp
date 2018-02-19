@@ -48,6 +48,8 @@
         android:layout_toEndOf="@+id/musicImage"
         android:layout_toRightOf="@+id/musicImage"
         android:text="Track Name"
+        android:ellipsize="end"
+        android:maxLength="24"
         android:textColor="#000000"
         android:textSize="12sp" />
 
@@ -59,9 +61,10 @@
         android:layout_alignStart="@+id/trackName"
         android:layout_below="@+id/trackName"
         android:layout_marginTop="9dp"
+        android:maxLength="20"
+        android:ellipsize="end"
         android:text="Artist Name"
         android:textColor="#000000"
         android:textSize="10sp" />
-
 
 </RelativeLayout>
