@@ -17,7 +17,7 @@ import static org.junit.Assert.fail;
  * Tests that modify the shared preferences.
  */
 @SmallTest
-public class SharedPreferencesTest {
+public class SharedPreferenceManagerTest {
     private static final String PREFS_NAME = "SongData";
     private static final String KEY_PREF = "KEY_PREF";
     private SharedPreferences sharedPreferences;
