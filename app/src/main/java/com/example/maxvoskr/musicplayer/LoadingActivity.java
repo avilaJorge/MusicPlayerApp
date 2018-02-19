@@ -32,15 +32,6 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
         context = getApplicationContext();
 
-
-        try {
-            wait(10000);
-        }
-        catch (Exception e)
-        {
-
-        }
-
         musicList = new MusicArrayList();
         sharedPref = new SongHistorySharedPreferenceManager(context);
 
