@@ -394,4 +394,12 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
             dislike.setImageResource(R.drawable.dislike_black);
         }
     }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        if(isChangingConfigurations()){
+            ;
+        }
+    }
 }

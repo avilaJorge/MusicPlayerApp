@@ -34,14 +34,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/background"
-        app:layout_constraintVertical_chainStyle="spread_inside">
+        app:layout_constraintVertical_chainStyle="spread">
 
         <TextView
             android:id="@+id/songTitle"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight=".8"
-            android:autoSizeMaxTextSize="50dp"
+            android:autoSizeMaxTextSize="48dp"
             android:autoSizeTextType="uniform"
             android:ellipsize="marquee"
             android:maxHeight="100dp"
@@ -81,22 +81,24 @@
 
             android:textColor="#000000"
             android:textSize="24sp" />
+
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layoutB"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="85dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layoutA">
 
         <TextView
             android:id="@+id/lastPlayed"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:autoSizeMaxTextSize="36dp"
