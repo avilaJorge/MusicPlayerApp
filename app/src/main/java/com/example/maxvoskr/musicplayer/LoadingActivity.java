@@ -12,7 +12,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Set;
 
 /*****
@@ -32,6 +31,7 @@ public class LoadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
         context = getApplicationContext();
+
         musicList = new MusicArrayList();
         sharedPref = new SongHistorySharedPreferenceManager(context);
 

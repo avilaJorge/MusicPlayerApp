@@ -11,10 +11,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +31,10 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
 
     private boolean playing = true;
     private Song currentSong;
+
+    private int album;
+    private int trackNum;
+    private Album currentAlbum;
 
     private ImageView play;
     private ImageView next;
@@ -85,14 +89,32 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
 
                 }
                 else if(playerMode == ALBUM_MODE) {
+                    if(album != -1 && trackNum != -1)
+                    {
+                        currentAlbum = MusicArrayList.albumList.get(album);
+                        ArrayList<Song> songs = new ArrayList<Song>();
+                        ArrayList<Song> albumSongs = currentAlbum.getMusicList();
 
+                        for(int i = trackNum; i < albumSongs.size(); i++)
+                            songs.add(albumSongs.get(i));
+
+                        for(int i = 0; i < trackNum; i++)
+                            songs.add(albumSongs.get(i));
+
+                        musicPlayerService.setList(songs);
+                        musicPlayerService.playSong();
+
+
+                        currentSong = songs.get(0);
+                    }
                 }
                 else if (playerMode == FLASHBACK_MODE) {
                     musicPlayerService.stop();
                     musicPlayerService.setList(new ArrayList<Song>());
                     musicPlayerService.playSong();
-
                     currentSong = musicPlayerService.getCurrentSong();
+                    if (currentSong != null)
+                        play.setImageResource(R.drawable.pause);
                 }
             }
             else {
@@ -140,13 +162,15 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         Intent musicPlayerIntent = new Intent(this, MusicPlayerService.class);
         bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
         startService(musicPlayerIntent);
-        Toast.makeText(SongPlayerScreen.this, "Service now connected", Toast.LENGTH_SHORT).show();
+        Log.d("log", "Service now connected");
 
         // get passed in intent values
         Intent intent = getIntent();
         playing = intent.getBooleanExtra("playingStatus", false);
         playerMode = intent.getIntExtra("playerMode", SONG_MODE);
         changeSong = intent.getBooleanExtra("changeSong", true);
+        album = intent.getIntExtra("album", -1);
+        trackNum = intent.getIntExtra("track", -1);
 
         //create intent references
         songList = new Intent(this, MainActivity.class);
@@ -157,7 +181,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         if(playerMode == SONG_MODE)
             background.setBackgroundColor(Color.parseColor("#5a47025c"));
         else if(playerMode == ALBUM_MODE)
-            background.setBackgroundColor(Color.parseColor("#6e0208c6"));
+            background.setBackgroundColor(Color.parseColor("#5a0208c6"));
         else
             background.setBackgroundColor(Color.parseColor("#6eff6701"));
 
@@ -183,7 +207,6 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                 }
 
                 playing = !playing;
-                Toast.makeText(SongPlayerScreen.this, "Should play!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -203,7 +226,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                     currentSong.setLikeDislike(0);
                 }
 
-                //sharedPref.writeData(currentSong);
+                sharedPref.writeData(currentSong);
             }
         });
 
@@ -224,8 +247,11 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                     currentSong.setLikeDislike(0);
                 }
 
-                //sharedPref.writeData(currentSong);
-                startActivity(songList);
+                sharedPref.writeData(currentSong);
+
+                if(playerMode == SONG_MODE) {
+                    startActivity(songList);
+                }
             }
         });
 
@@ -366,6 +392,14 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
 
             like.setImageResource(R.drawable.like_black);
             dislike.setImageResource(R.drawable.dislike_black);
+        }
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        if(isChangingConfigurations()){
+            ;
         }
     }
 }
