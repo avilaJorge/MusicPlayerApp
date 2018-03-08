@@ -6,6 +6,7 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import java.lang.reflect.Field;
@@ -32,6 +33,7 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
         context = getApplicationContext();
 
+        System.out.println("Hi Max");
         musicList = new MusicArrayList();
         sharedPref = new SongHistorySharedPreferenceManager(context);
 
@@ -91,7 +93,17 @@ public class LoadingActivity extends AppCompatActivity {
         }
 
         final Intent mainActivityIntent  = new Intent(this, MainActivity.class);
-        startActivity(mainActivityIntent);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+
+                startActivity(mainActivityIntent);
+            }
+        }, 5000);
+
 
         currentLocationTimeData = new CurrentLocationTimeData(this);
     }
