@@ -21,6 +21,11 @@ import static android.app.DownloadManager.STATUS_SUCCESSFUL;
 
 
 // TODO: Does not auto add .mp3 to music files
+/*
+    Context context = getApplicationContext();
+    Downloader downloader = new Downloader(context);
+    path = downloader.download("https://freemusicarchive.org/music/download/24daacec73f9279086fbb714a8da8a84f2a16f1f");
+ */
 
 
 public class Downloader {
@@ -28,25 +33,24 @@ public class Downloader {
     private DownloadManager manager;
     private DownloadManager.Request request;
     private long lastID;
+    private String lastPath;
     private Context context;
-    //private File localDest;
 
     @TargetApi(25)
     Downloader(Context context) {
         manager = context.getSystemService(DownloadManager.class);
         this.context = context;
-        //this.localDest = localDest;
     }
 
-    public long download(String url) {
+    public String download(String url) {
         String name = url.substring(url.lastIndexOf("/") + 1);
-        name = name + ".mp3";
         File localDest = new File(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC), name);
         request = new DownloadManager.Request(Uri.parse(url));
         request.setDestinationUri(Uri.fromFile(localDest));
 
         lastID = manager.enqueue(request);
-        return lastID;
+
+        return localDest.getPath();
     }
 
     public boolean downloadSuccessful() {
@@ -54,10 +58,17 @@ public class Downloader {
     }
 
     public boolean downloadRunning() {
-        return Integer.parseInt(COLUMN_STATUS) == STATUS_RUNNING;
+        if(COLUMN_STATUS == "status")
+            return false;
+        else
+            return Integer.parseInt(COLUMN_STATUS) == STATUS_RUNNING;
     }
 
     public float downloadPercent() {
         return Integer.parseInt(COLUMN_BYTES_DOWNLOADED_SO_FAR)  / Integer.parseInt(COLUMN_TOTAL_SIZE_BYTES);
+    }
+
+    public String getLastDownloadPath() {
+        return lastPath;
     }
 }
