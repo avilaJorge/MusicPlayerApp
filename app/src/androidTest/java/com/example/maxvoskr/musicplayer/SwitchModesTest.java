@@ -37,7 +37,7 @@ import static org.hamcrest.Matchers.is;
 public class SwitchModesTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<LoadingActivity> mActivityTestRule = new ActivityTestRule<>(LoadingActivity.class);
 
 
     @Rule
@@ -54,42 +54,36 @@ public class SwitchModesTest {
 
     }
 
-    /*@Test
-    public void switchToSongModeTest() {
-
-        // Perform switch to flashBack mode
-        onView(withId(R.id.songsMode)).perform(click());
-
-        // Check for trackList
-        onData(allOf(is(instanceOf(String.class)), is("Last Played:")));
-
-    }*/
-
     @Test
     public void switchToPlayingSongTest() {
 
-        // Perform switch to flashBack mode
+        // Check to see if we are in song list mode
         onView(withId(R.id.songsMode)).perform(click());
 
-        // Perform switch to flashBack mode
+        // Perform switch to song play mode
         onView(withId(R.id.songsMode)).perform(click());
 
         // Check for Last played object
         onData(allOf(is(instanceOf(String.class)), is("Last Played:")));
+
+        // Switch back to song list mode
+        onView(withId(R.id.songsMode)).perform(click());
+
+        // Check if we are back in song list mode
 
     }
 
-    /*
+
+
     @Test
     public void switchToAlbumModeTest() {
 
-        // Perform switch to flashBack mode
-        onView(withId(R.id.albumMode)).perform(click());
+        // Perform switch to album mode mode
+        //onView(withId(R.id.albumMode)).perform(click());
 
-        // Check for Last played object
-        onData(allOf(is(instanceOf(String.class)), is("Last Played:")));
+        // Check for some object in album mode
 
-    }*/
+    }
 
 
     private static Matcher<View> childAtPosition(

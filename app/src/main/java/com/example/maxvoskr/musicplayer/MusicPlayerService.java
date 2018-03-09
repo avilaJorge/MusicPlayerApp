@@ -1,5 +1,6 @@
 package com.example.maxvoskr.musicplayer;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
@@ -62,7 +63,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-        Toast.makeText(context, "In onPrepared", Toast.LENGTH_SHORT).show();
+        Log.d("log", "In On Prepared");
         mp.start();
         currentLocationTimeData.updateTempData();
     }
@@ -104,7 +105,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     public void playSong() {
 
 
-        Toast.makeText(context, "In playSong", Toast.LENGTH_SHORT).show();
+        Log.d("log", "Service now connected");
         if (!playerReleased && paused) {
             paused = false;
             mediaPlayer.start();
@@ -157,7 +158,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                         playerReleased = true;
                     }
 
-                    Toast.makeText(context, "In onCompletion", Toast.LENGTH_SHORT).show();
+                    Log.d("log", "in on completion");
                 }
             });
             // TODO: Erase this before demo.
@@ -176,13 +177,13 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    @TargetApi(24)
     public void skip() {
         if(!playerReleased && mediaPlayer != null) {
             if (mediaPlayer.isPlaying()) {
                 mediaPlayer.reset();
                 if(mode == ALBUM_MODE) {
-                    if (++songIndex <= songs.size() && !songs.isEmpty() &&
+                    if (++songIndex < songs.size() && !songs.isEmpty() &&
                             songs.get(songIndex).getLikeDislike() != -1) {
                         activity.updateUI(getCurrentSong());
                         playSong();
@@ -201,11 +202,19 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                         playSong();
                     }
                 }
+                else if (mode == SONG_MODE)
+                {
+                    stop();
+                }
+                else
+                {
+                    stop();
+                }
             }
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    @TargetApi(24)
     public void previous() {
         if(!playerReleased && mediaPlayer != null) {
             if (mediaPlayer.isPlaying()) {
@@ -244,7 +253,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
     /* Restart song */
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    @TargetApi(24)
     public void reset() {
         if(!playerReleased && mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.reset();
@@ -252,7 +261,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    @TargetApi(24)
     public void stop() {
         if(!playerReleased && mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.reset();

@@ -53,14 +53,13 @@ public class AlbumAdapter extends BaseAdapter {
 
         if (view == null) {
 
-            System.out.println("1");
             viewHolder = new AlbumAdapter.ViewHolder();
             LayoutInflater layoutInflater =
                     (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             view = layoutInflater.inflate(layout, null);
-            //viewHolder.albumName = (TextView) view.findViewById(R.id.albumName);
-            //viewHolder.artistName = (TextView) view.findViewById(R.id.artistName);
+            viewHolder.albumName = (TextView) view.findViewById(R.id.albumName);
+            viewHolder.artistName = (TextView) view.findViewById(R.id.artistName);
 
             view.setTag(viewHolder);
 
@@ -70,8 +69,10 @@ public class AlbumAdapter extends BaseAdapter {
         }
 
         final Album album = albumList.get(i);
-        viewHolder.albumName.setText(album.getAlbumName());
-        viewHolder.artistName.setText(album.getArtist());
+        if(album != null) {
+            viewHolder.albumName.setText(album.getAlbumName());
+            viewHolder.artistName.setText(album.getArtist());
+        }
 
         return view;
     }
