@@ -69,7 +69,7 @@
         android:id="@+id/flashbackMode"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/flashback"
+        android:src="@drawable/vibemode"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/navRight"
         app:layout_constraintRight_toRightOf="@id/navRight"
