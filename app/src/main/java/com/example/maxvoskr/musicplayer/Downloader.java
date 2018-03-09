@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Environment;
 
 import java.io.File;
 
@@ -19,7 +20,7 @@ import static android.app.DownloadManager.STATUS_SUCCESSFUL;
 
 
 
-// TODO: add to loading or somewhere: context.getDir("MusicFolder", 0);
+// TODO: Does not auto add .mp3 to music files
 
 
 public class Downloader {
@@ -27,15 +28,20 @@ public class Downloader {
     private DownloadManager manager;
     private DownloadManager.Request request;
     private long lastID;
-    private File localDest;
+    private Context context;
+    //private File localDest;
 
     @TargetApi(25)
-    Downloader(Context context, File localDest) {
+    Downloader(Context context) {
         manager = context.getSystemService(DownloadManager.class);
-        this.localDest = localDest;
+        this.context = context;
+        //this.localDest = localDest;
     }
 
     public long download(String url) {
+        String name = url.substring(url.lastIndexOf("/") + 1);
+        name = name + ".mp3";
+        File localDest = new File(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC), name);
         request = new DownloadManager.Request(Uri.parse(url));
         request.setDestinationUri(Uri.fromFile(localDest));
 

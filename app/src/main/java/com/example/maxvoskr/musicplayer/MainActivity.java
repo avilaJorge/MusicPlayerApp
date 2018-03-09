@@ -230,6 +230,11 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
                 }
 
                 playing = !playing;
+
+
+                Context context = getApplicationContext();
+                Downloader downloader = new Downloader(context);
+                downloader.download("https://freemusicarchive.org/music/download/24daacec73f9279086fbb714a8da8a84f2a16f1f");
             }
         });
 

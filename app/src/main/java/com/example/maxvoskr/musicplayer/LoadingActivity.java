@@ -90,6 +90,8 @@ public class LoadingActivity extends AppCompatActivity {
             }
         }
 
+
+
         final Intent mainActivityIntent  = new Intent(this, MainActivity.class);
         startActivity(mainActivityIntent);
 
