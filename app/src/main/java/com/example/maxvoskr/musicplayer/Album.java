@@ -1,7 +1,6 @@
 package com.example.maxvoskr.musicplayer;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by AdityaS on 2/13/18.
