@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -51,9 +52,11 @@ public class AlbumListActivity extends AppCompatActivity {
     private View songMode;
     private View albumMode;
     private View flashbackMode;
+    private View settingsMode;
     private Intent songPlayer;
     private Intent songList;
     private Intent songListActivityIntent;
+    private Intent settingsIntent;
 
     private ImageView play;
     private ImageView next;
@@ -142,9 +145,10 @@ public class AlbumListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.album_list);
-
+        //TODO: How to use a specific layout xml file.
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
+        settingsIntent = new Intent(this, SettingsActivity.class);
 
         songListActivityIntent  = new Intent(this, MainActivity.class);
 
@@ -157,6 +161,7 @@ public class AlbumListActivity extends AppCompatActivity {
         songMode = findViewById(R.id.navLeft);
         albumMode = findViewById(R.id.navMid);
         flashbackMode = findViewById(R.id.navRight);
+        settingsMode = findViewById(R.id.settingsMode);
         play = findViewById(R.id.play);
         next = findViewById(R.id.next);
         previous = findViewById(R.id.previous);
@@ -165,6 +170,7 @@ public class AlbumListActivity extends AppCompatActivity {
 
         adapter = new AlbumAdapter(this, R.layout.custom_album_cell, musicList.albumList);
         albumListView.setAdapter(adapter);
+        //TODO: This is how we can implement a ListView/Adapter in our settings menu.
 
         albumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -203,6 +209,14 @@ public class AlbumListActivity extends AppCompatActivity {
             }
         });
 
+        settingsMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(settingsIntent);
+            }
+        });
+
+
 
         play.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -227,19 +241,19 @@ public class AlbumListActivity extends AppCompatActivity {
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSong.getLikeDislike() <= 0) {
-                    like.setImageResource(R.drawable.like_green);
-                    dislike.setImageResource(R.drawable.dislike_black);
-                    currentSong.setLikeDislike(1);
-                }
-                else
-                {
-                    like.setImageResource(R.drawable.like_black);
-                    dislike.setImageResource(R.drawable.dislike_black);
-                    currentSong.setLikeDislike(0);
+                if(currentSong != null) {
+                    if (currentSong.getLikeDislike() <= 0) {
+                        like.setImageResource(R.drawable.like_green);
+                        dislike.setImageResource(R.drawable.dislike_black);
+                        currentSong.setLikeDislike(1);
+                    } else {
+                        like.setImageResource(R.drawable.like_black);
+                        dislike.setImageResource(R.drawable.dislike_black);
+                        currentSong.setLikeDislike(0);
+                    }
+                    sharedPref.writeData(currentSong);
                 }
 
-                sharedPref.writeData(currentSong);
             }
         });
 
@@ -279,17 +293,6 @@ public class AlbumListActivity extends AppCompatActivity {
         });
 
     }
-
-// TODO: Will implement these when we have multiple activities binding to the same service.
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//    }
 
     @Override
     protected void onStop() {

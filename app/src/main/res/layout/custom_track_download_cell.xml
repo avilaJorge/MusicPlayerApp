@@ -25,18 +25,7 @@
         android:layout_alignBottom="@+id/artistName"
         android:layout_marginEnd="11dp"
         android:layout_marginRight="11dp"
-        android:src="@drawable/like_black" />
-
-    <ImageView
-        android:id="@+id/dislike"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignTop="@+id/like"
-        android:layout_toLeftOf="@+id/like"
-        android:layout_toStartOf="@+id/like"
-        android:layout_marginEnd="11dp"
-        android:layout_marginRight="11dp"
-        android:src="@drawable/dislike_black" />
+        android:src="@drawable/download" />
 
     <TextView
         android:id="@+id/trackName"
