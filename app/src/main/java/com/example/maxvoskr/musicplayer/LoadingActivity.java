@@ -33,7 +33,6 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
         context = getApplicationContext();
 
-        System.out.println("Hi Max");
         musicList = new MusicArrayList();
         sharedPref = new SongHistorySharedPreferenceManager(context);
 
@@ -92,7 +91,9 @@ public class LoadingActivity extends AppCompatActivity {
             }
         }
 
-        final Intent mainActivityIntent  = new Intent(this, MainActivity.class);
+        //final Intent mainActivityIntent  = new Intent(this, MainActivity.class);
+
+        final Intent mainActivityIntent  = new Intent(this, GoogleSignInActivity.class);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
