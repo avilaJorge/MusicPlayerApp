@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -131,7 +132,11 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         }
 
         if (songs != null && songIndex < songs.size()) {
-            mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
+            if (songs.get(songIndex).getClass() == SongRes.class)
+                mediaPlayer = MediaPlayer.create(context, ((SongRes)(songs.get(songIndex))).getSong());
+            else
+                mediaPlayer = MediaPlayer.create(context, Uri.parse(((SongFile)(songs.get(songIndex))).getSong()));
+
             playerReleased = false;
             mediaPlayer.setOnPreparedListener(this);
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {

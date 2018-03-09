@@ -30,14 +30,14 @@ public class SharedPreferenceManagerTest {
     public void before() {
         context = InstrumentationRegistry.getTargetContext();
 
-        song1 = new Song("Song Title","Album Title","Artist",0);
+        song1 = new SongRes("Song Title","Album Title","Artist",0);
         song1.setTimeMS(0);
         song1.setDayOfWeek(1);
         song1.setTimeOfDay(0);
         song1.setLikeDislike(0);
         song1.setLocation("");
 
-        song2 = new Song("Song Title","Album Title","Artist",0);
+        song2 = new SongRes("Song Title","Album Title","Artist",0);
         song2.setTimeMS(0);
         song2.setDayOfWeek(1);
         song2.setTimeOfDay(0);

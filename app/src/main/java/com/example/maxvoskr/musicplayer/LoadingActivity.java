@@ -63,7 +63,7 @@ public class LoadingActivity extends AppCompatActivity {
             AssetFileDescriptor afd = res.openRawResourceFd(songCodes.get(i++));
             retriever.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 
-            Song song = new Song(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE), retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
+            Song song = new SongRes(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE), retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
                     retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST), nameToCode.get(songName));
 
             this.albumNamesSet.add(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM));
