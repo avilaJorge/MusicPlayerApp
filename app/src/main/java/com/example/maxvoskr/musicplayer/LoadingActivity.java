@@ -2,16 +2,15 @@ package com.example.maxvoskr.musicplayer;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.Resources;
-import android.media.MediaMetadataRetriever;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Set;
 
 /*****
@@ -22,9 +21,10 @@ public class LoadingActivity extends AppCompatActivity {
 
     public static CurrentLocationTimeData currentLocationTimeData;
     private Set<String> albumNamesSet = new HashSet<String>();
-    MusicArrayList musicList;
-    Context context;
-    SongHistorySharedPreferenceManager sharedPref;
+    private MusicArrayList musicList;
+    private Context context;
+    private SongHistorySharedPreferenceManager sharedPref;
+    private SongFactory songFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,89 @@ public class LoadingActivity extends AppCompatActivity {
 
         musicList = new MusicArrayList();
         sharedPref = new SongHistorySharedPreferenceManager(context);
+        songFactory = new SongFactory(getResources());
 
+        final String SOME_ACTION = "android.intent.action.DOWNLOAD_COMPLETE";
+        IntentFilter intentFilter = new IntentFilter(SOME_ACTION);
+        Downloader mReceiver = new Downloader(context);
+        context.registerReceiver(mReceiver, intentFilter);
+
+
+
+        loadSongsFromMusicFolder();
+
+        loadSongsFromResRaw();
+
+        prepareAlbumList();
+
+
+        // Is there an issue here? we start the CurrentLocationTimeData after we would have switched to MainActivity
+
+        final Intent mainActivityIntent  = new Intent(this, MainActivity.class);
+        startActivity(mainActivityIntent);
+
+        currentLocationTimeData = new CurrentLocationTimeData(this);
+    }
+
+
+
+
+
+
+
+
+
+    @Override
+    protected void onDestroy() {
+        currentLocationTimeData.unBindServices();
+
+        for (Song song : musicList.musicList) {
+
+            sharedPref.writeData(song);
+        }
+
+        super.onDestroy();
+    }
+
+
+
+    private void loadSongsFromMusicFolder() {
+        File musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+        File[] songFiles = musicDir.listFiles();
+
+        for(File songFile : songFiles) {
+            Song song = songFactory.makeSongFromPath(songFile.getPath());
+
+            musicList.musicList.add(song);
+            albumNamesSet.add(song.getAlbum());
+
+            sharedPref.updateData(song);
+        }
+    }
+
+    private void loadSongsFromResRaw() {
+        ArrayList<Integer> songCodes = new ArrayList<>();
+        Field[] fields=R.raw.class.getFields();
+        for(Field field : fields){
+            try {
+                songCodes.add(field.getInt(field));
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(Integer resID : songCodes) {
+            Song song = songFactory.makeSongFromResID(resID);
+
+            musicList.musicList.add(song);
+            albumNamesSet.add(song.getAlbum());
+
+            sharedPref.updateData(song);
+        }
+
+
+        /* old method code
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         ArrayList<String> rawFileNames = new ArrayList<>();
         ArrayList<Integer> songCodes = new ArrayList<>();
@@ -67,12 +149,12 @@ public class LoadingActivity extends AppCompatActivity {
                     retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST), nameToCode.get(songName));
 
             this.albumNamesSet.add(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM));
-            //musicList.albumSet.add(new Album(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
-            //        retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST)));
             sharedPref.updateData(song);
             musicList.musicList.add(song);
-        }
+        } */
+    }
 
+    private void prepareAlbumList() {
         for (String albumName : albumNamesSet) {
             System.out.println(albumName);
             musicList.albumList.add(new Album(albumName, "Max"));
@@ -89,25 +171,6 @@ public class LoadingActivity extends AppCompatActivity {
                 }
             }
         }
-
-
-
-        final Intent mainActivityIntent  = new Intent(this, MainActivity.class);
-        startActivity(mainActivityIntent);
-
-        currentLocationTimeData = new CurrentLocationTimeData(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        currentLocationTimeData.unBindServices();
-
-        for (Song song : musicList.musicList) {
-
-            sharedPref.writeData(song);
-        }
-
-        super.onDestroy();
     }
 
 

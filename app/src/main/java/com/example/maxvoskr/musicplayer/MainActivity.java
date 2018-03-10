@@ -238,13 +238,9 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
 
 
 
-
-
-
-                Context context = getApplicationContext();
-                Downloader downloader = new Downloader(context);
+                //testing for downloader
+                Downloader downloader = new Downloader(getApplicationContext());
                 path = downloader.download("https://freemusicarchive.org/music/download/24daacec73f9279086fbb714a8da8a84f2a16f1f");
-
             }
         });
 
@@ -267,6 +263,12 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
                     songList.putExtra("Position", -1);
                     startActivity(songList);
                 }
+
+
+                //testing for downloader
+                SongFactory songFactory = new SongFactory(getResources());
+                Song song = songFactory.makeSongFromPath(path);
+                musicList.musicList.add(song);
             }
         });
 

@@ -2,9 +2,12 @@ package com.example.maxvoskr.musicplayer;
 
 import android.annotation.TargetApi;
 import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.widget.Toast;
 
 import java.io.File;
 
@@ -28,7 +31,7 @@ import static android.app.DownloadManager.STATUS_SUCCESSFUL;
  */
 
 
-public class Downloader {
+public class Downloader extends BroadcastReceiver {
 
     private DownloadManager manager;
     private DownloadManager.Request request;
@@ -71,4 +74,14 @@ public class Downloader {
     public String getLastDownloadPath() {
         return lastPath;
     }
+
+
+
+
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        Toast.makeText(context, "Download complete", Toast.LENGTH_LONG).show();
+    }
+
 }
