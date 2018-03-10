@@ -1,9 +1,12 @@
 package com.example.maxvoskr.musicplayer;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -13,13 +16,19 @@ import java.util.ArrayList;
 
 class DownloadAdapter extends BaseAdapter {
 
+    private Context context;
+    private ArrayList<Song> musicList;
+    int layout;
 
     public DownloadAdapter(Context context, int layout, ArrayList<Song> musicList) {
+        this.context = context;
+        this.layout = layout;
+        this.musicList = musicList;
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return musicList.size();
     }
 
     @Override
@@ -32,8 +41,34 @@ class DownloadAdapter extends BaseAdapter {
         return 0;
     }
 
+    private class ViewHolder {
+        TextView trackName, artistName;
+        ImageView downloadButton;
+    }
+
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        return null;
+        final ViewHolder viewHolder;
+
+        if(view == null) {
+            viewHolder = new ViewHolder();
+            LayoutInflater layoutInflater =
+                    (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = layoutInflater.inflate(layout, null);
+            viewHolder.trackName = (TextView) view.findViewById(R.id.trackName);
+            viewHolder.artistName = (TextView) view.findViewById(R.id.artistName);
+            viewHolder.downloadButton = (ImageView) view.findViewById(R.id.download);
+            view.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) view.getTag();
+        }
+
+        final Song music = musicList.get(i);
+        viewHolder.trackName.setText(music.getName());
+        viewHolder.artistName.setText(music.getArtist());
+
+        // TODO: Get download info to set icon color and clickability
+
+        return view;
     }
 }

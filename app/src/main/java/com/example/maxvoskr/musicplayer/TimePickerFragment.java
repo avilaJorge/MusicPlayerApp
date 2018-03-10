@@ -13,11 +13,7 @@ import java.util.Calendar;
  * Created by avila on 3/8/2018.
  */
 
-public class TimePickerFragment extends DialogFragment implements
-        TimePickerDialog.OnTimeSetListener {
-
-    private int hour;
-    private int minute;
+public class TimePickerFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -27,21 +23,7 @@ public class TimePickerFragment extends DialogFragment implements
         int minute = c.get(Calendar.MINUTE);
 
         //Create a new instance of TimePickerDialog and return it
-        return new TimePickerDialog(getActivity(), this, hour, minute,
+        return new TimePickerDialog(getActivity(), (SettingsActivity)getActivity(), hour, minute,
                 DateFormat.is24HourFormat(getActivity()));
-    }
-
-    @Override
-    public void onTimeSet(TimePicker timePicker, int i, int i1) {
-        hour = i;
-        minute = i1;
-    }
-
-    public int getHour() {
-        return hour;
-    }
-
-    public int getMinute() {
-        return minute;
     }
 }
