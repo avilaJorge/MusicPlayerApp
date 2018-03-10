@@ -44,9 +44,11 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
     private View songMode;
     private View albumMode;
     private View flashbackMode;
-    private Intent songPlayer; //TODO: Here we add another intent for passing info to settings and starting the activity.
+    private View settingsMode;
+    private Intent songPlayer;
     private Intent songList;
     private Intent albumIntent;
+    private Intent settingsIntent;
 
     private ImageView play;
     private ImageView next;
@@ -131,13 +133,13 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
         albumIntent = new Intent(this, AlbumListActivity.class);
-        //TODO: We need to initialize our intent here with this and the target class
+        settingsIntent = new Intent(this, SettingsActivity.class);
 
         trackList = (ListView) findViewById(R.id.trackList);
         songMode = findViewById(R.id.navLeft);
         albumMode = findViewById(R.id.navMid);
         flashbackMode = findViewById(R.id.navRight);
-        //TODO: get view handler here.
+        settingsMode = (View) findViewById(R.id.settingsMode);
         play = findViewById(R.id.play);
         next = findViewById(R.id.next);
         previous = findViewById(R.id.previous);
@@ -160,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList.musicList);
             background.setBackgroundColor(Color.parseColor("#5a47025c"));
             trackList.setAdapter(adapter);
-        } //TODO: tracklist is a ListView object.
+        }
 
         trackList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -213,9 +215,12 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             }
         });
 
-        //TODO: Insert settings menu setOnCLickListener here.
-
-
+        settingsMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(settingsIntent);
+            }
+        });
 
         play.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
