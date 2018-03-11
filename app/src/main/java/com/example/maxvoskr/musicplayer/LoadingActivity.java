@@ -38,9 +38,9 @@ public class LoadingActivity extends AppCompatActivity {
 
         final String SOME_ACTION = "android.intent.action.DOWNLOAD_COMPLETE";
         IntentFilter intentFilter = new IntentFilter(SOME_ACTION);
-        Downloader mReceiver = new Downloader(context);
+        Downloader mReceiver = new Downloader(context, getResources());
         context.registerReceiver(mReceiver, intentFilter);
-
+        //context.registerReceiver(mReceiver);
 
 
         loadSongsFromMusicFolder();

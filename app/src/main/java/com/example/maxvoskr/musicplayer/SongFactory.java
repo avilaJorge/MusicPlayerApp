@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
  * Created by evor on 3/8/2018.
  */
 
-public class SongFactory extends AppCompatActivity {
+public class SongFactory {
 
     private MediaMetadataRetriever retriever;
     private Resources res;
