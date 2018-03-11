@@ -165,7 +165,7 @@ public class LoadingActivity extends AppCompatActivity {
 
             for (Song song : musicList.musicList) {
 
-                if (song.getAlbum().equals(album.getAlbumName())) {
+                if (song.getAlbum() != null && song.getAlbum().equals(album.getAlbumName())) {
                     album.setArtist(song.getArtist());
                     album.addSong(song);
                 }

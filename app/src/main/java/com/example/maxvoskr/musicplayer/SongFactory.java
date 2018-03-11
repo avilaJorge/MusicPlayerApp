@@ -3,13 +3,12 @@ package com.example.maxvoskr.musicplayer;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
 import android.media.MediaMetadataRetriever;
-import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by evor on 3/8/2018.
  */
 
-public class SongFactory extends AppCompatActivity {
+public class SongFactory {
 
     private MediaMetadataRetriever retriever;
     private Resources res;

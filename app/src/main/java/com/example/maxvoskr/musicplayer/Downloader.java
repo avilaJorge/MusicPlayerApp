@@ -36,7 +36,7 @@ public class Downloader extends BroadcastReceiver {
     private DownloadManager manager;
     private DownloadManager.Request request;
     private long lastID;
-    private String lastPath;
+    private static String lastPath;
     private Context context;
 
     @TargetApi(25)
@@ -82,6 +82,7 @@ public class Downloader extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Toast.makeText(context, "Download complete", Toast.LENGTH_LONG).show();
+
     }
 
 }
