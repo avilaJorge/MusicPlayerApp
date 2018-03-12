@@ -44,9 +44,11 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
     private View songMode;
     private View albumMode;
     private View flashbackMode;
+    private View settingsMode;
     private Intent songPlayer;
     private Intent songList;
     private Intent albumIntent;
+    private Intent settingsIntent;
 
     private ImageView play;
     private ImageView next;
@@ -131,11 +133,13 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
         albumIntent = new Intent(this, AlbumListActivity.class);
+        settingsIntent = new Intent(this, SettingsActivity.class);
 
         trackList = (ListView) findViewById(R.id.trackList);
         songMode = findViewById(R.id.navLeft);
         albumMode = findViewById(R.id.navMid);
         flashbackMode = findViewById(R.id.navRight);
+        settingsMode = (View) findViewById(R.id.settingsMode);
         play = findViewById(R.id.play);
         next = findViewById(R.id.next);
         previous = findViewById(R.id.previous);
@@ -211,8 +215,12 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             }
         });
 
-
-
+        settingsMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(settingsIntent);
+            }
+        });
 
         play.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
