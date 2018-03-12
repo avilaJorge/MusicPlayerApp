@@ -5,7 +5,10 @@ import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.widget.Toast;
 
@@ -35,14 +38,16 @@ public class Downloader extends BroadcastReceiver {
 
     private DownloadManager manager;
     private DownloadManager.Request request;
+    private SongFactory factory;
     private long lastID;
     private static String lastPath;
     private Context context;
 
     @TargetApi(25)
-    Downloader(Context context) {
+    Downloader(Context context, Resources res) {
         manager = context.getSystemService(DownloadManager.class);
         this.context = context;
+        factory = new SongFactory(res);
     }
 
     public String download(String url) {
@@ -81,7 +86,35 @@ public class Downloader extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "Download complete", Toast.LENGTH_LONG).show();
+        //Get path of music downloads
+        String path = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC).getPath() + '/';
+        String name = "";
+
+        String action = intent.getAction();
+        if (action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE) ){
+            Bundle extras = intent.getExtras();
+            DownloadManager.Query q = new DownloadManager.Query();
+            q.setFilterById(extras.getLong(DownloadManager.EXTRA_DOWNLOAD_ID));
+            Cursor c = manager.query(q);
+
+            if (c.moveToFirst()) {
+                int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
+                if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                    path = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
+                    name = path.substring( path.lastIndexOf('/')+1, path.length() );
+                }
+                else{
+                    Toast.makeText(context, "Download Unsuccessful", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+            c.close();
+
+            Toast.makeText(context, path + " complete", Toast.LENGTH_LONG).show();
+            //testing for downloader
+            Song song = factory.makeSongFromPath(path);
+            MusicArrayList.musicList.add(song);
+        }
 
     }
 
