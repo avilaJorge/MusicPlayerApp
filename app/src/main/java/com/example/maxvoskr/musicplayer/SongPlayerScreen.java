@@ -50,6 +50,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
     private Intent songList;
     private Intent albumList;
     private Intent settingsIntent;
+    private Intent priorityListIntent;
 
     private TextView songTitleTextView;
     private TextView artistTextView;
@@ -180,6 +181,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         songPlayer = new Intent(this, SongPlayerScreen.class);
         albumList = new Intent(this, AlbumListActivity.class);
         settingsIntent = new Intent(this, SettingsActivity.class);
+        priorityListIntent = new Intent(this, PriorityListActivity.class);
         playerMode = getIntent().getIntExtra("playerMode", SONG_MODE);
 
         if(playerMode == SONG_MODE)
@@ -301,6 +303,9 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
             if(playerMode != FLASHBACK_MODE) {
                 songPlayer.putExtra("playerMode", FLASHBACK_MODE);
                 startActivity(songPlayer);
+            } else {
+                priorityListIntent.putExtra("playingStatus", playing);
+                startActivity(priorityListIntent);
             }
             }
         });

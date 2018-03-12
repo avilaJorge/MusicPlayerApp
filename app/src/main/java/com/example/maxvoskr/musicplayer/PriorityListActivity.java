@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -28,13 +27,14 @@ import java.util.ArrayList;
  * Created by maxvoskr on 2/14/18.
  */
 
-public class AlbumListActivity extends AppCompatActivity {
+public class PriorityListActivity extends AppCompatActivity {
 
     public static Context contextOfApplication;
 
     private final int SONG_MODE = 0;
     private final int ALBUM_MODE = 1;
     private final int FLASHBACK_MODE = 2;
+    private int playerMode = SONG_MODE;
 
     public static LocationService locationService;
     public static DateService dateService;
@@ -42,13 +42,6 @@ public class AlbumListActivity extends AppCompatActivity {
     private boolean locBound = false;
     private boolean dateBound = false;
     private boolean musicPlayerBound = false;
-    private Button storeButton;
-    private Button retrieveButton;
-    private EditText keyText;
-    private EditText storeText;
-    private TextView message;
-    private SongHistorySharedPreferenceManager dataAccess;
-    private Song exampleSong;
     private View songMode;
     private View albumMode;
     private View flashbackMode;
@@ -64,8 +57,7 @@ public class AlbumListActivity extends AppCompatActivity {
     private ImageView like;
     private ImageView dislike;
 
-    //private ArrayList<Song> musicList;
-    private AlbumAdapter adapter;
+    private PriorityAdapter adapter;
     private ListView albumListView;
 
     private ArrayList<Album> albumList;
@@ -144,19 +136,19 @@ public class AlbumListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.album_list);
+        setContentView(R.layout.priority_list);
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
         settingsIntent = new Intent(this, SettingsActivity.class);
-
         songListActivityIntent  = new Intent(this, MainActivity.class);
+        playerMode = getIntent().getIntExtra("playerMode", SONG_MODE);
 
         Intent intent = getIntent();
         playing = intent.getBooleanExtra("playingStatus", false);
 
         sharedPref = new SongHistorySharedPreferenceManager(getApplicationContext());
 
-        albumListView = (ListView) findViewById(R.id.albumListDisplay);
+        albumListView = (ListView) findViewById(R.id.priorityListDisplay);
         songMode = findViewById(R.id.navLeft);
         albumMode = findViewById(R.id.navMid);
         flashbackMode = findViewById(R.id.navRight);
@@ -167,7 +159,7 @@ public class AlbumListActivity extends AppCompatActivity {
         like = findViewById(R.id.like);
         dislike = findViewById(R.id.dislike);
 
-        adapter = new AlbumAdapter(this, R.layout.custom_album_cell, musicList.albumList);
+        adapter = new PriorityAdapter(this, R.layout.custom_priority_cell, musicList.musicList);
         albumListView.setAdapter(adapter);
 
         albumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -175,17 +167,15 @@ public class AlbumListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                if(musicList.musicList.get(i).getLikeDislike() != -1) {
-                    songListActivityIntent.putExtra("Position", i);
-                    startActivity(songListActivityIntent);
-                }
-
             }
         });
 
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(playerMode == FLASHBACK_MODE) {
+                    musicPlayerService.stop();
+                }
                 songList.putExtra("Position", -1);
                 startActivity(songList);
             }
@@ -203,6 +193,7 @@ public class AlbumListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 songPlayer.putExtra("playerMode", FLASHBACK_MODE);
+                songPlayer.putExtra("changeSong", false);
                 startActivity(songPlayer);
             }
         });

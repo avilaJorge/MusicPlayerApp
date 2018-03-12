@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         else
             play.setImageResource(R.drawable.pause);
 
-        if (albumPosition != -1) { //TODO: MusicAdapter is called here even though it shows as a new activity
+        if (albumPosition != -1) {
             currentAlbum = musicList.albumList.get(albumPosition);
             adapter = new MusicAdapter(this, R.layout.custom_track_cell, currentAlbum.getMusicList());
             background.setBackgroundColor(Color.parseColor("#5a0208c6"));
