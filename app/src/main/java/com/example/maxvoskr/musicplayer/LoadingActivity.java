@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import java.io.File;
@@ -56,26 +57,6 @@ public class LoadingActivity extends AppCompatActivity {
         startActivity(mainActivityIntent);
 
         currentLocationTimeData = new CurrentLocationTimeData(this);
-    }
-
-
-
-
-
-
-
-
-
-    @Override
-    protected void onDestroy() {
-        currentLocationTimeData.unBindServices();
-
-        for (Song song : musicList.musicList) {
-
-            sharedPref.writeData(song);
-        }
-
-        super.onDestroy();
     }
 
 
@@ -171,6 +152,35 @@ public class LoadingActivity extends AppCompatActivity {
                 }
             }
         }
+
+        //final Intent mainActivityIntent  = new Intent(this, MainActivity.class);
+
+        final Intent mainActivityIntent  = new Intent(this, GoogleSignInActivity.class);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+
+                startActivity(mainActivityIntent);
+            }
+        }, 5000);
+
+
+        currentLocationTimeData = new CurrentLocationTimeData(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        currentLocationTimeData.unBindServices();
+
+        for (Song song : musicList.musicList) {
+
+            sharedPref.writeData(song);
+        }
+
+        super.onDestroy();
     }
 
 

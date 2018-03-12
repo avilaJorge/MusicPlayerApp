@@ -113,7 +113,7 @@ public class Downloader extends BroadcastReceiver {
 
             Toast.makeText(context, path +name + " complete", Toast.LENGTH_LONG).show();
             //testing for downloader
-            Song song = factory.makeSongFromPath(path+name);
+            Song song = factory.makeSongFromPath(path);
             MusicArrayList.musicList.add(song);
         }
 
