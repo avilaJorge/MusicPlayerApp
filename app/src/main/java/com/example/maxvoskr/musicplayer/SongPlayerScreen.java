@@ -74,61 +74,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
             musicPlayerService.registerClient(SongPlayerScreen.this);
             musicPlayerBound = true;
 
-            musicPlayerService.setMode(playerMode);
-
-            if(changeSong) {
-                if(playerMode == SONG_MODE)
-                {
-                    currentSong = MusicArrayList.musicList.get(getIntent().getExtras().getInt("Position"));
-
-                    if(currentSong.getLikeDislike() == -1) {
-                        currentSong = null;
-                    } else {
-                        ArrayList<Song> songs = new ArrayList<Song>();
-                        songs.add(currentSong);
-                        musicPlayerService.setList(songs);
-                        musicPlayerService.playSong();
-                    }
-
-                }
-                else if(playerMode == ALBUM_MODE) {
-                    if(album != -1 && trackNum != -1)
-                    {
-                        currentAlbum = MusicArrayList.albumList.get(album);
-                        ArrayList<Song> songs = new ArrayList<Song>();
-                        ArrayList<Song> albumSongs = currentAlbum.getMusicList();
-
-                        for(int i = trackNum; i < albumSongs.size(); i++)
-                            songs.add(albumSongs.get(i));
-
-                        for(int i = 0; i < trackNum; i++)
-                            songs.add(albumSongs.get(i));
-
-                        musicPlayerService.setList(songs);
-                        musicPlayerService.playSong();
-
-
-                        currentSong = songs.get(0);
-                    }
-                }
-                else if (playerMode == FLASHBACK_MODE) {
-                    musicPlayerService.stop();
-                    musicPlayerService.setList(new ArrayList<Song>());
-                    musicPlayerService.playSong();
-                    currentSong = musicPlayerService.getCurrentSong();
-                    if (currentSong != null)
-                        play.setImageResource(R.drawable.pause);
-                }
-            }
-            else {
-                currentSong = musicPlayerService.getCurrentSong(); // get currently played song from media player service
-
-                if(currentSong != null && currentSong.getLikeDislike() == -1) {
-                    currentSong = null;
-                }
-            }
-
-            updateUI(currentSong);
+            setupMusicPlayer();
         }
 
         @Override
@@ -183,6 +129,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         settingsIntent = new Intent(this, SettingsActivity.class);
         priorityListIntent = new Intent(this, PriorityListActivity.class);
         playerMode = getIntent().getIntExtra("playerMode", SONG_MODE);
+
 
         if(playerMode == SONG_MODE)
             background.setBackgroundColor(Color.parseColor("#5a47025c"));
@@ -316,6 +263,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         });
     }
 
+
     private void updateText() {
         String[] day = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
         String[] month = {"January", "February", "March", "April", "May", "June", "July", "August",
@@ -325,6 +273,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
             songTitleTextView.setText(currentSong.getName());
             artistTextView.setText(currentSong.getArtist());
             albumTitleTextView.setText(currentSong.getAlbum());
+
             if (currentSong.getTimeMS() != 0) {
                 Date songDate = new Date(currentSong.getTimeMS());
 
@@ -365,6 +314,68 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
     }
 
 
+    private void setupMusicPlayer()
+    {
+
+        musicPlayerService.setMode(playerMode);
+
+        if(changeSong) {
+            if(playerMode == SONG_MODE)
+            {
+                currentSong = MusicArrayList.musicList.get(getIntent().getExtras().getInt("Position"));
+
+                if(currentSong.getLikeDislike() == -1) {
+                    currentSong = null;
+                } else {
+                    ArrayList<Song> songs = new ArrayList<Song>();
+                    songs.add(currentSong);
+                    musicPlayerService.setList(songs);
+                    musicPlayerService.playSong();
+                }
+
+            }
+            else if(playerMode == ALBUM_MODE) {
+                if(album != -1 && trackNum != -1)
+                {
+                    currentAlbum = MusicArrayList.albumList.get(album);
+                    ArrayList<Song> songs = new ArrayList<Song>();
+                    ArrayList<Song> albumSongs = currentAlbum.getMusicList();
+
+                    for(int i = trackNum; i < albumSongs.size(); i++)
+                        songs.add(albumSongs.get(i));
+
+                    for(int i = 0; i < trackNum; i++)
+                        songs.add(albumSongs.get(i));
+
+                    musicPlayerService.setList(songs);
+                    musicPlayerService.playSong();
+
+
+                    currentSong = songs.get(0);
+                }
+            }
+            else if (playerMode == FLASHBACK_MODE) {
+                musicPlayerService.stop();
+                musicPlayerService.setList(new ArrayList<Song>());
+                musicPlayerService.playSong();
+                currentSong = musicPlayerService.getCurrentSong();
+                if (currentSong != null)
+                    play.setImageResource(R.drawable.pause);
+            }
+        }
+        else {
+            currentSong = musicPlayerService.getCurrentSong(); // get currently played song from media player service
+
+            if(currentSong != null && currentSong.getLikeDislike() == -1) {
+                currentSong = null;
+            }
+        }
+
+        updateUI(currentSong);
+    }
+
+
+
     @Override
     protected void onDestroy() {
         if(musicPlayerBound) {
@@ -373,6 +384,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         }
         super.onDestroy();
     }
+
 
     @Override
     public void updateUI(Song nextSong)

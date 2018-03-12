@@ -154,7 +154,7 @@ public class Song {
         weight = 0;
         if (timeMS == 0) return;
         else weight ++;
-        if (dataObj.getLocation() == location && dataObj.getLocation().isEmpty()) weight++;
+        if (dataObj.getLocation() == location || dataObj.getLocation().isEmpty()) weight++;
         if (dataObj.getDayOfWeek() == dayOfWeek) weight++;
         if (dataObj.getTimeOfDay() == timeOfDay) weight++;
         //Like Dislike Breaks Ties Only

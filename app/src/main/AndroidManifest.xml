@@ -31,8 +31,9 @@
         <activity android:name=".MainActivity"  android:configChanges="orientation"/>
         <activity android:name=".SettingsActivity" android:configChanges="orientation"/>
         <activity android:name=".PriorityListActivity" android:configChanges="orientation"/>
+        <activity android:name=".GoogleSignInActivity"  android:configChanges="orientation"/>
 
-        <service
+      <service
             android:name=".LocationService"
             android:enabled="true"
             android:exported="false" />

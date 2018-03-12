@@ -92,6 +92,7 @@ public class FlashbackPlaylistTest {
 
     @Test
     public void TestGetNextSongRepeatList(){
+        FlashbackPlaylist flashback = new FlashbackPlaylist(list);
         song1.setWeight(5);
         song1.setPlayed();
         song2.setWeight(6);
@@ -102,11 +103,11 @@ public class FlashbackPlaylistTest {
         song4.setPlayed();
         song5.setWeight(1);
         song5.setPlayed();
-        FlashbackPlaylist flashback = new FlashbackPlaylist(list);
         Assert.assertEquals(song2, flashback.getNextSong());
     }
     @Test
     public void TestGetNextSongSomePlayed(){
+        FlashbackPlaylist flashback = new FlashbackPlaylist(list);
         song1.setWeight(5);
         song2.setPlayed();
         song2.setWeight(6);
@@ -114,7 +115,6 @@ public class FlashbackPlaylistTest {
         song3.setWeight(2);
         song4.setWeight(3);
         song5.setWeight(1);
-        FlashbackPlaylist flashback = new FlashbackPlaylist(list);
         Assert.assertEquals(song4, flashback.getNextSong());
     }
 
