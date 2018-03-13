@@ -101,7 +101,6 @@ public class Downloader extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         //Get path of music downloads
         String path = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC).getPath() + '/';
-        String name = "";
 
         String action = intent.getAction();
         if (action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE) ){
@@ -122,12 +121,11 @@ public class Downloader extends BroadcastReceiver {
             }
             c.close();
 
-            Toast.makeText(context, path + " complete", Toast.LENGTH_LONG).show();
-            //testing for downloader
+
             Song song = factory.makeSongFromPath(path);
             MusicArrayList.insertLocalSong(song);
+
+            Toast.makeText(context, "Downloading " + song.getName() + " complete", Toast.LENGTH_LONG).show();
         }
-
     }
-
 }

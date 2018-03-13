@@ -49,6 +49,12 @@ public class LoadingActivity extends AppCompatActivity {
 
         importSongsToApp();
 
+
+        // TODO: remove this, only for testing until FB is up
+        MusicArrayList.insertFBSong(new SongRes("song1", "album", "artist", 0));
+
+
+
         final Intent mainActivityIntent  = new Intent(this, GoogleSignInActivity.class);
 
         final Handler handler = new Handler();

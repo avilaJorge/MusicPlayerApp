@@ -72,7 +72,14 @@ public class SettingsActivity extends AppCompatActivity implements
 
         Intent intent = getIntent();
 
-        downloadAdapter = new DownloadAdapter(this, R.layout.custom_track_download_cell, MusicArrayList.allMusicList);
+        ArrayList<Song> downloadableSongs = MusicArrayList.allMusicList;
+        for(Song downloaded : MusicArrayList.musicList) {
+            Toast.makeText(getApplicationContext(), downloaded.getName() + " was removed",
+                    Toast.LENGTH_SHORT).show();
+            downloadableSongs.remove(downloaded);
+        }
+
+        downloadAdapter = new DownloadAdapter(this, R.layout.custom_track_download_cell, downloadableSongs);
         downloadListView.setAdapter(downloadAdapter);
 
         timeEditText.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +109,7 @@ public class SettingsActivity extends AppCompatActivity implements
         albumMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                songPlayer.putExtra("albumMode", ALBUM_MODE);
+                songPlayer.putExtra("playerMode", ALBUM_MODE);
                 startActivity(songPlayer);
             }
         });
@@ -110,7 +117,7 @@ public class SettingsActivity extends AppCompatActivity implements
         flashbackMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               songPlayer.putExtra("albumMode", FLASHBACK_MODE);
+               songPlayer.putExtra("playerMode", FLASHBACK_MODE);
                startActivity(songPlayer);
             }
         });
