@@ -6,12 +6,14 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -84,9 +86,11 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         Log.e("ClearFromRecentService", "END");
-        mediaPlayer.release();
-        playerReleased = true;
-        stopSelf();
+        if(mediaPlayer != null) {
+            mediaPlayer.release();
+            playerReleased = true;
+            stopSelf();
+        }
     }
 
     private void initMusicPlayer() {
@@ -119,6 +123,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         }
 
         if (mode == FLASHBACK_MODE && songs.isEmpty()) {
+            Toast.makeText(context, "Starting flashback mode over", Toast.LENGTH_SHORT).show();
             flashbackPlaylist = new FlashbackPlaylist(MusicArrayList.musicList);
             flashbackPlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
             Song next = flashbackPlaylist.getNextSong();
@@ -129,7 +134,11 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         }
 
         if (songs != null && songIndex < songs.size()) {
-            mediaPlayer = MediaPlayer.create(context, songs.get(songIndex).getSong());
+            if (songs.get(songIndex).getClass() == SongRes.class)
+                mediaPlayer = MediaPlayer.create(context, ((SongRes)(songs.get(songIndex))).getSong());
+            else
+                mediaPlayer = MediaPlayer.create(context, Uri.parse(((SongFile)(songs.get(songIndex))).getSong()));
+
             playerReleased = false;
             mediaPlayer.setOnPreparedListener(this);
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -189,6 +198,15 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                     else
                     {
                         stop();
+                    }
+                } else if(mode == FLASHBACK_MODE) {
+                    flashbackPlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
+                    Song next = flashbackPlaylist.getNextSong();
+                    if(next != null) {
+                        songs.set(0, next);
+                        songIndex = 0;
+                        activity.updateUI(getCurrentSong());
+                        playSong();
                     }
                 }
                 else if (mode == SONG_MODE)

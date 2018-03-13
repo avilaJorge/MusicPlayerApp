@@ -1,24 +1,19 @@
 package com.example.maxvoskr.musicplayer;
 
-import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.TimePicker;
-import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -39,6 +34,11 @@ public class SettingsActivity extends AppCompatActivity implements
 
     private CheckBox privacyCheckBox;
     private EditText timeEditText;
+
+    private EditText urlEditText;
+    private ImageView urlDownload;
+
+
     private View songMode;
     private View albumMode;
     private View flashbackMode;
@@ -67,6 +67,8 @@ public class SettingsActivity extends AppCompatActivity implements
         // Get view ids
         downloadListView = (ListView) findViewById(R.id.downloadList);
         timeEditText = (EditText) findViewById(R.id.timeEditText);
+        urlDownload = (ImageView) findViewById(R.id.urlDownload);
+        urlEditText = (EditText) findViewById(R.id.urlEditText);
         songMode = (View) findViewById(R.id.navLeft);
         albumMode = (View) findViewById(R.id.navMid);
         flashbackMode = (View) findViewById(R.id.navRight);
@@ -78,7 +80,14 @@ public class SettingsActivity extends AppCompatActivity implements
 
         Intent intent = getIntent();
 
-        downloadAdapter = new DownloadAdapter(this, R.layout.custom_track_download_cell, musicList.musicList);
+        ArrayList<Song> downloadableSongs = MusicArrayList.allMusicList;
+        for(Song downloaded : MusicArrayList.musicList) {
+            Toast.makeText(getApplicationContext(), downloaded.getName() + " was removed",
+                    Toast.LENGTH_SHORT).show();
+            downloadableSongs.remove(downloaded);
+        }
+
+        downloadAdapter = new DownloadAdapter(this, R.layout.custom_track_download_cell, downloadableSongs);
         downloadListView.setAdapter(downloadAdapter);
 
         timeEditText.setOnClickListener(new View.OnClickListener() {
@@ -89,11 +98,26 @@ public class SettingsActivity extends AppCompatActivity implements
             }
         });
 
+        urlDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String downloadUrl = urlEditText.getText().toString();
+                if (downloadUrl.isEmpty()) return;
+                //TODO: check url in firebase, check hashmap, retreive SongFile from there instead
+                Downloader downloader = new Downloader(getApplicationContext(),getResources());
+                String path = downloader.download(downloadUrl);
+
+                urlEditText.setText("");
+            }
+        });
+
         downloadListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(getApplicationContext(), "You clicked on a list item!",
                         Toast.LENGTH_SHORT).show();
+
+
             }
         });
 
@@ -108,7 +132,7 @@ public class SettingsActivity extends AppCompatActivity implements
         albumMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                songPlayer.putExtra("albumMode", ALBUM_MODE);
+                songPlayer.putExtra("playerMode", ALBUM_MODE);
                 startActivity(songPlayer);
             }
         });
@@ -116,7 +140,7 @@ public class SettingsActivity extends AppCompatActivity implements
         flashbackMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               songPlayer.putExtra("albumMode", FLASHBACK_MODE);
+               songPlayer.putExtra("playerMode", FLASHBACK_MODE);
                startActivity(songPlayer);
             }
         });

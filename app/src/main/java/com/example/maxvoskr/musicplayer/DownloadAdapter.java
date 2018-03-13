@@ -67,7 +67,16 @@ class DownloadAdapter extends BaseAdapter {
         viewHolder.trackName.setText(music.getName());
         viewHolder.artistName.setText(music.getArtist());
 
-        // TODO: Get download info to set icon color and clickability
+
+
+        viewHolder.downloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Downloader downloader = new Downloader(context, context.getResources());
+                downloader.download((SongFile) music);
+            }
+        });
+
 
         return view;
     }

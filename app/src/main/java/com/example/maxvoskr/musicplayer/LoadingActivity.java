@@ -2,18 +2,15 @@ package com.example.maxvoskr.musicplayer;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.Resources;
-import android.media.MediaMetadataRetriever;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Set;
 
 /*****
  * dev: Adi
@@ -22,10 +19,11 @@ import java.util.Set;
 public class LoadingActivity extends AppCompatActivity {
 
     public static CurrentLocationTimeData currentLocationTimeData;
-    private Set<String> albumNamesSet = new HashSet<String>();
-    MusicArrayList musicList;
-    Context context;
-    SongHistorySharedPreferenceManager sharedPref;
+    private ArrayList<Song> songList;
+    private MusicArrayList musicList;
+    private Context context;
+    private SongHistorySharedPreferenceManager sharedPref;
+    private SongFactory songFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,64 +32,30 @@ public class LoadingActivity extends AppCompatActivity {
         context = getApplicationContext();
 
         musicList = new MusicArrayList();
+        songList = new ArrayList<Song>();
         sharedPref = new SongHistorySharedPreferenceManager(context);
+        songFactory = new SongFactory(getResources());
 
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        ArrayList<String> rawFileNames = new ArrayList<>();
-        ArrayList<Integer> songCodes = new ArrayList<>();
-
-        Field[] fields=R.raw.class.getFields();
-
-        for(Field field : fields){
-            try {
-                rawFileNames.add(field.getName());
-                songCodes.add(field.getInt(field));
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        Hashtable<String, Integer> nameToCode = new Hashtable<String, Integer>();
-        for(int count = 0; count < fields.length; count++){
-            nameToCode.put(rawFileNames.get(count), songCodes.get(count));
-        }
-
-        int i = 0;
-        for(String songName : rawFileNames) {
-
-            Resources res = getResources();
-            AssetFileDescriptor afd = res.openRawResourceFd(songCodes.get(i++));
-            retriever.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-
-            Song song = new Song(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE), retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
-                    retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST), nameToCode.get(songName));
-
-            this.albumNamesSet.add(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM));
-            //musicList.albumSet.add(new Album(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
-            //        retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST)));
-            sharedPref.updateData(song);
-            musicList.musicList.add(song);
-        }
-
-        for (String albumName : albumNamesSet) {
-            System.out.println(albumName);
-            musicList.albumList.add(new Album(albumName, "Max"));
-        }
+        final String SOME_ACTION = "android.intent.action.DOWNLOAD_COMPLETE";
+        IntentFilter intentFilter = new IntentFilter(SOME_ACTION);
+        Downloader mReceiver = new Downloader(context, getResources());
+        context.registerReceiver(mReceiver, intentFilter);
+        //context.registerReceiver(mReceiver);
 
 
-        for (Album album : musicList.albumList) {
+        loadSongsFromMusicFolder();
 
-            for (Song song : musicList.musicList) {
+        loadSongsFromResRaw();
 
-                if (song.getAlbum().equals(album.getAlbumName())) {
-                    album.setArtist(song.getArtist());
-                    album.addSong(song);
-                }
-            }
-        }
+        importSongsToApp();
 
-        //final Intent mainActivityIntent  = new Intent(this, MainActivity.class);
+
+        // TODO: remove this, only for testing until FB is up
+        SongFile song = new SongFile("Back On The Road Again", "Music for TV and Film Vol. 1", "Scott Holmes", "");
+        song.setUrl("https://freemusicarchive.org/music/download/a8ea4c3229d571ec76ef3a6eb867b840db7b1b17");
+        MusicArrayList.insertFBSong(song);
+
+
 
         final Intent mainActivityIntent  = new Intent(this, GoogleSignInActivity.class);
 
@@ -107,6 +71,53 @@ public class LoadingActivity extends AppCompatActivity {
 
 
         currentLocationTimeData = new CurrentLocationTimeData(this);
+
+        // Is there an issue here? we start the CurrentLocationTimeData after we would have switched to MainActivity
+
+        final Intent mainActivityIntent2  = new Intent(this, MainActivity.class);
+        startActivity(mainActivityIntent2);
+    }
+
+
+
+    private void loadSongsFromMusicFolder() {
+        File musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+        File[] songFiles = musicDir.listFiles();
+
+        for(File songFile : songFiles) {
+            Song song = songFactory.makeSongFromPath(songFile.getPath());
+
+            songList.add(song);
+
+            sharedPref.updateData(song);
+        }
+    }
+
+    private void loadSongsFromResRaw() {
+        ArrayList<Integer> songCodes = new ArrayList<>();
+        Field[] fields=R.raw.class.getFields();
+        for(Field field : fields){
+            try {
+                songCodes.add(field.getInt(field));
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(Integer resID : songCodes) {
+            Song song = songFactory.makeSongFromResID(resID);
+
+            songList.add(song);
+
+            sharedPref.updateData(song);
+        }
+    }
+
+    private void importSongsToApp() {
+        for(Song song : songList) {
+            musicList.insertLocalSong(song);
+        }
     }
 
     @Override

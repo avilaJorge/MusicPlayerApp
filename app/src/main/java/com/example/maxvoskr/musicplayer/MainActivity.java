@@ -26,6 +26,11 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MusicPlayerService.Callbacks{
 
+
+
+    private String path;
+
+
     public static Context contextOfApplication;
 
     private final int SONG_MODE = 0;
@@ -245,21 +250,24 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSong.getLikeDislike() <= 0) {
-                    like.setImageResource(R.drawable.like_green);
-                    dislike.setImageResource(R.drawable.dislike_black);
-                    currentSong.setLikeDislike(1);
-                }
-                else
-                {
-                    like.setImageResource(R.drawable.like_black);
-                    dislike.setImageResource(R.drawable.dislike_black);
-                    currentSong.setLikeDislike(0);
+                if(currentSong != null) {
+                    if (currentSong.getLikeDislike() <= 0) {
+                        like.setImageResource(R.drawable.like_green);
+                        dislike.setImageResource(R.drawable.dislike_black);
+                        currentSong.setLikeDislike(1);
+                    } else {
+                        like.setImageResource(R.drawable.like_black);
+                        dislike.setImageResource(R.drawable.dislike_black);
+                        currentSong.setLikeDislike(0);
+                    }
+
+                    sharedPref.writeData(currentSong);
+                    songList.putExtra("Position", -1);
+                    startActivity(songList);
                 }
 
-                sharedPref.writeData(currentSong);
-                songList.putExtra("Position", -1);
-                startActivity(songList);
+
+
             }
         });
 
@@ -267,22 +275,22 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         dislike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSong.getLikeDislike() >= 0) {
-                    like.setImageResource(R.drawable.like_black);
-                    dislike.setImageResource(R.drawable.dislike_red);
-                    currentSong.setLikeDislike(-1);
-                    musicPlayerService.skip();
-                }
-                else
-                {
-                    like.setImageResource(R.drawable.like_black);
-                    dislike.setImageResource(R.drawable.dislike_black);
-                    currentSong.setLikeDislike(0);
-                }
+                if(currentSong != null) {
+                    if (currentSong.getLikeDislike() >= 0) {
+                        like.setImageResource(R.drawable.like_black);
+                        dislike.setImageResource(R.drawable.dislike_red);
+                        currentSong.setLikeDislike(-1);
+                        musicPlayerService.skip();
+                    } else {
+                        like.setImageResource(R.drawable.like_black);
+                        dislike.setImageResource(R.drawable.dislike_black);
+                        currentSong.setLikeDislike(0);
+                    }
 
-                sharedPref.writeData(currentSong);
-                songList.putExtra("Position", -1);
-                startActivity(songList);
+                    sharedPref.writeData(currentSong);
+                    songList.putExtra("Position", -1);
+                    startActivity(songList);
+                }
             }
         });
 
