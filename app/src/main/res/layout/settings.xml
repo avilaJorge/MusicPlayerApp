@@ -19,6 +19,26 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
+        <CheckBox
+            android:id="@+id/privacyCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:checked="false"
+            android:duplicateParentState="false"
+            android:onClick="onPrivacyCheckBoxClicked"
+            app:layout_constraintBottom_toTopOf="@+id/timeEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/textView3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp" />
+
         <TextView
             android:id="@+id/textView3"
             android:layout_width="175dp"
@@ -58,25 +78,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <CheckBox
-            android:id="@+id/privacyCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="34dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:checked="false"
-            android:duplicateParentState="false"
-            android:onClick="onPrivacyCheckBoxClicked"
-            app:layout_constraintBottom_toTopOf="@+id/timeEditText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/textView3"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="16dp" />
+
 
     </android.support.constraint.ConstraintLayout>
 

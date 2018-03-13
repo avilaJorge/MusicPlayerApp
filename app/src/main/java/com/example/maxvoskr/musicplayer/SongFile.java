@@ -6,6 +6,7 @@ package com.example.maxvoskr.musicplayer;
 
 public class SongFile extends Song {
     private String song;
+    private String url;
 
 
     SongFile(String name, String album, String artist, String song){
@@ -51,5 +52,13 @@ public class SongFile extends Song {
 
     public void setSong(String song) {
         this.song = song;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

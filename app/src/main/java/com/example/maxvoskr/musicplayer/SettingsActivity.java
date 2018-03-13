@@ -1,24 +1,18 @@
 package com.example.maxvoskr.musicplayer;
 
-import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.TimePicker;
-import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -78,7 +72,7 @@ public class SettingsActivity extends AppCompatActivity implements
 
         Intent intent = getIntent();
 
-        downloadAdapter = new DownloadAdapter(this, R.layout.custom_track_download_cell, musicList.musicList);
+        downloadAdapter = new DownloadAdapter(this, R.layout.custom_track_download_cell, MusicArrayList.allMusicList);
         downloadListView.setAdapter(downloadAdapter);
 
         timeEditText.setOnClickListener(new View.OnClickListener() {

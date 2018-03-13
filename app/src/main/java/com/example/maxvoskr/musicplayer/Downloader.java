@@ -61,6 +61,19 @@ public class Downloader extends BroadcastReceiver {
         return localDest.getPath();
     }
 
+    public String download(SongFile song) {
+        String url = song.getUrl();
+        String name = url.substring(url.lastIndexOf("/") + 1);
+        File localDest = new File(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC), name);
+        request = new DownloadManager.Request(Uri.parse(url));
+        request.setDestinationUri(Uri.fromFile(localDest));
+
+        lastID = manager.enqueue(request);
+
+        return localDest.getPath();
+    }
+
+
     public boolean downloadSuccessful() {
         return Integer.parseInt(COLUMN_STATUS) == STATUS_SUCCESSFUL;
     }
@@ -101,7 +114,6 @@ public class Downloader extends BroadcastReceiver {
                 int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
                 if (status == DownloadManager.STATUS_SUCCESSFUL) {
                     path = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
-                    name = path.substring( path.lastIndexOf('/')+1, path.length() );
                 }
                 else{
                     Toast.makeText(context, "Download Unsuccessful", Toast.LENGTH_LONG).show();
@@ -113,7 +125,7 @@ public class Downloader extends BroadcastReceiver {
             Toast.makeText(context, path + " complete", Toast.LENGTH_LONG).show();
             //testing for downloader
             Song song = factory.makeSongFromPath(path);
-            MusicArrayList.musicList.add(song);
+            MusicArrayList.insertLocalSong(song);
         }
 
     }

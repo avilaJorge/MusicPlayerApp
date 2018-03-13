@@ -11,8 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 /*****
  * dev: Adi
@@ -21,7 +19,7 @@ import java.util.Set;
 public class LoadingActivity extends AppCompatActivity {
 
     public static CurrentLocationTimeData currentLocationTimeData;
-    private Set<String> albumNamesSet = new HashSet<String>();
+    private ArrayList<Song> songList;
     private MusicArrayList musicList;
     private Context context;
     private SongHistorySharedPreferenceManager sharedPref;
@@ -34,6 +32,7 @@ public class LoadingActivity extends AppCompatActivity {
         context = getApplicationContext();
 
         musicList = new MusicArrayList();
+        songList = new ArrayList<Song>();
         sharedPref = new SongHistorySharedPreferenceManager(context);
         songFactory = new SongFactory(getResources());
 
@@ -48,15 +47,27 @@ public class LoadingActivity extends AppCompatActivity {
 
         loadSongsFromResRaw();
 
-        prepareAlbumList();
+        importSongsToApp();
 
+        final Intent mainActivityIntent  = new Intent(this, GoogleSignInActivity.class);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+
+                startActivity(mainActivityIntent);
+            }
+        }, 5000);
+
+
+        currentLocationTimeData = new CurrentLocationTimeData(this);
 
         // Is there an issue here? we start the CurrentLocationTimeData after we would have switched to MainActivity
 
-        final Intent mainActivityIntent  = new Intent(this, MainActivity.class);
-        startActivity(mainActivityIntent);
-
-        currentLocationTimeData = new CurrentLocationTimeData(this);
+        final Intent mainActivityIntent2  = new Intent(this, MainActivity.class);
+        startActivity(mainActivityIntent2);
     }
 
 
@@ -68,8 +79,7 @@ public class LoadingActivity extends AppCompatActivity {
         for(File songFile : songFiles) {
             Song song = songFactory.makeSongFromPath(songFile.getPath());
 
-            musicList.musicList.add(song);
-            albumNamesSet.add(song.getAlbum());
+            songList.add(song);
 
             sharedPref.updateData(song);
         }
@@ -90,85 +100,16 @@ public class LoadingActivity extends AppCompatActivity {
         for(Integer resID : songCodes) {
             Song song = songFactory.makeSongFromResID(resID);
 
-            musicList.musicList.add(song);
-            albumNamesSet.add(song.getAlbum());
+            songList.add(song);
 
             sharedPref.updateData(song);
         }
-
-
-        /* old method code
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        ArrayList<String> rawFileNames = new ArrayList<>();
-        ArrayList<Integer> songCodes = new ArrayList<>();
-
-        Field[] fields=R.raw.class.getFields();
-
-        for(Field field : fields){
-            try {
-                rawFileNames.add(field.getName());
-                songCodes.add(field.getInt(field));
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        Hashtable<String, Integer> nameToCode = new Hashtable<String, Integer>();
-        for(int count = 0; count < fields.length; count++){
-            nameToCode.put(rawFileNames.get(count), songCodes.get(count));
-        }
-
-        int i = 0;
-        for(String songName : rawFileNames) {
-
-            Resources res = getResources();
-            AssetFileDescriptor afd = res.openRawResourceFd(songCodes.get(i++));
-            retriever.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-
-            Song song = new SongRes(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE), retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
-                    retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST), nameToCode.get(songName));
-
-            this.albumNamesSet.add(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM));
-            sharedPref.updateData(song);
-            musicList.musicList.add(song);
-        } */
     }
 
-    private void prepareAlbumList() {
-        for (String albumName : albumNamesSet) {
-            System.out.println(albumName);
-            musicList.albumList.add(new Album(albumName, "Max"));
+    private void importSongsToApp() {
+        for(Song song : songList) {
+            musicList.insertLocalSong(song);
         }
-
-
-        for (Album album : musicList.albumList) {
-
-            for (Song song : musicList.musicList) {
-
-                if (song.getAlbum() != null && song.getAlbum().equals(album.getAlbumName())) {
-                    album.setArtist(song.getArtist());
-                    album.addSong(song);
-                }
-            }
-        }
-
-        //final Intent mainActivityIntent  = new Intent(this, MainActivity.class);
-
-        final Intent mainActivityIntent  = new Intent(this, GoogleSignInActivity.class);
-
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Do something after 5s = 5000ms
-
-                startActivity(mainActivityIntent);
-            }
-        }, 5000);
-
-
-        currentLocationTimeData = new CurrentLocationTimeData(this);
     }
 
     @Override

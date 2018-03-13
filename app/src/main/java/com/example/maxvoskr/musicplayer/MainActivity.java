@@ -243,13 +243,6 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
                 }
 
                 playing = !playing;
-
-
-
-
-                // TODO implementation of downloader
-                Downloader downloader = new Downloader(getApplicationContext(),getResources());
-                path = downloader.download("https://freemusicarchive.org/music/download/b14b61dc01ebf1ea4110336edee42b95bfb1a255");
             }
         });
 
