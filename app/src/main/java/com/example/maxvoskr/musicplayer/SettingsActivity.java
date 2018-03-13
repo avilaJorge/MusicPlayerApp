@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -39,6 +41,11 @@ public class SettingsActivity extends AppCompatActivity implements
 
     private CheckBox privacyCheckBox;
     private EditText timeEditText;
+
+    private EditText urlEditText;
+    private ImageView urlDownload;
+
+
     private View songMode;
     private View albumMode;
     private View flashbackMode;
@@ -67,6 +74,8 @@ public class SettingsActivity extends AppCompatActivity implements
         // Get view ids
         downloadListView = (ListView) findViewById(R.id.downloadList);
         timeEditText = (EditText) findViewById(R.id.timeEditText);
+        urlDownload = (ImageView) findViewById(R.id.urlDownload);
+        urlEditText = (EditText) findViewById(R.id.urlEditText);
         songMode = (View) findViewById(R.id.navLeft);
         albumMode = (View) findViewById(R.id.navMid);
         flashbackMode = (View) findViewById(R.id.navRight);
@@ -89,11 +98,23 @@ public class SettingsActivity extends AppCompatActivity implements
             }
         });
 
+        urlDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String downloadUrl = urlEditText.getText().toString();
+                if (downloadUrl.isEmpty()) return;
+                // TODO downloader should handle bad downloads
+                Downloader downloader = new Downloader(getApplicationContext(),getResources());
+                String path = downloader.download(downloadUrl);
+            }
+        });
+
         downloadListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(getApplicationContext(), "You clicked on a list item!",
                         Toast.LENGTH_SHORT).show();
+                //TODO get URL from firebase song list and add downloader.
             }
         });
 
