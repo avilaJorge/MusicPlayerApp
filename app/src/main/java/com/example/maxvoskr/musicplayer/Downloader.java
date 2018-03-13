@@ -52,23 +52,47 @@ public class Downloader extends BroadcastReceiver {
 
     public String download(String url) {
         String name = url.substring(url.lastIndexOf("/") + 1);
+
+    /*    File musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+        File[] songFiles = musicDir.listFiles();
+
+        for(File file: songFiles) {
+            if(file.getName() == name)
+                return "";
+        }
+      */
         File localDest = new File(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC), name);
         request = new DownloadManager.Request(Uri.parse(url));
         request.setDestinationUri(Uri.fromFile(localDest));
 
         lastID = manager.enqueue(request);
+
+        Toast.makeText(context, "Download Started", Toast.LENGTH_SHORT).show();
 
         return localDest.getPath();
     }
 
     public String download(SongFile song) {
+
         String url = song.getUrl();
         String name = url.substring(url.lastIndexOf("/") + 1);
+/*
+        File musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+        File[] songFiles = musicDir.listFiles();
+
+        for(File file: songFiles) {
+            if(file.getName() == name)
+                return "";
+        }
+*/
+
         File localDest = new File(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC), name);
         request = new DownloadManager.Request(Uri.parse(url));
         request.setDestinationUri(Uri.fromFile(localDest));
 
         lastID = manager.enqueue(request);
+
+        Toast.makeText(context, "Download Started", Toast.LENGTH_SHORT).show();
 
         return localDest.getPath();
     }
@@ -92,7 +116,6 @@ public class Downloader extends BroadcastReceiver {
     public String getLastDownloadPath() {
         return lastPath;
     }
-
 
 
 
@@ -122,10 +145,18 @@ public class Downloader extends BroadcastReceiver {
             c.close();
 
 
-            Song song = factory.makeSongFromPath(path);
-            MusicArrayList.insertLocalSong(song);
+            Song newSong = factory.makeSongFromPath(path);
+            SongFile oldSong = (SongFile) MusicArrayList.allMusicTable.get(newSong.getName() + newSong.getAlbum() + newSong.getArtist());
 
-            Toast.makeText(context, "Downloading " + song.getName() + " complete", Toast.LENGTH_LONG).show();
+            if(oldSong != null) {
+                oldSong.setSong(path);
+                MusicArrayList.insertLocalSong(oldSong);
+            }
+            else {
+                MusicArrayList.insertLocalSong(newSong);
+            }
+
+            Toast.makeText(context, "Downloading " + newSong.getName() + " complete", Toast.LENGTH_LONG).show();
         }
     }
 }

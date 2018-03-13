@@ -51,7 +51,9 @@ public class LoadingActivity extends AppCompatActivity {
 
 
         // TODO: remove this, only for testing until FB is up
-        MusicArrayList.insertFBSong(new SongRes("song1", "album", "artist", 0));
+        SongFile song = new SongFile("Back On The Road Again", "Music for TV and Film Vol. 1", "Scott Holmes", "");
+        song.setUrl("https://freemusicarchive.org/music/download/a8ea4c3229d571ec76ef3a6eb867b840db7b1b17");
+        MusicArrayList.insertFBSong(song);
 
 
 

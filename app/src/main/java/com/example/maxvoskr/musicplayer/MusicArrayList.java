@@ -34,9 +34,10 @@ public class MusicArrayList {
             allMusicTable.put(key, song);
         }
 
+
         boolean added = false;
         for(Album album : albumList) {
-            if(album.getAlbumName() == song.getAlbum()){
+            if(album.getAlbumName().equals(song.getAlbum())){
                 if(album.getMusicList().indexOf(song) == -1) {
                     album.addSong(song);
                 }
