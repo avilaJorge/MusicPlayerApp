@@ -51,7 +51,6 @@ public class UserStoryFourTest {
     public void before(){
 
         songOne = musicList.get(0);
-        //songTwo = musicList.get(1);
 
     }
 
@@ -63,8 +62,6 @@ public class UserStoryFourTest {
         // TODO need to reset state of song to completely unplayed
         songOne.setLocation("");
         songOne.unsetPlayed();
-        //song.setDayOfWeek(1);
-        //song.setTimeOfDay(1);
         songOne.setTimeMS(0);
 
         onData(anything()).inAdapterView(withId(R.id.trackList)).atPosition(0).perform(click());

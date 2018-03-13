@@ -45,9 +45,12 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
     private View albumMode;
     private View flashbackMode;
     private View background;
+    private View settingsMode;
     private Intent songPlayer;
     private Intent songList;
     private Intent albumList;
+    private Intent settingsIntent;
+    private Intent priorityListIntent;
 
     private TextView songTitleTextView;
     private TextView artistTextView;
@@ -93,6 +96,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         songMode = findViewById(R.id.navLeft);
         albumMode = findViewById(R.id.navMid);
         flashbackMode = findViewById(R.id.navRight);
+        settingsMode = (View) findViewById(R.id.settingsMode);
         background = findViewById(R.id.background);
 
         // text fields
@@ -122,6 +126,8 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
         albumList = new Intent(this, AlbumListActivity.class);
+        settingsIntent = new Intent(this, SettingsActivity.class);
+        priorityListIntent = new Intent(this, PriorityListActivity.class);
         playerMode = getIntent().getIntExtra("playerMode", SONG_MODE);
 
 
@@ -241,11 +247,19 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         flashbackMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(playerMode != FLASHBACK_MODE) {
-                    songPlayer.putExtra("playerMode", FLASHBACK_MODE);
-                    startActivity(songPlayer);
-                }
+            if(playerMode != FLASHBACK_MODE) {
+                songPlayer.putExtra("playerMode", FLASHBACK_MODE);
+                startActivity(songPlayer);
+            } else {
+                priorityListIntent.putExtra("playingStatus", playing);
+                startActivity(priorityListIntent);
             }
+            }
+        });
+
+        settingsMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { startActivity(settingsIntent); }
         });
     }
 

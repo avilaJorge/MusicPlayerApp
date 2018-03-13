@@ -54,7 +54,6 @@ public class UserStoryTwoTest {
 
         context = InstrumentationRegistry.getTargetContext();
 
-
         album = albumList.get(0);
         song = album.getMusicList().get(0);
 
@@ -64,16 +63,6 @@ public class UserStoryTwoTest {
 
     @Test
     public void userViewsTracksInAnAlbumPlaysSong() {
-
-        /*
-            Given: app is open
-            And the user is in playback mode
-            And the user is on the Album menu
-            When "Hello World: The Album" is selected
-            Then all songs in the album will be listed in a new page
-            And the user can then select songs from that page to play
-
-        */
 
         onView(withId(R.id.albumMode)).perform(click());
 

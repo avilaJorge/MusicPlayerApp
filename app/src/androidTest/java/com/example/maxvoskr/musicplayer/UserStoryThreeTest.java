@@ -59,14 +59,6 @@ public class UserStoryThreeTest {
     @Test
     public void UserNavigatesFromPlaybackToFlashBack() {
 
-        /*
-            Given: The user is in the Playback Activity
-            When: The user taps the flashback button at the top of the UI
-            Then:  The activity will change into Flashback mode
-            And the next songs to be played are now automatically selected for play based on priorities
-
-        */
-
         onView(withId(R.id.flashbackMode)).perform(click());
 
         onView(withText("Last Played:")).check(matches(isDisplayed()));

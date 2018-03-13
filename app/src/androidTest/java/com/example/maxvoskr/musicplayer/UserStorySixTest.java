@@ -42,7 +42,6 @@ import static org.hamcrest.Matchers.is;
 public class UserStorySixTest {
 
     private Song song;
-    private static Album album;
 
     @Rule
     public ActivityTestRule<LoadingActivity> mActivityTestRule = new ActivityTestRule<>(LoadingActivity.class);
