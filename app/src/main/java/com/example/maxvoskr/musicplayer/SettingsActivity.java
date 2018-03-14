@@ -86,8 +86,6 @@ public class SettingsActivity extends AppCompatActivity implements
 
         ArrayList<Song> downloadableSongs = MusicArrayList.allMusicList;
         for(Song downloaded : MusicArrayList.musicList) {
-            Toast.makeText(getApplicationContext(), downloaded.getName() + " was removed",
-                    Toast.LENGTH_SHORT).show();
             downloadableSongs.remove(downloaded);
         }
 
