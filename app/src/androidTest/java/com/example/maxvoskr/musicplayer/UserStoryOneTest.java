@@ -49,7 +49,7 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class UserStoryOneTest {
 
-    private static Song song;
+    private Song song;
 
 
     @Rule
@@ -72,18 +72,6 @@ public class UserStoryOneTest {
     @Test
     public void userSelectsATrackToPlay() {
 
-
-        /*
-            Given: app is open
-            And the user is in playback mode
-            And the user is on the song menu
-            When "Hello World!" is selected
-            Then  the song playing page will open
-            And the song will play
-            And the user can then select to change to another song or listen till the end
-
-        */
-
         // App should be open, check for song list mode and click first song
         onData(anything()).inAdapterView(withId(R.id.trackList))
                 .atPosition(0)
@@ -91,7 +79,6 @@ public class UserStoryOneTest {
 
         onView(withText(song.getName())).check(matches(isDisplayed()));
 
-        //onData(allOf(is(instanceOf(String.class)), is(song.getName()))).check(matches(isDisplayed()))    ;
     }
 
 

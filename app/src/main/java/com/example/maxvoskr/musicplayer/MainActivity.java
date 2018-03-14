@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -20,11 +21,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MusicPlayerService.Callbacks{
+
+
+
+    private String path;
+
 
     public static Context contextOfApplication;
 
@@ -44,15 +49,19 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
     private View songMode;
     private View albumMode;
     private View flashbackMode;
+    private View settingsMode;
     private Intent songPlayer;
     private Intent songList;
     private Intent albumIntent;
+    private Intent settingsIntent;
 
     private ImageView play;
     private ImageView next;
     private ImageView previous;
     private ImageView like;
     private ImageView dislike;
+
+    private ListView background;
 
     //private ArrayList<Song> musicList;
     private MusicAdapter adapter;
@@ -77,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             musicPlayerService = musicPlayerBinder.getMusicPlayerService();
             musicPlayerService.registerClient(MainActivity.this);
             musicPlayerBound = true;
-            Toast.makeText(MainActivity.this, "Service almost connected", Toast.LENGTH_SHORT).show();
+            Log.d("log", "Service almost connected");
 
             currentSong = musicPlayerService.getCurrentSong();
 
@@ -113,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         Intent musicPlayerIntent = new Intent(this, MusicPlayerService.class);
         bindService(musicPlayerIntent, musicPlayerConnection, Context.BIND_AUTO_CREATE);
         startService(musicPlayerIntent);
-        Toast.makeText(MainActivity.this, "Service now connected", Toast.LENGTH_SHORT).show();
+        Log.d("log", "Service Now connected");
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
@@ -129,16 +138,20 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
         albumIntent = new Intent(this, AlbumListActivity.class);
+        settingsIntent = new Intent(this, SettingsActivity.class);
 
         trackList = (ListView) findViewById(R.id.trackList);
         songMode = findViewById(R.id.navLeft);
         albumMode = findViewById(R.id.navMid);
         flashbackMode = findViewById(R.id.navRight);
+        settingsMode = (View) findViewById(R.id.settingsMode);
         play = findViewById(R.id.play);
         next = findViewById(R.id.next);
         previous = findViewById(R.id.previous);
         like = findViewById(R.id.like);
         dislike = findViewById(R.id.dislike);
+
+        background = findViewById(R.id.trackList);
 
         if(!playing)
             play.setImageResource(R.drawable.play);
@@ -148,9 +161,11 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         if (albumPosition != -1) {
             currentAlbum = musicList.albumList.get(albumPosition);
             adapter = new MusicAdapter(this, R.layout.custom_track_cell, currentAlbum.getMusicList());
+            background.setBackgroundColor(Color.parseColor("#5a0208c6"));
             trackList.setAdapter(adapter);
         } else {
             adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList.musicList);
+            background.setBackgroundColor(Color.parseColor("#5a47025c"));
             trackList.setAdapter(adapter);
         }
 
@@ -161,9 +176,10 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
 
                 if (albumPosition != -1) {
                     if(currentAlbum.getMusicList().get(i).getLikeDislike() != -1) {
-                        anotherActivityIntent.putExtra("Position", i);
+                        anotherActivityIntent.putExtra("album", albumPosition);
+                        anotherActivityIntent.putExtra("track", i);
                         anotherActivityIntent.putExtra("changeSong", true);
-                        anotherActivityIntent.putExtra("playerMode", SONG_MODE);
+                        anotherActivityIntent.putExtra("playerMode", ALBUM_MODE);
                         anotherActivityIntent.putExtra("playingStatus", true);
                         startActivity(anotherActivityIntent);
                     }
@@ -204,8 +220,12 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             }
         });
 
-
-
+        settingsMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(settingsIntent);
+            }
+        });
 
         play.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -230,20 +250,24 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSong.getLikeDislike() <= 0) {
-                    like.setImageResource(R.drawable.like_green);
-                    dislike.setImageResource(R.drawable.dislike_black);
-                    currentSong.setLikeDislike(1);
-                }
-                else
-                {
-                    like.setImageResource(R.drawable.like_black);
-                    dislike.setImageResource(R.drawable.dislike_black);
-                    currentSong.setLikeDislike(0);
+                if(currentSong != null) {
+                    if (currentSong.getLikeDislike() <= 0) {
+                        like.setImageResource(R.drawable.like_green);
+                        dislike.setImageResource(R.drawable.dislike_black);
+                        currentSong.setLikeDislike(1);
+                    } else {
+                        like.setImageResource(R.drawable.like_black);
+                        dislike.setImageResource(R.drawable.dislike_black);
+                        currentSong.setLikeDislike(0);
+                    }
+
+                    sharedPref.writeData(currentSong);
+                    songList.putExtra("Position", -1);
+                    startActivity(songList);
                 }
 
-               // sharedPref.writeData(currentSong);
-                startActivity(songList);
+
+
             }
         });
 
@@ -251,21 +275,22 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         dislike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSong.getLikeDislike() >= 0) {
-                    like.setImageResource(R.drawable.like_black);
-                    dislike.setImageResource(R.drawable.dislike_red);
-                    currentSong.setLikeDislike(-1);
-                    musicPlayerService.skip();
-                }
-                else
-                {
-                    like.setImageResource(R.drawable.like_black);
-                    dislike.setImageResource(R.drawable.dislike_black);
-                    currentSong.setLikeDislike(0);
-                }
+                if(currentSong != null) {
+                    if (currentSong.getLikeDislike() >= 0) {
+                        like.setImageResource(R.drawable.like_black);
+                        dislike.setImageResource(R.drawable.dislike_red);
+                        currentSong.setLikeDislike(-1);
+                        musicPlayerService.skip();
+                    } else {
+                        like.setImageResource(R.drawable.like_black);
+                        dislike.setImageResource(R.drawable.dislike_black);
+                        currentSong.setLikeDislike(0);
+                    }
 
-                //sharedPref.writeData(currentSong);
-                startActivity(songList);
+                    sharedPref.writeData(currentSong);
+                    songList.putExtra("Position", -1);
+                    startActivity(songList);
+                }
             }
         });
 
@@ -308,5 +333,13 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             musicPlayerBound = false;
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        if(isChangingConfigurations()){
+            ;
+        }
     }
 }

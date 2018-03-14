@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * Created by Tim on 2/10/2018.
@@ -82,7 +81,9 @@ public class CurrentLocationTimeData {
 
     public String getLocation(){
         if(locationService != null)
-        location =  locationService.getLocationName();
+            location =  locationService.getLocationName();
+        else
+            location = "";
         return location;
     }
 
@@ -110,18 +111,17 @@ public class CurrentLocationTimeData {
         tempTimeMS = getTimeMS();
         tempDayOfWeek = getDayOfWeek();
         tempTimeOfDay = getTimeOfDay();
-        Toast.makeText(context, "Your location: " + tempLocation + "Day of Week " + tempDayOfWeek, Toast.LENGTH_SHORT).show();
+        Log.d("log", "Your location: " + tempLocation + "Day of Week " + tempDayOfWeek);
     }
 
     //Use if song ends
     public void updateSongUsingTemp(Song song) {
         Log.d("STATE", "tempDayOfWeek contains " + Integer.toString(tempDayOfWeek));
-        if (!tempLocation.isEmpty())
-            song.setLocation(tempLocation);
+
+        song.setLocation(tempLocation);
         song.setDayOfWeek(tempDayOfWeek);
         song.setTimeMS(tempTimeMS);
         song.setTimeOfDay(tempTimeOfDay);
-        //Toast.makeText(context, "Your location: " + tempLocation, Toast.LENGTH_SHORT).show();
     }
 
     public void unBindServices() {
@@ -133,6 +133,13 @@ public class CurrentLocationTimeData {
             context.unbindService(dateConnection);
             dateBound = false;
         }
+    }
+
+    public void setTestCurrentLocationTimeData(String location, int dayOfWeek, int timeOfDay, long timeMS){
+        this.location = location;
+        this.dayOfWeek = dayOfWeek;
+        this.timeOfDay = timeOfDay;
+        this.timeMS = timeMS;
     }
 
 }
