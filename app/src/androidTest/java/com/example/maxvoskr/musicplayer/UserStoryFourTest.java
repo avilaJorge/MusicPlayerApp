@@ -102,7 +102,7 @@ public class UserStoryFourTest {
         songOne.setTimeOfDay(1);
         songOne.setTimeMS(43200000);
 
-        onView(withId(R.id.flashbackMode)).perform(click());
+        onView(withId(R.id.vibeMode)).perform(click());
 
         onView(withText("Price Center")).check(matches(isDisplayed()));
 

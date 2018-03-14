@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <View
+        android:id="@+id/sortTitle"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="#8c8c8c"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="80dp"
+        app:layout_constraintRight_toLeftOf="@id/sortAlbum"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <View
+        android:id="@+id/sortAlbum"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="#7d7d7d"
+        app:layout_constraintTop_toTopOf="@id/sortTitle"
+        app:layout_constraintRight_toLeftOf="@id/sortArtist"
+        app:layout_constraintLeft_toRightOf="@id/sortTitle"
+        />
+
+    <View
+        android:id="@+id/sortArtist"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="#fc6e6e6e"
+        app:layout_constraintTop_toTopOf="@id/sortTitle"
+        app:layout_constraintRight_toLeftOf="@+id/sortLike"
+        app:layout_constraintLeft_toRightOf="@id/sortAlbum"
+        />
+
+    <View
+        android:id="@+id/sortLike"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="#5f5f5f"
+        app:layout_constraintLeft_toRightOf="@id/sortArtist"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/sortTitle" />
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/a_z_sort"
+        app:layout_constraintTop_toTopOf="@id/sortTitle"
+        app:layout_constraintLeft_toLeftOf="@id/sortTitle"
+        app:layout_constraintRight_toRightOf="@id/sortTitle"
+        android:layout_marginTop="10dp"/>
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/album"
+        app:layout_constraintTop_toTopOf="@id/sortAlbum"
+        app:layout_constraintLeft_toLeftOf="@id/sortAlbum"
+        app:layout_constraintRight_toRightOf="@id/sortAlbum"
+        android:layout_marginTop="10dp"/>
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/artist_sort"
+        app:layout_constraintTop_toTopOf="@id/sortArtist"
+        app:layout_constraintLeft_toLeftOf="@id/sortArtist"
+        app:layout_constraintRight_toRightOf="@id/sortArtist"
+        android:layout_marginTop="10dp"/>
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/like_sort"
+        app:layout_constraintTop_toTopOf="@id/sortLike"
+        app:layout_constraintLeft_toLeftOf="@id/sortLike"
+        app:layout_constraintRight_toRightOf="@id/sortLike"
+        android:layout_marginTop="10dp"/>
+
+</android.support.constraint.ConstraintLayout>

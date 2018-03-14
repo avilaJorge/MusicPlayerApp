@@ -30,10 +30,13 @@ public class SettingsActivity extends AppCompatActivity implements
 
     private final int SONG_MODE = 0;
     private final int ALBUM_MODE = 1;
-    private final int FLASHBACK_MODE = 2;
+    private final int VIBE_MODE = 2;
 
     private CheckBox privacyCheckBox;
     private EditText timeEditText;
+
+    private CheckBox manualTimeCheckBox;
+    private boolean manualTimeSet;
 
     private EditText urlEditText;
     private ImageView urlDownload;
@@ -41,7 +44,7 @@ public class SettingsActivity extends AppCompatActivity implements
 
     private View songMode;
     private View albumMode;
-    private View flashbackMode;
+    private View vibeMode;
     private Intent songPlayer;
     private Intent songList;
     private Intent songListActivityIntent;
@@ -71,8 +74,9 @@ public class SettingsActivity extends AppCompatActivity implements
         urlEditText = (EditText) findViewById(R.id.urlEditText);
         songMode = (View) findViewById(R.id.navLeft);
         albumMode = (View) findViewById(R.id.navMid);
-        flashbackMode = (View) findViewById(R.id.navRight);
+        vibeMode = (View) findViewById(R.id.navRight);
         privacyCheckBox = (CheckBox) findViewById(R.id.privacyCheckBox);
+        manualTimeCheckBox = (CheckBox) findViewById(R.id.manualTimeCheckBox);
 
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
@@ -82,8 +86,6 @@ public class SettingsActivity extends AppCompatActivity implements
 
         ArrayList<Song> downloadableSongs = MusicArrayList.allMusicList;
         for(Song downloaded : MusicArrayList.musicList) {
-            Toast.makeText(getApplicationContext(), downloaded.getName() + " was removed",
-                    Toast.LENGTH_SHORT).show();
             downloadableSongs.remove(downloaded);
         }
 
@@ -137,10 +139,10 @@ public class SettingsActivity extends AppCompatActivity implements
             }
         });
 
-        flashbackMode.setOnClickListener(new View.OnClickListener() {
+        vibeMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               songPlayer.putExtra("playerMode", FLASHBACK_MODE);
+               songPlayer.putExtra("playerMode", VIBE_MODE);
                startActivity(songPlayer);
             }
         });
@@ -168,7 +170,11 @@ public class SettingsActivity extends AppCompatActivity implements
         Date date = calendar.getTime();
         SimpleDateFormat format = new SimpleDateFormat();
         String dateString = format.format(date);
+        manualTimeSet = true;
         timeEditText.setText(dateString);
+
+        Toast.makeText(getApplicationContext(), "Date set: " + dateString, Toast.LENGTH_SHORT).show();
+
 
         //TODO: Store the user defined date somewhere
     }
@@ -181,5 +187,28 @@ public class SettingsActivity extends AppCompatActivity implements
             //TODO: Update this setting somewhere else
             Toast.makeText(getApplicationContext(), "Private Mode Off!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void onManualTimeCheckBoxClicked(View view) {
+        if (manualTimeCheckBox.isChecked()) {
+            //TODO: Update this setting somewhere else
+
+            if (!manualTimeSet){
+                timeEditText.callOnClick();
+            }
+
+
+
+
+
+
+
+            Toast.makeText(getApplicationContext(), "Enable Manual time!", Toast.LENGTH_SHORT).show();
+
+        } else {
+            //TODO: Update this settings somewhere else
+            Toast.makeText(getApplicationContext(), "Disable Manual Time!", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

@@ -24,7 +24,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
 
     private final int SONG_MODE = 0;
     private final int ALBUM_MODE = 1;
-    private final int FLASHBACK_MODE = 2;
+    private final int VIBE_MODE = 2;
 
     private int playerMode = SONG_MODE;
     private boolean changeSong = false;
@@ -43,7 +43,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
     private ImageView dislike;
     private View songMode;
     private View albumMode;
-    private View flashbackMode;
+    private View vibeMode;
     private View background;
     private View settingsMode;
     private Intent songPlayer;
@@ -95,7 +95,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         dislike = findViewById(R.id.dislike);
         songMode = findViewById(R.id.navLeft);
         albumMode = findViewById(R.id.navMid);
-        flashbackMode = findViewById(R.id.navRight);
+        vibeMode = findViewById(R.id.navRight);
         settingsMode = (View) findViewById(R.id.settingsMode);
         background = findViewById(R.id.background);
 
@@ -211,7 +211,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (playerMode != FLASHBACK_MODE)
+                if (playerMode != VIBE_MODE)
                     musicPlayerService.previous();
             }
         });
@@ -226,7 +226,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(playerMode == FLASHBACK_MODE) {
+                if(playerMode == VIBE_MODE) {
                     musicPlayerService.stop();
                 }
                 songList.putExtra("playingStatus", playing);
@@ -237,18 +237,18 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         albumMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(playerMode == FLASHBACK_MODE) {
+                if(playerMode == VIBE_MODE) {
                     musicPlayerService.stop();
                 }
                 startActivity(albumList);
             }
         });
 
-        flashbackMode.setOnClickListener(new View.OnClickListener() {
+        vibeMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            if(playerMode != FLASHBACK_MODE) {
-                songPlayer.putExtra("playerMode", FLASHBACK_MODE);
+            if(playerMode != VIBE_MODE) {
+                songPlayer.putExtra("playerMode", VIBE_MODE);
                 startActivity(songPlayer);
             } else {
                 priorityListIntent.putExtra("playingStatus", playing);
@@ -354,7 +354,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                     currentSong = songs.get(0);
                 }
             }
-            else if (playerMode == FLASHBACK_MODE) {
+            else if (playerMode == VIBE_MODE) {
                 musicPlayerService.stop();
                 musicPlayerService.setList(new ArrayList<Song>());
                 musicPlayerService.playSong();

@@ -18,6 +18,7 @@ class Song {
     protected boolean played;
     protected boolean playedByFriend;
     protected int weight;
+    protected String songID;
 
     protected ArrayList<String> locations;
 
@@ -36,6 +37,10 @@ class Song {
 
     public String getLastLocation(){
         return lastLocation;
+    }
+
+    public String getSongID(){
+        return songID;
     }
 
     public long getTimeMS(){
@@ -65,6 +70,8 @@ class Song {
     public String getArtist() {
         return nameOfArtist;
     }
+
+    public String setSongID(String songID) { this.songID = songID; }
 
     public boolean beenPlayed(){return played;}
 

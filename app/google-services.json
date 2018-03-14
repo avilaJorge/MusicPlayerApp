@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "630586042148-leu369vmu90lbdn26sc80p5mi2t4ngnu.apps.googleusercontent.com",
+          "client_id": "630586042148-4aqh9qpnnv22138p3ocrg5dp3eull2vd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.maxvoskr.musicplayer",
-            "certificate_hash": "ee2b830779fca86c7b1335bd1221c1c99825fc0e"
+            "certificate_hash": "133e55bbe80cc66bffc628d929c818be78ee47fb"
           }
         },
         {

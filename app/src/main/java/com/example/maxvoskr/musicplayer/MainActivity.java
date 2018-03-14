@@ -26,16 +26,16 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MusicPlayerService.Callbacks{
 
-
-
-    private String path;
-
-
     public static Context contextOfApplication;
 
     private final int SONG_MODE = 0;
     private final int ALBUM_MODE = 1;
-    private final int FLASHBACK_MODE = 2;
+    private final int VIBE_MODE = 2;
+
+    private final int SORT_TITLE = 0;
+    private final int SORT_ALBUM = 1;
+    private final int SORT_ARTIST = 2;
+    private final int SORT_LIKE = 3;
 
     public MusicPlayerService musicPlayerService;
     private boolean musicPlayerBound = false;
@@ -48,8 +48,12 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
     private Song exampleSong;
     private View songMode;
     private View albumMode;
-    private View flashbackMode;
+    private View vibeMode;
     private View settingsMode;
+    private View sortTitle;
+    private View sortAlbum;
+    private View sortArtist;
+    private View sortLike;
     private Intent songPlayer;
     private Intent songList;
     private Intent albumIntent;
@@ -68,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
     private ListView trackList;
 
     private ArrayList<Album> albumList;
+    private ArrayList<Song> sortedSongList;
 
     private MusicArrayList musicList;
 
@@ -75,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
     private Album currentAlbum;
     private boolean playing;
     private int albumPosition = -1;
+    private int sortMode;
 
     private SongHistorySharedPreferenceManager sharedPref;
 
@@ -131,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         Intent intent = getIntent();
         playing = intent.getBooleanExtra("playingStatus", false);
         albumPosition = intent.getIntExtra("Position", -1);
+        sortMode = intent.getIntExtra("sortMode", SORT_TITLE);
 
         sharedPref = new SongHistorySharedPreferenceManager(getApplicationContext());
 
@@ -143,13 +150,17 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         trackList = (ListView) findViewById(R.id.trackList);
         songMode = findViewById(R.id.navLeft);
         albumMode = findViewById(R.id.navMid);
-        flashbackMode = findViewById(R.id.navRight);
+        vibeMode = findViewById(R.id.navRight);
         settingsMode = (View) findViewById(R.id.settingsMode);
         play = findViewById(R.id.play);
         next = findViewById(R.id.next);
         previous = findViewById(R.id.previous);
         like = findViewById(R.id.like);
         dislike = findViewById(R.id.dislike);
+        sortTitle = findViewById(R.id.sortTitle);
+        sortAlbum = findViewById(R.id.sortAlbum);
+        sortArtist = findViewById(R.id.sortArtist);
+        sortLike = findViewById(R.id.sortLike);
 
         background = findViewById(R.id.trackList);
 
@@ -159,12 +170,16 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             play.setImageResource(R.drawable.pause);
 
         if (albumPosition != -1) {
+            // Album mode
             currentAlbum = musicList.albumList.get(albumPosition);
-            adapter = new MusicAdapter(this, R.layout.custom_track_cell, currentAlbum.getMusicList());
+            sortedSongList = sort(currentAlbum.getMusicList());
+            adapter = new MusicAdapter(this, R.layout.custom_track_cell, sortedSongList);
             background.setBackgroundColor(Color.parseColor("#5a0208c6"));
             trackList.setAdapter(adapter);
         } else {
-            adapter = new MusicAdapter(this, R.layout.custom_track_cell, musicList.musicList);
+            // Song mode
+            sortedSongList = (ArrayList<Song>) sort(musicList.musicList);
+            adapter = new MusicAdapter(this, R.layout.custom_track_cell, sortedSongList);
             background.setBackgroundColor(Color.parseColor("#5a47025c"));
             trackList.setAdapter(adapter);
         }
@@ -184,6 +199,8 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
                         startActivity(anotherActivityIntent);
                     }
                 } else {
+
+
                     if (musicList.musicList.get(i).getLikeDislike() != -1) {
                         anotherActivityIntent.putExtra("Position", i);
                         anotherActivityIntent.putExtra("changeSong", true);
@@ -212,10 +229,10 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             }
         });
 
-        flashbackMode.setOnClickListener(new View.OnClickListener() {
+        vibeMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                songPlayer.putExtra("playerMode", FLASHBACK_MODE);
+                songPlayer.putExtra("playerMode", VIBE_MODE);
                 startActivity(songPlayer);
             }
         });
@@ -243,6 +260,9 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
                 }
 
                 playing = !playing;
+
+                Downloader downloader = new Downloader(getApplicationContext(), getResources());
+                downloader.unpackZip("/storage/emulated/0/Android/data/com.example.maxvoskr.musicplayer/files/Music/testAlbum.zip");
             }
         });
 
@@ -263,6 +283,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
 
                     sharedPref.writeData(currentSong);
                     songList.putExtra("Position", -1);
+                    songList.putExtra("sortMode", sortMode);
                     startActivity(songList);
                 }
 
@@ -289,6 +310,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
 
                     sharedPref.writeData(currentSong);
                     songList.putExtra("Position", -1);
+                    songList.putExtra("sortMode", sortMode);
                     startActivity(songList);
                 }
             }
@@ -305,6 +327,51 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             @Override
             public void onClick(View view) {
                 musicPlayerService.skip();
+            }
+        });
+
+
+        sortTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(sortMode != SORT_TITLE) {
+                    songList.putExtra("Position", -1);
+                    songList.putExtra("sortMode", SORT_TITLE);
+                    startActivity(songList);
+                }
+            }
+        });
+
+        sortAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(sortMode != SORT_ALBUM) {
+                    songList.putExtra("Position", -1);
+                    songList.putExtra("sortMode", SORT_ALBUM);
+                    startActivity(songList);
+                }
+            }
+        });
+
+        sortArtist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(sortMode != SORT_ARTIST) {
+                    songList.putExtra("Position", -1);
+                    songList.putExtra("sortMode", SORT_ARTIST);
+                    startActivity(songList);
+                }
+            }
+        });
+
+        sortLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(sortMode != SORT_LIKE) {
+                    songList.putExtra("Position", -1);
+                    songList.putExtra("sortMode", SORT_LIKE);
+                    startActivity(songList);
+                }
             }
         });
 
@@ -341,5 +408,43 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         if(isChangingConfigurations()){
             ;
         }
+    }
+
+
+    private ArrayList<Song> sort(ArrayList<Song> songList) {
+        for (int j = 0; j < songList.size(); j++) {
+            int switched = 0;
+            for (int i = 0; i < songList.size()-1; i++) {
+                int compare = 0;
+                switch (sortMode) {
+                    case SORT_TITLE:
+                        compare = songList.get(i).getName().compareTo(songList.get(i+1).getName());
+                        break;
+                    case SORT_ALBUM:
+                        compare = songList.get(i).getAlbum().compareTo(songList.get(i+1).getAlbum());
+                        break;
+                    case SORT_ARTIST:
+                        compare = songList.get(i).getArtist().compareTo(songList.get(i+1).getArtist());
+                        break;
+                    case SORT_LIKE:
+                        compare = songList.get(i+1).getLikeDislike() - songList.get(i).getLikeDislike();
+                        break;
+                }
+
+
+                if (compare > 0) {
+                    Song temp = songList.get(i);
+                    songList.set(i, songList.get(i+1));
+                    songList.set(i+1, temp);
+                    switched++;
+                }
+            }
+
+            if(switched == 0)
+                break;
+        }
+
+
+        return songList;
     }
 }
