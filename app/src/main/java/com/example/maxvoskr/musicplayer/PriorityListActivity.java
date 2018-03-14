@@ -15,11 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -33,7 +30,7 @@ public class PriorityListActivity extends AppCompatActivity {
 
     private final int SONG_MODE = 0;
     private final int ALBUM_MODE = 1;
-    private final int FLASHBACK_MODE = 2;
+    private final int VIBE_MODE = 2;
     private int playerMode = SONG_MODE;
 
     public static LocationService locationService;
@@ -44,7 +41,7 @@ public class PriorityListActivity extends AppCompatActivity {
     private boolean musicPlayerBound = false;
     private View songMode;
     private View albumMode;
-    private View flashbackMode;
+    private View vibeMode;
     private View settingsMode;
     private Intent songPlayer;
     private Intent songList;
@@ -151,7 +148,7 @@ public class PriorityListActivity extends AppCompatActivity {
         albumListView = (ListView) findViewById(R.id.priorityListDisplay);
         songMode = findViewById(R.id.navLeft);
         albumMode = findViewById(R.id.navMid);
-        flashbackMode = findViewById(R.id.navRight);
+        vibeMode = findViewById(R.id.navRight);
         settingsMode = findViewById(R.id.settingsMode);
         play = findViewById(R.id.play);
         next = findViewById(R.id.next);
@@ -173,7 +170,7 @@ public class PriorityListActivity extends AppCompatActivity {
         songMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(playerMode == FLASHBACK_MODE) {
+                if(playerMode == VIBE_MODE) {
                     musicPlayerService.stop();
                 }
                 songList.putExtra("Position", -1);
@@ -189,10 +186,10 @@ public class PriorityListActivity extends AppCompatActivity {
             }
         });
 
-        flashbackMode.setOnClickListener(new View.OnClickListener() {
+        vibeMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                songPlayer.putExtra("playerMode", FLASHBACK_MODE);
+                songPlayer.putExtra("playerMode", VIBE_MODE);
                 songPlayer.putExtra("changeSong", false);
                 startActivity(songPlayer);
             }

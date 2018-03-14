@@ -23,7 +23,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     private final int SONG_MODE = 0;
     private final int ALBUM_MODE = 1;
-    private final int FLASHBACK_MODE = 2;
+    private final int VIBE_MODE = 2;
     private int mode = SONG_MODE;
 
     private Context context;
@@ -34,7 +34,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     private boolean playerReleased = true;
     private MediaPlayer mediaPlayer;
     private ArrayList<Song> songs;
-    private FlashbackPlaylist flashbackPlaylist;
+    private VibeModePlaylist vibeModePlaylist;
 
     public MusicPlayerService() {}
 
@@ -53,7 +53,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         super.onCreate();
         songIndex = 0;
         context = getApplicationContext();
-        flashbackPlaylist = new FlashbackPlaylist(MusicArrayList.musicList);
+        vibeModePlaylist = new VibeModePlaylist(MusicArrayList.musicList);
     }
 
     @Override
@@ -123,11 +123,11 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
             playerReleased = true;
         }
 
-        if (mode == FLASHBACK_MODE && songs.isEmpty()) {
-            Toast.makeText(context, "Starting flashback mode over", Toast.LENGTH_SHORT).show();
-            flashbackPlaylist = new FlashbackPlaylist(MusicArrayList.musicList);
-            flashbackPlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
-            Song next = flashbackPlaylist.getNextSong();
+        if (mode == VIBE_MODE && songs.isEmpty()) {
+            Toast.makeText(context, "Starting vibe mode over", Toast.LENGTH_SHORT).show();
+            vibeModePlaylist = new VibeModePlaylist(MusicArrayList.musicList);
+            vibeModePlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
+            Song next = vibeModePlaylist.getNextSong();
             if(next != null) {
                 songs.add(next);
             }
@@ -152,9 +152,9 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                             activity.updateUI(getCurrentSong());
                             playSong();
                         }
-                    } else if (mode == FLASHBACK_MODE) {
-                        flashbackPlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
-                        Song next = flashbackPlaylist.getNextSong();
+                    } else if (mode == VIBE_MODE) {
+                        vibeModePlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
+                        Song next = vibeModePlaylist.getNextSong();
                         if(next != null) {
                             songs.set(0, next);
                             songIndex = 0;
@@ -200,9 +200,9 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                     {
                         stop();
                     }
-                } else if(mode == FLASHBACK_MODE) {
-                    flashbackPlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
-                    Song next = flashbackPlaylist.getNextSong();
+                } else if(mode == VIBE_MODE) {
+                    vibeModePlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
+                    Song next = vibeModePlaylist.getNextSong();
                     if(next != null) {
                         songs.set(0, next);
                         songIndex = 0;
@@ -246,7 +246,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     /* Set the mode of the MusicPlayerService according to the following constants.
            private final int SONG_MODE = 0;
            private final int ALBUM_MODE = 1;
-           private final int FLASHBACK_MODE = 2;
+           private final int VIBE_MODE = 2;
      */
     public void setMode(int mode) {
         this.mode = mode;

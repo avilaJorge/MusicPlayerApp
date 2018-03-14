@@ -7,9 +7,9 @@ import java.util.ArrayList;
  * Created by mdavi on 2/7/2018.
  */
 
-public class FlashbackPlaylist {
+public class VibeModePlaylist {
     private ArrayList<Song> listOfSongs;
-    FlashbackPlaylist(ArrayList<Song> listOfSongs){
+    VibeModePlaylist(ArrayList<Song> listOfSongs){
         this.listOfSongs = listOfSongs;
         for(Song s : listOfSongs){
             s.unsetPlayed();
@@ -24,7 +24,7 @@ public class FlashbackPlaylist {
         }
     }
     /*
-     * getsNextSong for flashback mode (trigger on song end)
+     * getsNextSong for vibeback mode (trigger on song end)
      * input(dataObj that contains the user location and time info)
      * output nextSong obj
      */
