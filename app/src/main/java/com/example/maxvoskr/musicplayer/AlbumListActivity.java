@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -34,7 +33,7 @@ public class AlbumListActivity extends AppCompatActivity {
 
     private final int SONG_MODE = 0;
     private final int ALBUM_MODE = 1;
-    private final int FLASHBACK_MODE = 2;
+    private final int VIBE_MODE = 2;
 
     public static LocationService locationService;
     public static DateService dateService;
@@ -51,7 +50,7 @@ public class AlbumListActivity extends AppCompatActivity {
     private Song exampleSong;
     private View songMode;
     private View albumMode;
-    private View flashbackMode;
+    private View vibeMode;
     private View settingsMode;
     private Intent songPlayer;
     private Intent songList;
@@ -159,7 +158,7 @@ public class AlbumListActivity extends AppCompatActivity {
         albumListView = (ListView) findViewById(R.id.albumListDisplay);
         songMode = findViewById(R.id.navLeft);
         albumMode = findViewById(R.id.navMid);
-        flashbackMode = findViewById(R.id.navRight);
+        vibeMode = findViewById(R.id.navRight);
         settingsMode = findViewById(R.id.settingsMode);
         play = findViewById(R.id.play);
         next = findViewById(R.id.next);
@@ -199,10 +198,10 @@ public class AlbumListActivity extends AppCompatActivity {
             }
         });
 
-        flashbackMode.setOnClickListener(new View.OnClickListener() {
+        vibeMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                songPlayer.putExtra("playerMode", FLASHBACK_MODE);
+                songPlayer.putExtra("playerMode", VIBE_MODE);
                 startActivity(songPlayer);
             }
         });
