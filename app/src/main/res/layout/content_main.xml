@@ -8,6 +8,7 @@
 >
 
     <include layout="@layout/navigation_bar" />
+    <include layout="@layout/sort_bar" />
 
     <ListView
         android:id="@+id/trackList"
@@ -15,7 +16,7 @@
         android:layout_height="0dp"
         android:background="#5a47025c"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="140dp"
         android:layout_marginBottom="80dp"
         app:layout_constraintBottom_toBottomOf="parent">
     </ListView>
