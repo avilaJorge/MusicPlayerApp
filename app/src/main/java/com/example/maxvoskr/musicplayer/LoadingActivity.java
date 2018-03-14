@@ -24,6 +24,7 @@ public class LoadingActivity extends AppCompatActivity {
     private Context context;
     private SongHistorySharedPreferenceManager sharedPref;
     private SongFactory songFactory;
+    private FirebaseData firebaseObject = new FirebaseData();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +50,14 @@ public class LoadingActivity extends AppCompatActivity {
 
         importSongsToApp();
 
+        firebaseObject = new FirebaseData();
 
         // TODO: remove this, only for testing until FB is up
         SongFile song = new SongFile("Back On The Road Again", "Music for TV and Film Vol. 1", "Scott Holmes", "");
         song.setUrl("https://freemusicarchive.org/music/download/a8ea4c3229d571ec76ef3a6eb867b840db7b1b17");
+        System.out.println("--------------------firebase Write 1111111---------------");
+        firebaseObject.writeNewSong(song);
         MusicArrayList.insertFBSong(song);
-
-
 
         final Intent mainActivityIntent  = new Intent(this, GoogleSignInActivity.class);
 

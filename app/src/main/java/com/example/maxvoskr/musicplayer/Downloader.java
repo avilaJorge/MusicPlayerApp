@@ -144,6 +144,8 @@ public class Downloader extends BroadcastReceiver {
             }
             c.close();
 
+            FirebaseData firebaseObject = new FirebaseData();
+
 
             Song newSong = factory.makeSongFromPath(path);
             SongFile oldSong = (SongFile) MusicArrayList.allMusicTable.get(newSong.getName() + newSong.getAlbum() + newSong.getArtist());
