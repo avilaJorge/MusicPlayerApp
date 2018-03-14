@@ -16,7 +16,7 @@ public class FlashbackPlaylist {
         }
     }
 
-    /* sets the weights of all songs based on the current location/time/etc */
+    /* sets the weights of all songs based on the current lastLocation/time/etc */
     public void setCurrentWeights(CurrentLocationTimeData dataObj){
         for(Song s : listOfSongs){
             if (!s.beenPlayed())
@@ -25,7 +25,7 @@ public class FlashbackPlaylist {
     }
     /*
      * getsNextSong for flashback mode (trigger on song end)
-     * input(dataObj that contains the user location and time info)
+     * input(dataObj that contains the user lastLocation and time info)
      * output nextSong obj
      */
     public Song getNextSong(){
