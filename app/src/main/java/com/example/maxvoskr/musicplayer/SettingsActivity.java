@@ -30,7 +30,7 @@ public class SettingsActivity extends AppCompatActivity implements
 
     private final int SONG_MODE = 0;
     private final int ALBUM_MODE = 1;
-    private final int FLASHBACK_MODE = 2;
+    private final int VIBE_MODE = 2;
 
     private CheckBox privacyCheckBox;
     private EditText timeEditText;
@@ -41,7 +41,7 @@ public class SettingsActivity extends AppCompatActivity implements
 
     private View songMode;
     private View albumMode;
-    private View flashbackMode;
+    private View vibeMode;
     private Intent songPlayer;
     private Intent songList;
     private Intent songListActivityIntent;
@@ -71,7 +71,7 @@ public class SettingsActivity extends AppCompatActivity implements
         urlEditText = (EditText) findViewById(R.id.urlEditText);
         songMode = (View) findViewById(R.id.navLeft);
         albumMode = (View) findViewById(R.id.navMid);
-        flashbackMode = (View) findViewById(R.id.navRight);
+        vibeMode = (View) findViewById(R.id.navRight);
         privacyCheckBox = (CheckBox) findViewById(R.id.privacyCheckBox);
 
         songList = new Intent(this, MainActivity.class);
@@ -137,10 +137,10 @@ public class SettingsActivity extends AppCompatActivity implements
             }
         });
 
-        flashbackMode.setOnClickListener(new View.OnClickListener() {
+        vibeMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               songPlayer.putExtra("playerMode", FLASHBACK_MODE);
+               songPlayer.putExtra("playerMode", VIBE_MODE);
                startActivity(songPlayer);
             }
         });

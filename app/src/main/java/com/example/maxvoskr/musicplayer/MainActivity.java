@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
 
     private final int SONG_MODE = 0;
     private final int ALBUM_MODE = 1;
-    private final int FLASHBACK_MODE = 2;
+    private final int VIBE_MODE = 2;
 
     public MusicPlayerService musicPlayerService;
     private boolean musicPlayerBound = false;
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
     private Song exampleSong;
     private View songMode;
     private View albumMode;
-    private View flashbackMode;
+    private View vibeMode;
     private View settingsMode;
     private Intent songPlayer;
     private Intent songList;
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
         trackList = (ListView) findViewById(R.id.trackList);
         songMode = findViewById(R.id.navLeft);
         albumMode = findViewById(R.id.navMid);
-        flashbackMode = findViewById(R.id.navRight);
+        vibeMode = findViewById(R.id.navRight);
         settingsMode = (View) findViewById(R.id.settingsMode);
         play = findViewById(R.id.play);
         next = findViewById(R.id.next);
@@ -212,10 +212,10 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             }
         });
 
-        flashbackMode.setOnClickListener(new View.OnClickListener() {
+        vibeMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                songPlayer.putExtra("playerMode", FLASHBACK_MODE);
+                songPlayer.putExtra("playerMode", VIBE_MODE);
                 startActivity(songPlayer);
             }
         });
