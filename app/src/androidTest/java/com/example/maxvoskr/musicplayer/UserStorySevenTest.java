@@ -2,8 +2,6 @@ package com.example.maxvoskr.musicplayer;
 
 
 import android.Manifest;
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -27,85 +25,64 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.maxvoskr.musicplayer.LoadingActivity.currentLocationTimeData;
 import static com.example.maxvoskr.musicplayer.MusicArrayList.musicList;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
+
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class UserStoryFiveTest {
+public class UserStorySevenTest {
 
-    private Context context;
-    private Song songOne, songTwo;
+    private Song song;
 
     @Rule
     public ActivityTestRule<LoadingActivity> mActivityTestRule = new ActivityTestRule<>(LoadingActivity.class);
 
+
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
 
-   @Before
+    @Before
     public void before(){
 
-        context = InstrumentationRegistry.getTargetContext();
+        song = musicList.get(0);
 
-        songOne = musicList.get(0);
-        songTwo = musicList.get(1);
+        //TODO set google sign in variables!!!
+
+
+
 
     }
 
 
 
     @Test
-    public void higherFlashbackPriorityBasedOnLocationTest() {
-
-        currentLocationTimeData.setTestCurrentLocationTimeData("My House", 1, 1, 43200000);
-
-        songOne.setLocation("My house");
-        songOne.setDayOfWeek(1);
-        songOne.setPlayed();
-        songOne.setTimeOfDay(1);
-        songOne.setTimeMS(43200000);
-
-        songTwo.setTimeOfDay(1);
-        songTwo.setTimeMS(43200000);
-        songTwo.setDayOfWeek(1);
-        songTwo.setPlayed();
-        songTwo.setLocation("Price Center");
+    public void UserNavigatesFromPlaybackToVibeMode() {
 
         onView(withId(R.id.vibeMode)).perform(click());
 
-        onView(withText(songOne.getName())).check(matches(isDisplayed()));
-
+        onView(withText("Last Played:")).check(matches(isDisplayed()));
 
     }
+
+
 
     @Test
-    public void higherFlashbackPriorityBasedOnTimeTest() {
-
-        currentLocationTimeData.setTestCurrentLocationTimeData("My House", 1, 1, 43200000);
-
-        songOne.setLocation("My house");
-        songOne.setDayOfWeek(1);
-        songOne.setPlayed();
-        songOne.setTimeOfDay(1);
-        songOne.setTimeMS(14400000);
-
-        songTwo.setTimeOfDay(1);
-        songTwo.setTimeMS(43200000);
-        songTwo.setDayOfWeek(1);
-        songTwo.setPlayed();
-        songTwo.setLocation("My House");
+    public void UserNavigatesFromVibeModeToPlayback() {
 
         onView(withId(R.id.vibeMode)).perform(click());
 
-        onView(withText(songTwo.getName())).check(matches(isDisplayed()));
+        onView(withText("Last Played:")).check(matches(isDisplayed()));
 
+        onView(withId(R.id.songsMode)).perform(click());
 
+        onData(anything()).inAdapterView(withId(R.id.trackList))
+                .atPosition(0)
+                .perform(click());
+
+        onView(withText(song.getName())).check(matches(isDisplayed()));
     }
+
 
 
     private static Matcher<View> childAtPosition(
