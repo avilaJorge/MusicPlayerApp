@@ -87,6 +87,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     public void onTaskRemoved(Intent rootIntent) {
         Log.e("ClearFromRecentService", "END");
         if(mediaPlayer != null) {
+            //TODO: crash here
             mediaPlayer.release();
             playerReleased = true;
             stopSelf();

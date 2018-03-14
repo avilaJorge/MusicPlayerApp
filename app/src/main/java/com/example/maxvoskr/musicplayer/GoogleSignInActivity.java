@@ -44,6 +44,8 @@ public class GoogleSignInActivity extends BaseActivity implements
     private TextView mStatusTextView;
     private TextView mDetailTextView;
 
+    private Intent mainActivityIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +54,9 @@ public class GoogleSignInActivity extends BaseActivity implements
         // Views
         mStatusTextView = findViewById(R.id.status);
         mDetailTextView = findViewById(R.id.detail);
+
+        // Intents
+        mainActivityIntent = new Intent(this, MainActivity.class);
 
         // Button listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this);
@@ -68,8 +73,14 @@ public class GoogleSignInActivity extends BaseActivity implements
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if(user != null) {
+            startActivity(mainActivityIntent);
+        }
         // [END initialize_auth]
     }
 
@@ -122,6 +133,7 @@ public class GoogleSignInActivity extends BaseActivity implements
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            startActivity(mainActivityIntent);
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -142,8 +154,8 @@ public class GoogleSignInActivity extends BaseActivity implements
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
-        final Intent mainActivityIntent  = new Intent(this, MainActivity.class);
-        startActivity(mainActivityIntent);
+        //final Intent mainActivityIntent  = new Intent(this, MainActivity.class);
+        //startActivity(mainActivityIntent);
     }
     // [END signin]
 
