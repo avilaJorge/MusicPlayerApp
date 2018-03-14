@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <View
+        android:id="@+id/navLeft"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:background="#5a47025c"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/navMid"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <View
+        android:id="@+id/navMid"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:background="#5a0208c6"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/navRight"
+        app:layout_constraintLeft_toRightOf="@id/navLeft"
+        />
+
+    <View
+        android:id="@+id/navRight"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:background="#6eff6701"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/navSettings"
+        app:layout_constraintLeft_toRightOf="@id/navMid"
+        />
+
+    <View
+        android:id="@+id/navSettings"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:background="@color/background_settings"
+        app:layout_constraintLeft_toRightOf="@id/navRight"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/songsMode"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/song"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/navLeft"
+        app:layout_constraintRight_toRightOf="@id/navLeft"
+        android:layout_marginTop="15dp"/>
+
+    <ImageView
+        android:id="@+id/albumMode"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/album"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/navMid"
+        app:layout_constraintRight_toRightOf="@id/navMid"
+        android:layout_marginTop="15dp"/>
+
+    <ImageView
+        android:id="@+id/vibeMode"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/vibemode"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/navRight"
+        app:layout_constraintRight_toRightOf="@id/navRight"
+        android:layout_marginTop="15dp"/>
+
+    <ImageView
+        android:id="@+id/settingsMode"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/settings"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/navSettings"
+        app:layout_constraintRight_toRightOf="@id/navSettings"
+        android:layout_marginTop="15dp"/>
+
+</android.support.constraint.ConstraintLayout>

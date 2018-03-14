@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+
+    <!--
+            Upper navigation bar
+     -->
+
+    <include layout="@layout/navigation_bar" />
+
+    <!--
+        middle stuff
+    -->
+    <View
+        android:id="@+id/background"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="80dp"
+        android:background="#6eff6701"
+        app:layout_constraintBottom_toTopOf="@+id/musicBar"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/layoutA"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/layoutB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/background"
+        app:layout_constraintVertical_chainStyle="spread">
+
+        <TextView
+            android:id="@+id/songTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight=".8"
+            android:autoSizeMaxTextSize="48dp"
+            android:autoSizeTextType="uniform"
+            android:ellipsize="marquee"
+            android:maxHeight="100dp"
+            android:text="A REALLY LONG SONG NAME FOR TESTING, NOW EVEN LONGER"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="36sp"
+            app:layout_constraintBottom_toTopOf="@id/artistName"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/background"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/artistName"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="FOR SOME REASON THE ARTIST NAME IS REALLY LONG TOO"
+            android:textAlignment="gravity"
+            android:textColor="#000000"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/albumTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="ALSO A REALLY LONG ARTIST NAME FOR SOME REASON AS WELL"
+            android:textAlignment="center"
+
+            android:textColor="#000000"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutB"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="85dp"
+        android:orientation="vertical"
+>>>>>>> dev_branch
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutA">
+
+        <TextView
+            android:id="@+id/lastPlayed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autoSizeMaxTextSize="36dp"
+            android:autoSizeTextType="uniform"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="Last Played:"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="24sp"
+
+            app:layout_constraintBottom_toTopOf="@+id/time"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autoSizeMaxTextSize="36dp"
+            android:autoSizeTextType="uniform"
+            android:text="12:32"
+            android:textAlignment="center"
+
+            android:textColor="#000000"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/dayOfWeek"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lastPlayed" />
+
+        <TextView
+            android:id="@+id/dayOfWeek"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autoSizeMaxTextSize="36dp"
+            android:autoSizeTextType="uniform"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="Wednesday"
+            android:textAlignment="center"
+
+            android:textColor="#000000"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/date"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/time" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autoSizeMaxTextSize="36dp"
+            android:autoSizeTextType="uniform"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="September 31, 2018"
+            android:textAlignment="center"
+
+            android:textColor="#000000"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/location"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dayOfWeek" />
+
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autoSizeMaxTextSize="36dp"
+            android:autoSizeTextType="uniform"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="The name of this location is extremely long for testing purposes"
+            android:textAlignment="center"
+
+            android:textColor="#000000"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/date" />
+    </LinearLayout>
+
+
+
+
+
+
+
+    <!--
+        Lower music bar stuff
+     -->
+
+    <include layout="@layout/music_bar" />
+
+</android.support.constraint.ConstraintLayout>

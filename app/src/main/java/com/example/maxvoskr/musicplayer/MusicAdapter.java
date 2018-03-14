@@ -20,14 +20,16 @@ public class MusicAdapter extends BaseAdapter {
 
     private Context context;
     private int layout;
-    private ArrayList<Music> musicList;
+    private ArrayList<Song> musicList;
     private MediaPlayer mediaPlayer;
     private Boolean flag = true;
+    private static SongHistorySharedPreferenceManager sharedPref;
 
-    public MusicAdapter(Context context, int layout, ArrayList<Music> musicList) {
+    public MusicAdapter(Context context, int layout, ArrayList<Song> musicList) {
         this.context = context;
         this.layout = layout;
         this.musicList = musicList;
+        sharedPref = new SongHistorySharedPreferenceManager(context);
     }
 
     @Override
@@ -47,13 +49,11 @@ public class MusicAdapter extends BaseAdapter {
 
     private class ViewHolder {
         TextView trackName, artistName;
-        ImageView playButton, resetButton;
+        ImageView likeButton, dislikeButton;
     }
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         final ViewHolder viewHolder;
-
-        System.out.println("hey");
 
         if (view == null) {
 
@@ -65,8 +65,8 @@ public class MusicAdapter extends BaseAdapter {
             view = layoutInflater.inflate(layout, null);
             viewHolder.trackName = (TextView) view.findViewById(R.id.trackName);
             viewHolder.artistName = (TextView) view.findViewById(R.id.artistName);
-            viewHolder.playButton = (ImageView) view.findViewById(R.id.playImage);
-            viewHolder.resetButton = (ImageView) view.findViewById(R.id.resetImage);
+            viewHolder.likeButton = (ImageView) view.findViewById(R.id.like);
+            viewHolder.dislikeButton = (ImageView) view.findViewById(R.id.dislike);
 
             view.setTag(viewHolder);
 
@@ -75,39 +75,62 @@ public class MusicAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        final Music music = musicList.get(i);
+        final Song music = musicList.get(i);
         viewHolder.trackName.setText(music.getName());
         viewHolder.artistName.setText(music.getArtist());
 
+        if(music.getLikeDislike() == -1)
+        {
+            viewHolder.likeButton.setImageResource(R.drawable.like_black);
+            viewHolder.dislikeButton.setImageResource(R.drawable.dislike_red);
+        }
+        else if(music.getLikeDislike() == 1)
+        {
+            viewHolder.likeButton.setImageResource(R.drawable.like_green);
+            viewHolder.dislikeButton.setImageResource(R.drawable.dislike_black);
+        }
+        else
+        {
+            viewHolder.likeButton.setImageResource(R.drawable.like_black);
+            viewHolder.dislikeButton.setImageResource(R.drawable.dislike_black);
+        }
+
         // play music
-        viewHolder.playButton.setOnClickListener(new View.OnClickListener() {
+        viewHolder.likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (flag) {
-                    mediaPlayer = MediaPlayer.create(context, music.getSong());
-                    flag = false;
+                if (music.getLikeDislike() <= 0) {
+                    viewHolder.likeButton.setImageResource(R.drawable.like_green);
+                    viewHolder.dislikeButton.setImageResource(R.drawable.dislike_black);
+                    music.setLikeDislike(1);
                 }
-                if (mediaPlayer.isPlaying()) {
-                    mediaPlayer.pause();
-                    viewHolder.playButton.setImageResource(R.drawable.playimage);
-                } else {
-                    mediaPlayer.start();
-                    viewHolder.playButton.setImageResource(R.drawable.pauseimage);
+                else
+                {
+                    viewHolder.likeButton.setImageResource(R.drawable.like_black);
+                    music.setLikeDislike(0);
                 }
 
+                sharedPref.writeData(music);
             }
         });
 
         // pause music
-        viewHolder.resetButton.setOnClickListener(new View.OnClickListener() {
+
+        viewHolder.dislikeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!flag) {
-                    mediaPlayer.stop();
-                    mediaPlayer.release();
-                    flag = true;
+                if ( music.getLikeDislike() >= 0) {
+                    viewHolder.likeButton.setImageResource(R.drawable.like_black);
+                    viewHolder.dislikeButton.setImageResource(R.drawable.dislike_red);
+                    music.setLikeDislike(-1);
                 }
-                viewHolder.playButton.setImageResource(R.drawable.playimage);
+                else
+                {
+                    viewHolder.dislikeButton.setImageResource(R.drawable.dislike_black);
+                    music.setLikeDislike(0);
+                }
+
+                sharedPref.writeData(music);
             }
         });
 
