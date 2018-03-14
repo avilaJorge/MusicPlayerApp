@@ -47,23 +47,30 @@ public class UserStorySevenTest {
 
         song = musicList.get(0);
 
+        //TODO set google sign in variables!!!
+
+
+
+
     }
 
 
 
     @Test
-    public void UserNavigatesFromPlaybackToFlashBack() {
+    public void UserNavigatesFromPlaybackToVibeMode() {
 
-        onView(withId(R.id.  .flashbackMode)).perform(click());
+        onView(withId(R.id.vibeMode)).perform(click());
 
         onView(withText("Last Played:")).check(matches(isDisplayed()));
 
     }
 
-    @Test
-    public void UserNavigatesFromFlashbackToPlayback() {
 
-        onView(withId(R.id.flashbackMode)).perform(click());
+
+    @Test
+    public void UserNavigatesFromVibeModeToPlayback() {
+
+        onView(withId(R.id.vibeMode)).perform(click());
 
         onView(withText("Last Played:")).check(matches(isDisplayed()));
 
