@@ -58,7 +58,7 @@ class Song {
         return nameOfArtist;
     }
 
-    public String setSongID(String songID) { this.songID = songID; }
+    public void setSongID(String songID) { this.songID = songID; }
 
     public boolean beenPlayed(){return played;}
 
