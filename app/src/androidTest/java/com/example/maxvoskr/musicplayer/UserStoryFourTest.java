@@ -2,12 +2,10 @@ package com.example.maxvoskr.musicplayer;
 
 
 import android.Manifest;
-import android.os.SystemClock;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -30,7 +28,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.maxvoskr.musicplayer.MusicArrayList.musicList;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 @LargeTest
@@ -60,7 +57,7 @@ public class UserStoryFourTest {
 
 
         // TODO need to reset state of song to completely unplayed
-        songOne.setLocation("");
+        songOne.setLastLocation("");
         songOne.unsetPlayed();
         songOne.setTimeMS(0);
 
@@ -83,7 +80,7 @@ public class UserStoryFourTest {
 
         onView(withId(R.id.songsMode)).perform(click());
 
-        songTwo.setLocation("Price Center");
+        songTwo.setLastLocation("Price Center");
         songTwo.setPlayed();
         songTwo.setDayOfWeek(1);
         songTwo.setTimeOfDay(1);
@@ -99,7 +96,7 @@ public class UserStoryFourTest {
     @Test
     public void viewLastPlayedInfoForSongInFlashbackModeTest() {
 
-        songOne.setLocation("Price Center");
+        songOne.setLastLocation("Price Center");
         songOne.setPlayed();
         songOne.setDayOfWeek(1);
         songOne.setTimeOfDay(1);

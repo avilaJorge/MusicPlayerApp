@@ -288,7 +288,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                     AM_PM = "pm";
                 }
 
-                String location = currentSong.getLocation();
+                String location = currentSong.getLastLocation();
                 if (location.length() > 30)
                     location = location.substring(0, 26) + "...";
 
