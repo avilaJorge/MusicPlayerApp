@@ -59,7 +59,7 @@ public class UserStoryThreeTest {
     @Test
     public void UserNavigatesFromPlaybackToFlashBack() {
 
-        onView(withId(R.id.flashbackMode)).perform(click());
+        onView(withId(R.id.vibeMode)).perform(click());
 
         onView(withText("Last Played:")).check(matches(isDisplayed()));
 
@@ -68,7 +68,7 @@ public class UserStoryThreeTest {
     @Test
     public void UserNavigatesFromFlashbackToPlayback() {
 
-        onView(withId(R.id.flashbackMode)).perform(click());
+        onView(withId(R.id.vibeMode)).perform(click());
 
         onView(withText("Last Played:")).check(matches(isDisplayed()));
 

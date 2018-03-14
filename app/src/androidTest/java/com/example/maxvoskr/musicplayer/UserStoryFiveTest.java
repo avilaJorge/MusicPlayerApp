@@ -76,7 +76,7 @@ public class UserStoryFiveTest {
         songTwo.setPlayed();
         songTwo.setLocation("Price Center");
 
-        onView(withId(R.id.flashbackMode)).perform(click());
+        onView(withId(R.id.vibeMode)).perform(click());
 
         onView(withText(songOne.getName())).check(matches(isDisplayed()));
 
@@ -100,7 +100,7 @@ public class UserStoryFiveTest {
         songTwo.setPlayed();
         songTwo.setLocation("My House");
 
-        onView(withId(R.id.flashbackMode)).perform(click());
+        onView(withId(R.id.vibeMode)).perform(click());
 
         onView(withText(songTwo.getName())).check(matches(isDisplayed()));
 
