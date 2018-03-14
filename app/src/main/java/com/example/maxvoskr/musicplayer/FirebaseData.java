@@ -35,15 +35,13 @@ public class FirebaseData {
 
         mDatabase = FirebaseDatabase.getInstance();
         myRef = mDatabase.getReferenceFromUrl("https://musicplayer-c8dfe.firebaseio.com/");
-
-        //mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     void writeNewSong(Song song) {
         System.out.println("--------------------firebase Write-------------------");
 
         String song_id = myRef.push().getKey();
-        myRef.setValue("hello");
+        song.setSongID(song_id);
 
         if (song == null){
             throw new NullPointerException("Cannot write an uninitialized song");
@@ -61,22 +59,20 @@ public class FirebaseData {
 
     }
 
-    /*boolean updateData(Song songObj)
+    void updateSongData(Song songObj)
     {
         if(songObj == null){
             throw new NullPointerException("Cannot update a uninitialized song");
         }
         try{
-            songObj.setLocation(SongData.getString(songObj.getName()+LOCATION, songObj.getLocation()));
-            songObj.setTimeMS(Long.parseLong(SongData.getString(songObj.getName()+TIME_MS, Long.toString(songObj.getTimeMS()))));
-            songObj.setDayOfWeek(Integer.parseInt(SongData.getString(songObj.getName()+DAY_OF_WEEK, Integer.toString(songObj.getDayOfWeek()))));
-            songObj.setTimeOfDay(Integer.parseInt(SongData.getString(songObj.getName()+TIME_OF_DAY, Integer.toString(songObj.getTimeOfDay()))));
-            songObj.setLikeDislike(Integer.parseInt(SongData.getString(songObj.getName()+LIKE_DISLIKE, Integer.toString(songObj.getLikeDislike()))));
+            myRef.child("songs").child(songObj.getSongID()).child("name").setValue(songObj.getName());
+            myRef.child("songs").child(songObj.getSongID()).child("album").setValue(songObj.getAlbum());
+            myRef.child("songs").child(songObj.getSongID()).child("artist").setValue(songObj.getArtist());
+            myRef.child("songs").child(songObj.getSongID()).child("time").setValue(songObj.getTimeMS());
+            myRef.child("songs").child(songObj.getSongID()).child("locations").child(songObj.getLocation()).setValue(true);
         }
         catch (Exception e){
             System.out.println("Unable to retrieve last play information");
-            return false;
         }
-        return true;
-    }*/
+    }
 }

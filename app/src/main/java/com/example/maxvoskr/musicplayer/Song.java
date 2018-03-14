@@ -15,6 +15,7 @@ class Song {
     protected String nameOfArtist;
     protected boolean played;
     protected int weight;
+    protected String songID;
 
     Song() {
         this.weight = 0;
@@ -23,6 +24,10 @@ class Song {
 
     public String getLocation(){
         return location;
+    }
+
+    public String getSongID(){
+        return songID;
     }
 
     public long getTimeMS(){
@@ -52,6 +57,8 @@ class Song {
     public String getArtist() {
         return nameOfArtist;
     }
+
+    public String setSongID(String songID) { this.songID = songID; }
 
     public boolean beenPlayed(){return played;}
 
