@@ -85,11 +85,13 @@ public class LoadingActivity extends AppCompatActivity {
         File[] songFiles = musicDir.listFiles();
 
         for(File songFile : songFiles) {
-            Song song = songFactory.makeSongFromPath(songFile.getPath());
+            if(!songFile.getPath().contains(".zip")) {
+                Song song = songFactory.makeSongFromPath(songFile.getPath());
 
-            songList.add(song);
+                songList.add(song);
 
-            sharedPref.updateData(song);
+                sharedPref.updateData(song);
+            }
         }
     }
 

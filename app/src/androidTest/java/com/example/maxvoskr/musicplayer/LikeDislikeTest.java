@@ -1,12 +1,8 @@
 package com.example.maxvoskr.musicplayer;
 
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
 
 import java.util.ArrayList;
-
-import static junit.framework.Assert.assertEquals;
 
 /**
  * Created by mdavi on 2/14/2018.
@@ -54,7 +50,7 @@ public class LikeDislikeTest{
         list.add(song5);
         list.add(song6);
     }
-
+/*
     @Test
     public void TestGetNextSongBreakTieByLike(){
         song1.setWeight(2);
@@ -77,5 +73,5 @@ public class LikeDislikeTest{
         FlashbackPlaylist flashback = new FlashbackPlaylist(list);
         Assert.assertEquals(null, flashback.getNextSong());
     }
-
+*/
 }
