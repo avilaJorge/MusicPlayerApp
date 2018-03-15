@@ -1,14 +1,8 @@
 package com.example.maxvoskr.musicplayer;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by maxvoskr on 3/13/18.
@@ -47,8 +41,11 @@ public class FirebaseData {
             throw new NullPointerException("Cannot write an uninitialized song");
         }
 
-        if (song.getLocation() != null) {
-            myRef.child("songs").child(song_id).child("locations").child(song.getLocation()).setValue(true);
+        if (song.getLocations() != null) {
+
+            //TODO: Check
+            for(String location : song.getLocations())
+                myRef.child("songs").child(song_id).child("locations").child(location).setValue(true);
         }
 
 
@@ -69,7 +66,10 @@ public class FirebaseData {
             myRef.child("songs").child(songObj.getSongID()).child("album").setValue(songObj.getAlbum());
             myRef.child("songs").child(songObj.getSongID()).child("artist").setValue(songObj.getArtist());
             myRef.child("songs").child(songObj.getSongID()).child("time").setValue(songObj.getTimeMS());
-            myRef.child("songs").child(songObj.getSongID()).child("locations").child(songObj.getLocation()).setValue(true);
+
+            //TODO: Check
+            for(String location : songObj.getLocations())
+                myRef.child("songs").child(songObj.getSongID()).child("locations").child(location).setValue(true);
         }
         catch (Exception e){
             System.out.println("Unable to retrieve last play information");

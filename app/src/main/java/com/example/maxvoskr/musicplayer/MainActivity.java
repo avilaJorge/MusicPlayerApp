@@ -260,9 +260,6 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
                 }
 
                 playing = !playing;
-
-                Downloader downloader = new Downloader(getApplicationContext(), getResources());
-                downloader.unpackZip("/storage/emulated/0/Android/data/com.example.maxvoskr.musicplayer/files/Music/testAlbum.zip");
             }
         });
 
