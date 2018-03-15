@@ -59,7 +59,9 @@ public class Downloader extends BroadcastReceiver {
     }
 
     public String download(String url) {
-        String name = url.substring(url.lastIndexOf("/") + 1);
+        String name;
+        name = url.substring(url.lastIndexOf("/") + 1, url.indexOf("?"));
+        //name = "songFile";
 
         File musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
         File[] songFiles = musicDir.listFiles();
@@ -83,7 +85,7 @@ public class Downloader extends BroadcastReceiver {
     public String download(SongFile song) {
 
         String url = song.getUrl();
-        String name = url.substring(url.lastIndexOf("/") + 1);
+        String name = url.substring(url.lastIndexOf("/") + 1, url.indexOf("?"));
 
         File localDest = new File(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC), name);
         request = new DownloadManager.Request(Uri.parse(url));
@@ -150,6 +152,7 @@ public class Downloader extends BroadcastReceiver {
             }
             c.close();
 
+
             try {
 
                 File orginal = new File(path);
@@ -159,7 +162,18 @@ public class Downloader extends BroadcastReceiver {
                 e.printStackTrace();
             }
 
-            if(title.contains(".zip"))
+            FirebaseData firebaseObject = new FirebaseData();
+
+
+            if(title.contains(".zip") != path.contains(".zip")) {
+                Toast.makeText(context, "Bad file type, please download again and check download type", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Title: " + title, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Path: " + path, Toast.LENGTH_LONG).show();
+
+                File file = new File(path);
+                file.delete();
+            }
+            else if(title.contains(".zip"))
             {
                 Toast.makeText(context, "Downloaded a Zip file complete", Toast.LENGTH_LONG).show();
                 Toast.makeText(context, "Title: " + title, Toast.LENGTH_LONG).show();

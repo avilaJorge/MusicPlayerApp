@@ -16,7 +16,7 @@ public class VibeModePlaylist {
         }
     }
 
-    /* sets the weights of all songs based on the current location/time/etc */
+    /* sets the weights of all songs based on the current lastLocation/time/etc */
     public void setCurrentWeights(CurrentLocationTimeData dataObj){
         for(Song s : listOfSongs){
             if (!s.beenPlayed())
@@ -24,8 +24,13 @@ public class VibeModePlaylist {
         }
     }
     /*
+<<<<<<< HEAD:app/src/main/java/com/example/maxvoskr/musicplayer/FlashbackPlaylist.java
+     * getsNextSong for flashback mode (trigger on song end)
+     * input(dataObj that contains the user lastLocation and time info)
+=======
      * getsNextSong for vibeback mode (trigger on song end)
      * input(dataObj that contains the user location and time info)
+>>>>>>> dev_branch:app/src/main/java/com/example/maxvoskr/musicplayer/VibeModePlaylist.java
      * output nextSong obj
      */
     public Song getNextSong(){

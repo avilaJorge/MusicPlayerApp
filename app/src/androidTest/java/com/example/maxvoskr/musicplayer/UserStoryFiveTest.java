@@ -20,7 +20,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -31,7 +30,6 @@ import static com.example.maxvoskr.musicplayer.LoadingActivity.currentLocationTi
 import static com.example.maxvoskr.musicplayer.MusicArrayList.musicList;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 @LargeTest
@@ -64,7 +62,7 @@ public class UserStoryFiveTest {
 
         currentLocationTimeData.setTestCurrentLocationTimeData("My House", 1, 1, 43200000);
 
-        songOne.setLocation("My house");
+        songOne.setLastLocation("My house");
         songOne.setDayOfWeek(1);
         songOne.setPlayed();
         songOne.setTimeOfDay(1);
@@ -74,7 +72,7 @@ public class UserStoryFiveTest {
         songTwo.setTimeMS(43200000);
         songTwo.setDayOfWeek(1);
         songTwo.setPlayed();
-        songTwo.setLocation("Price Center");
+        songTwo.setLastLocation("Price Center");
 
         onView(withId(R.id.vibeMode)).perform(click());
 
@@ -88,7 +86,7 @@ public class UserStoryFiveTest {
 
         currentLocationTimeData.setTestCurrentLocationTimeData("My House", 1, 1, 43200000);
 
-        songOne.setLocation("My house");
+        songOne.setLastLocation("My house");
         songOne.setDayOfWeek(1);
         songOne.setPlayed();
         songOne.setTimeOfDay(1);
@@ -98,7 +96,7 @@ public class UserStoryFiveTest {
         songTwo.setTimeMS(43200000);
         songTwo.setDayOfWeek(1);
         songTwo.setPlayed();
-        songTwo.setLocation("My House");
+        songTwo.setLastLocation("My House");
 
         onView(withId(R.id.vibeMode)).perform(click());
 

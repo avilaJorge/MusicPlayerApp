@@ -1,11 +1,13 @@
 package com.example.maxvoskr.musicplayer;
 
+import java.util.ArrayList;
+
 /**
  * Created by mdavi on 3/8/2018.
  */
 
 class Song {
-    protected String location;
+    protected String lastLocation;
     protected long timeMS;
     protected int dayOfWeek;
     protected int timeOfDay;
@@ -14,15 +16,31 @@ class Song {
     protected String nameOfAlbum;
     protected String nameOfArtist;
     protected boolean played;
+    protected boolean playedByFriend;
     protected int weight;
+    protected String songID;
+
+    protected ArrayList<String> locations;
 
     Song() {
         this.weight = 0;
         this.played = false;
     }
 
-    public String getLocation(){
-        return location;
+    public boolean isPlayedByFriend() {
+        return playedByFriend;
+    }
+
+    public void setPlayedByFriend(boolean playedByFriend) {
+        this.playedByFriend = playedByFriend;
+    }
+
+    public String getLastLocation(){
+        return lastLocation;
+    }
+
+    public String getSongID(){
+        return songID;
     }
 
     public long getTimeMS(){
@@ -52,6 +70,8 @@ class Song {
     public String getArtist() {
         return nameOfArtist;
     }
+
+    public void setSongID(String songID) { this.songID = songID; }
 
     public boolean beenPlayed(){return played;}
 
@@ -86,8 +106,8 @@ class Song {
             throw new IllegalArgumentException();
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLastLocation(String location) {
+        this.lastLocation = location;
     }
 
     public void setAlbum(String nameOfAlbum) {
@@ -109,11 +129,24 @@ class Song {
             throw new IllegalArgumentException();
     }
 
+    public ArrayList<String> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(ArrayList<String> locations) {
+        this.locations = locations;
+    }
+
+    public void addLocation(String location){
+        this.lastLocation = location;
+        this.locations.add(location);
+    }
+
     public void findWeight(CurrentLocationTimeData dataObj) {
         weight = 0;
         if (timeMS == 0) return;
         else weight ++;
-        if (dataObj.getLocation() == location || dataObj.getLocation().isEmpty()) weight++;
+        if (dataObj.getLocation() == lastLocation || dataObj.getLocation().isEmpty()) weight++;
         if (dataObj.getDayOfWeek() == dayOfWeek) weight++;
         if (dataObj.getTimeOfDay() == timeOfDay) weight++;
         //Like Dislike Breaks Ties Only

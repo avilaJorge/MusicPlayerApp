@@ -35,33 +35,33 @@ public class SharedPreferenceManagerTest {
         song1.setDayOfWeek(1);
         song1.setTimeOfDay(0);
         song1.setLikeDislike(0);
-        song1.setLocation("");
+        song1.setLastLocation("");
 
         song2 = new SongRes("Song Title","Album Title","Artist",0);
         song2.setTimeMS(0);
         song2.setDayOfWeek(1);
         song2.setTimeOfDay(0);
         song2.setLikeDislike(0);
-        song2.setLocation("");
+        song2.setLastLocation("");
 
         songHistorySharedPreferenceManager = new SongHistorySharedPreferenceManager(context);
     }
 
     @Test
     public void testRetrieveLocation() throws Exception {
-        song1.setLocation("Mars");
+        song1.setLastLocation("Mars");
         songHistorySharedPreferenceManager.writeData(song1);
         songHistorySharedPreferenceManager.updateData(song2);
 
-        assertEquals(song1.getLocation(), song2.getLocation());
+        assertEquals(song1.getLastLocation(), song2.getLastLocation());
     }
     @Test
     public void testRetrieveTimeMS() throws Exception {
-        song1.setLocation("Mars");
+        song1.setLastLocation("Mars");
         songHistorySharedPreferenceManager.writeData(song1);
         songHistorySharedPreferenceManager.updateData(song2);
 
-        assertEquals(song1.getLocation(), song2.getLocation());
+        assertEquals(song1.getLastLocation(), song2.getLastLocation());
     }
     @Test
     public void testRetrieveDayOfWeek() throws Exception {
@@ -69,7 +69,7 @@ public class SharedPreferenceManagerTest {
         songHistorySharedPreferenceManager.writeData(song1);
         songHistorySharedPreferenceManager.updateData(song2);
 
-        assertEquals(song1.getLocation(), song2.getLocation());
+        assertEquals(song1.getLastLocation(), song2.getLastLocation());
     }
     @Test
     public void testRetrieveTimeOfDay() throws Exception {
@@ -77,7 +77,7 @@ public class SharedPreferenceManagerTest {
         songHistorySharedPreferenceManager.writeData(song1);
         songHistorySharedPreferenceManager.updateData(song2);
 
-        assertEquals(song1.getLocation(), song2.getLocation());
+        assertEquals(song1.getLastLocation(), song2.getLastLocation());
     }
     @Test
     public void testRetrieveLikeDislike() throws Exception {
@@ -85,7 +85,7 @@ public class SharedPreferenceManagerTest {
         songHistorySharedPreferenceManager.writeData(song1);
         songHistorySharedPreferenceManager.updateData(song2);
 
-        assertEquals(song1.getLocation(), song2.getLocation());
+        assertEquals(song1.getLastLocation(), song2.getLastLocation());
     }
     @Test
     public void testWriteNullSong() throws Exception {

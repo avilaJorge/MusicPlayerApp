@@ -111,14 +111,14 @@ public class CurrentLocationTimeData {
         tempTimeMS = getTimeMS();
         tempDayOfWeek = getDayOfWeek();
         tempTimeOfDay = getTimeOfDay();
-        Log.d("log", "Your location: " + tempLocation + "Day of Week " + tempDayOfWeek);
+        Log.d("log", "Your lastLocation: " + tempLocation + "Day of Week " + tempDayOfWeek);
     }
 
     //Use if song ends
     public void updateSongUsingTemp(Song song) {
         Log.d("STATE", "tempDayOfWeek contains " + Integer.toString(tempDayOfWeek));
 
-        song.setLocation(tempLocation);
+        song.setLastLocation(tempLocation);
         song.setDayOfWeek(tempDayOfWeek);
         song.setTimeMS(tempTimeMS);
         song.setTimeOfDay(tempTimeOfDay);
