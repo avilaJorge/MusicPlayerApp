@@ -322,7 +322,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         if(changeSong) {
             if(playerMode == SONG_MODE)
             {
-                currentSong = MusicArrayList.musicList.get(getIntent().getExtras().getInt("Position"));
+                currentSong = MusicArrayList.localMusicList.get(getIntent().getExtras().getInt("Position"));
 
                 if(currentSong.getLikeDislike() == -1) {
                     currentSong = null;

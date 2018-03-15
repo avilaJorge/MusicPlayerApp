@@ -27,7 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.maxvoskr.musicplayer.LoadingActivity.currentLocationTimeData;
-import static com.example.maxvoskr.musicplayer.MusicArrayList.musicList;
+import static com.example.maxvoskr.musicplayer.MusicArrayList.localMusicList;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
@@ -50,8 +50,8 @@ public class UserStoryFiveTest {
 
         context = InstrumentationRegistry.getTargetContext();
 
-        songOne = musicList.get(0);
-        songTwo = musicList.get(1);
+        songOne = localMusicList.get(0);
+        songTwo = localMusicList.get(1);
 
     }
 

@@ -1,8 +1,12 @@
 package com.example.maxvoskr.musicplayer;
 
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by maxvoskr on 3/13/18.
@@ -31,6 +35,33 @@ public class FirebaseData {
         myRef = mDatabase.getReferenceFromUrl("https://musicplayer-c8dfe.firebaseio.com/");
     }
 
+    void updateSongList() {
+        Query q = myRef.child("songs");
+        q.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for(DataSnapshot data : children) {
+                    String name = data.child("name").getValue(String.class);
+                    String album = data.child("album").getValue(String.class);
+                    String artist = data.child("artist").getValue(String.class);
+                    String url = data.child("url").getValue(String.class);
+
+                    SongFile song = new SongFile(name, album, artist, "");
+                    song.setUrl(url);
+                    MusicArrayList.insertFBSong(song);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
     void writeNewSong(Song song) {
         System.out.println("--------------------firebase Write-------------------");
 
@@ -42,7 +73,6 @@ public class FirebaseData {
         }
 
         if (song.getLocations() != null) {
-
             //TODO: Check
             for(String location : song.getLocations())
                 myRef.child("songs").child(song_id).child("locations").child(location).setValue(true);
@@ -53,6 +83,7 @@ public class FirebaseData {
         myRef.child("songs").child(song_id).child("name").setValue(song.getName());
         myRef.child("songs").child(song_id).child("album").setValue(song.getAlbum());
         myRef.child("songs").child(song_id).child("artist").setValue(song.getArtist());
+        myRef.child("songs").child(song_id).child("url").setValue(song.getUrl());
 
     }
 

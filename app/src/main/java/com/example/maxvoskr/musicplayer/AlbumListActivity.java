@@ -63,7 +63,7 @@ public class AlbumListActivity extends AppCompatActivity {
     private ImageView like;
     private ImageView dislike;
 
-    //private ArrayList<Song> musicList;
+    //private ArrayList<Song> localMusicList;
     private AlbumAdapter adapter;
     private ListView albumListView;
 
@@ -174,7 +174,7 @@ public class AlbumListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                if(musicList.musicList.get(i).getLikeDislike() != -1) {
+                if(musicList.localMusicList.get(i).getLikeDislike() != -1) {
                     songListActivityIntent.putExtra("Position", i);
                     startActivity(songListActivityIntent);
                 }

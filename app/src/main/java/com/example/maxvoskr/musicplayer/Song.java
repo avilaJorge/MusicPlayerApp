@@ -157,4 +157,6 @@ class Song {
     public void setWeight(int weight){
         this.weight = weight;
     }
+
+    public String getUrl(){ return "";}
 }
