@@ -1,5 +1,7 @@
 package com.example.maxvoskr.musicplayer;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,23 +15,28 @@ public class MusicArrayList {
     public static ArrayList<Song> allMusicList;
     public static HashMap<String, Song> allMusicTable;
     public static ArrayList<Album> albumList;
-    //public static Set<Album> albumSet;
 
     public MusicArrayList() {
         localMusicList = new ArrayList<Song>();
         albumList = new ArrayList<Album>();
-      //  albumSet = new HashSet<Album>();
         allMusicList = new ArrayList<Song>();
         allMusicTable = new HashMap<String, Song>();
     }
 
     public static void insertLocalSong(Song song) {
-        if(allMusicList.indexOf(song) == -1) {
+        if(allMusicTable.get(getSongHash(song)) == null) {
+            Log.d("Importing Songs", "Song: " + song.getName() + "was not found in hashTable");
             allMusicList.add(song);
             String key = getSongHash(song);
             allMusicTable.put(key, song);
-
         }
+        else {
+            Log.d("Importing Songs", "Song: " + song.getName() + "was found hashTable");
+            Song fbSong = allMusicTable.get(getSongHash(song));
+            ((SongFile) song).setUrl(((SongFile) fbSong).getUrl());
+            song.setSongID(fbSong.getSongID());
+        }
+
 
 
         if(localMusicList.indexOf(song) == -1) {

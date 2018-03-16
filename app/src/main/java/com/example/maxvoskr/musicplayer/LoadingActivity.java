@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -45,8 +46,23 @@ public class LoadingActivity extends AppCompatActivity {
 
 
         firebaseObject = new FirebaseData();
-
         firebaseObject.updateSongList();
+
+        final LoadingActivity thisActivity = this;
+
+        final Handler handler2 = new Handler();
+        handler2.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+
+
+
+        for(Song song : MusicArrayList.allMusicTable.values())
+            Log.d("Loading", "HashMap after FB: " + song.getName() + " " + song.getSongID());
+
+        for(Song song : MusicArrayList.localMusicList)
+            Log.d("Loading", "localList after FB: " + song.getName() + " " + song.getSongID());
 
         loadSongsFromMusicFolder();
 
@@ -54,7 +70,13 @@ public class LoadingActivity extends AppCompatActivity {
 
         importSongsToApp();
 
-        final Intent mainActivityIntent  = new Intent(this, GoogleSignInActivity.class);
+        for(Song song : MusicArrayList.allMusicTable.values())
+            Log.d("Loading", "HashMap after Import: " + song.getName() + " " + song.getSongID());
+
+        for(Song song : MusicArrayList.localMusicList)
+            Log.d("Loading", "localList after Import: " + song.getName() + " " + song.getSongID());
+
+        final Intent mainActivityIntent  = new Intent(thisActivity, GoogleSignInActivity.class);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -67,12 +89,16 @@ public class LoadingActivity extends AppCompatActivity {
         }, 5000);
 
 
-        currentLocationTimeData = new CurrentLocationTimeData(this);
+        currentLocationTimeData = new CurrentLocationTimeData(thisActivity);
 
         // Is there an issue here? we start the CurrentLocationTimeData after we would have switched to MainActivity
 
-        final Intent mainActivityIntent2  = new Intent(this, MainActivity.class);
+        final Intent mainActivityIntent2  = new Intent(thisActivity, MainActivity.class);
         startActivity(mainActivityIntent2);
+
+
+            }
+        }, 1000);
     }
 
 
