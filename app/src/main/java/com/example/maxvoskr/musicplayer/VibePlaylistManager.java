@@ -99,7 +99,7 @@ public class VibePlaylistManager {
             if (s.getWeight()>0 && (s.getClass() == SongFile.class))
                 sortedListOfSongs.add((SongFile) s);
         }
-        sortByWeightRecursive(0,sortedListOfSongs.size());
+        sortByWeightRecursive(0,sortedListOfSongs.size()-1);
     }
 
     private void sortByWeightRecursive( int low, int high){
@@ -136,7 +136,7 @@ public class VibePlaylistManager {
     public ArrayList<Song> getListOfUpcomingSongs(){
         sortByWeight();
         ArrayList<Song> upcoming = new ArrayList<Song>();
-        for (int i = 0; i<sortedListOfSongs.size() && i < 25; i++)
+        for (int i = sortedListOfSongs.size()-1; i>=0 && i > sortedListOfSongs.size()-25; i--)
             upcoming.add(sortedListOfSongs.get(i));
         return upcoming;
     }

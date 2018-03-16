@@ -47,8 +47,8 @@ public class FirebaseData {
             throw new NullPointerException("Cannot write an uninitialized song");
         }
 
-        if (song.getLocation() != null) {
-            myRef.child("songs").child(song_id).child("locations").child(song.getLocation()).setValue(true);
+        if (song.getLastLocation() != null) {
+            myRef.child("songs").child(song_id).child("locations").child(song.getLastLocation()).setValue(true);
         }
 
 
@@ -69,7 +69,7 @@ public class FirebaseData {
             myRef.child("songs").child(songObj.getSongID()).child("album").setValue(songObj.getAlbum());
             myRef.child("songs").child(songObj.getSongID()).child("artist").setValue(songObj.getArtist());
             myRef.child("songs").child(songObj.getSongID()).child("time").setValue(songObj.getTimeMS());
-            myRef.child("songs").child(songObj.getSongID()).child("locations").child(songObj.getLocation()).setValue(true);
+            myRef.child("songs").child(songObj.getSongID()).child("locations").child(songObj.getLastLocation()).setValue(true);
         }
         catch (Exception e){
             System.out.println("Unable to retrieve last play information");

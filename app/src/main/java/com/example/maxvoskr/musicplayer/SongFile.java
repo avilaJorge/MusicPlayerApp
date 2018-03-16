@@ -1,5 +1,7 @@
 package com.example.maxvoskr.musicplayer;
 
+import java.util.ArrayList;
+
 /**
  * Created by mdavi on 3/8/2018.
  */
@@ -17,10 +19,10 @@ public class SongFile extends Song {
         this.song = song;
     }
 
-    SongFile(String location, long timeMS, int dayOfWeek, int timeOfDay,
+    SongFile(String lLocation, long timeMS, int dayOfWeek, int timeOfDay,
             int likeDislike, String name, String album, String artist, String song){
         super();
-        this.lastLocation = location;
+        this.lastLocation = lLocation;
         this.timeMS = timeMS;
         this.dayOfWeek = dayOfWeek;
         this.timeOfDay = timeOfDay;
@@ -31,10 +33,10 @@ public class SongFile extends Song {
         this.song = song;
     }
 
-    SongFile(String location, long timeMS, int dayOfWeek, int timeOfDay,
+    SongFile(String lLocation, long timeMS, int dayOfWeek, int timeOfDay,
             int likeDislike, String name, String album, String song){
         super();
-        this.lastLocation = location;
+        this.lastLocation = lLocation;
         this.timeMS = timeMS;
         this.dayOfWeek = dayOfWeek;
         this.timeOfDay = timeOfDay;
@@ -42,6 +44,20 @@ public class SongFile extends Song {
         this.nameOfSong = name;
         this.nameOfAlbum = album;
         this.song = song;
+    }
+
+    SongFile(ArrayList<String> locations, String lLocation, long timeMS, int dayOfWeek, int timeOfDay,
+             int likeDislike, String name, String album, String song){
+        super();
+        this.lastLocation = lLocation;
+        this.timeMS = timeMS;
+        this.dayOfWeek = dayOfWeek;
+        this.timeOfDay = timeOfDay;
+        this.likeDislike = likeDislike;
+        this.nameOfSong = name;
+        this.nameOfAlbum = album;
+        this.song = song;
+        this.locations = locations;
     }
 
     //reference to song
