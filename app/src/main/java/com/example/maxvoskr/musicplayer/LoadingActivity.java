@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -52,58 +53,70 @@ public class LoadingActivity extends AppCompatActivity {
         context.registerReceiver(mReceiver, intentFilter);
         //context.registerReceiver(mReceiver);
 
-
-        firebaseObject = new FirebaseData();
-
-        firebaseObject.updateSongList();
-
-        loadSongsFromMusicFolder();
-
-        loadSongsFromResRaw();
-
-        importSongsToApp();
-
-        currentLocationTimeData = new CurrentLocationTimeData(this);
-
         final Intent signInActivity = new Intent(this, GoogleSignInActivity.class);
         final Intent songListIntent = new Intent(this, MainActivity.class);
         final Intent songPlayerIntent = new Intent(this, SongPlayerScreen.class);
         final Intent albumListIntent = new Intent(this, AlbumListActivity.class);
 
-        lastActivitySharedPref = getSharedPreferences("LastActivity", Context.MODE_PRIVATE);
-        final String activity = lastActivitySharedPref.getString("Activity_Name", "");
+        currentLocationTimeData = new CurrentLocationTimeData(this);
 
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        firebaseObject = new FirebaseData();
+        firebaseObject.updateSongList();
+
+        final LoadingActivity thisActivity = this;
+
+        final Handler handler2 = new Handler();
+        handler2.postDelayed(new Runnable() {
             @Override
             public void run() {
-                // Do something after 5s = 5000ms
-                Intent activityIntent;
-                switch(activity) {
-                    case SONG_LIST_STRING:
-                        songListIntent.putExtra("Position", -1);
-                        startActivity(songListIntent);
-                        break;
-                    case ALBUM_MODE_STRING:
-                        startActivity(albumListIntent);
-                        break;
-                    case VIBE_MODE_STRING:
-                        songPlayerIntent.putExtra("playerMode", VIBE_MODE);
-                        startActivity(songPlayerIntent);
-                        break;
-                    default:
-                        startActivity(signInActivity);
-                }
+                for(Song song : MusicArrayList.allMusicTable.values())
+                    Log.d("Loading", "HashMap after FB: " + song.getName() + " " + song.getSongID());
+
+                for(Song song : MusicArrayList.localMusicList)
+                    Log.d("Loading", "localList after FB: " + song.getName() + " " + song.getSongID());
+
+                loadSongsFromMusicFolder();
+
+                loadSongsFromResRaw();
+
+                importSongsToApp();
+
+                lastActivitySharedPref = getSharedPreferences("LastActivity", Context.MODE_PRIVATE);
+                final String activity = lastActivitySharedPref.getString("Activity_Name", "");
+
+                for(Song song : MusicArrayList.allMusicTable.values())
+                    Log.d("Loading", "HashMap after Import: " + song.getName() + " " + song.getSongID());
+
+                for(Song song : MusicArrayList.localMusicList)
+                    Log.d("Loading", "localList after Import: " + song.getName() + " " + song.getSongID());
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Do something after 5s = 5000ms
+                        Intent activityIntent;
+                        switch(activity) {
+                            case SONG_LIST_STRING:
+                                songListIntent.putExtra("Position", -1);
+                                startActivity(songListIntent);
+                                break;
+                            case ALBUM_MODE_STRING:
+                                startActivity(albumListIntent);
+                                break;
+                            case VIBE_MODE_STRING:
+                                songPlayerIntent.putExtra("playerMode", VIBE_MODE);
+                                startActivity(songPlayerIntent);
+                                break;
+                            default:
+                                startActivity(signInActivity);
+                        }
+
+                    }
+                }, 5000);
 
             }
-        }, 5000);
-
-
-
-        // Is there an issue here? we start the CurrentLocationTimeData after we would have switched to MainActivity
-
-        //final Intent mainActivityIntent2  = new Intent(this, MainActivity.class);
-        //startActivity(mainActivityIntent2);
+        }, 1000);
     }
 
 
