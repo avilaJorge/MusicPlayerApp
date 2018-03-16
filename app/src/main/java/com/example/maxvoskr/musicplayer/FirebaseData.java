@@ -176,22 +176,31 @@ public class FirebaseData {
 
                         Log.d("getLastPlayed", "null check");
                         if(localSong != null) {
-                            localSong.setTimeMS(data.child("LastPlayed").child("Time").getValue(Long.class));
-                            localSong.setLastLocation(data.child("LastPlayed").child("Location").getValue(String.class));
 
-                            Date songDate = new Date(localSong.getTimeMS());
-                            String minutes = Integer.toString(songDate.getMinutes());
-                            if (songDate.getMinutes() < 10)
-                                minutes = "0" + songDate.getMinutes();
+                            Iterable<DataSnapshot> childrenLastPlayed = dataSnapshot.child(localSong.getSongID()).getChildren();
+                            for(DataSnapshot lastData : childrenLastPlayed) {
+                                //String allData = lastData.toString();
 
-                            String AM_PM = "am";
-                            int hour = songDate.getHours();
-                            if (hour > 12) {
-                                hour -= 12;
-                                AM_PM = "pm";
+                                if (lastData.child("LastPlayed").exists()) {
+                                    Long timeMS = lastData.child("LastPlayed").child("Time").getValue(Long.class);
+                                    localSong.setTimeMS(timeMS);
+                                    localSong.setLastLocation(data.child("LastPlayed").child("Location").getValue(String.class));
+
+                                    Date songDate = new Date(localSong.getTimeMS());
+                                    String minutes = Integer.toString(songDate.getMinutes());
+                                    if (songDate.getMinutes() < 10)
+                                        minutes = "0" + songDate.getMinutes();
+
+                                    String AM_PM = "am";
+                                    int hour = songDate.getHours();
+                                    if (hour > 12) {
+                                        hour -= 12;
+                                        AM_PM = "pm";
+                                    }
+
+                                    Log.d("getLastPlayed", "Song: " + localSong.getName() + " was updated to time: " + (hour + ":" + minutes + " " + AM_PM));
+                                }
                             }
-
-                            Log.d("getLastPlayed", "Song: " + localSong.getName() + " was updated to time: " + (hour + ":" + minutes + " " + AM_PM));
                         }
                         Log.d("getLastPlayed", "end_innner_loop");
                     }
