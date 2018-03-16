@@ -48,7 +48,7 @@ public class Downloader extends BroadcastReceiver {
     private DownloadManager.Request request;
     private SongFactory factory;
     private Song lastSong;
-    private static String lastPath;
+    private static String lastUrl;
     private Context context;
 
     @TargetApi(25)
@@ -59,17 +59,18 @@ public class Downloader extends BroadcastReceiver {
     }
 
     public String download(String url) {
-        //String name = url.substring(url.lastIndexOf("/") + 1);
-        String name = "testAlbum.zip";
+        lastUrl = url;
+        String name;
+        name = url.substring(url.lastIndexOf("/") + 1, url.indexOf("?"));
 
-    /*    File musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+        File musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
         File[] songFiles = musicDir.listFiles();
 
         for(File file: songFiles) {
             if(file.getName() == name)
                 return "";
         }
-      */
+
         File localDest = new File(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC), name);
         request = new DownloadManager.Request(Uri.parse(url));
         request.setDestinationUri(Uri.fromFile(localDest));
@@ -84,16 +85,8 @@ public class Downloader extends BroadcastReceiver {
     public String download(SongFile song) {
 
         String url = song.getUrl();
-        String name = url.substring(url.lastIndexOf("/") + 1);
-/*
-        File musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
-        File[] songFiles = musicDir.listFiles();
-
-        for(File file: songFiles) {
-            if(file.getName() == name)
-                return "";
-        }
-*/
+        lastUrl = url;
+        String name = url.substring(url.lastIndexOf("/") + 1, url.indexOf("?"));
 
         File localDest = new File(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC), name);
         request = new DownloadManager.Request(Uri.parse(url));
@@ -123,9 +116,6 @@ public class Downloader extends BroadcastReceiver {
         return Integer.parseInt(COLUMN_BYTES_DOWNLOADED_SO_FAR)  / Integer.parseInt(COLUMN_TOTAL_SIZE_BYTES);
     }
 
-    public String getLastDownloadPath() {
-        return lastPath;
-    }
     public Song getLastDownloadSong() {
         return lastSong;
     }
@@ -133,6 +123,7 @@ public class Downloader extends BroadcastReceiver {
 
 
 
+    @TargetApi(26)
     @Override
     public void onReceive(Context context, Intent intent) {
         String title = "This DID NOT WORK!!!!!!~!!!!!!!!";
@@ -159,52 +150,47 @@ public class Downloader extends BroadcastReceiver {
             }
             c.close();
 
-            FirebaseData firebaseObject = new FirebaseData();
+            if(title.contains(".zip") != path.contains(".zip")) {
+                Toast.makeText(context, "Bad file type, please download again and check download type", Toast.LENGTH_LONG).show();
+                Log.d("Download Failed", "types do not match: " + path + " vs " + title);
 
-
-            if(title.contains(".zip"))
+                File file = new File(path);
+                file.delete();
+            }
+            else if(title.contains(".zip"))
             {
                 Toast.makeText(context, "Downloaded a Zip file complete", Toast.LENGTH_LONG).show();
                 Toast.makeText(context, "Title: " + title, Toast.LENGTH_LONG).show();
+                Log.d("Zip downloaded", path);
 
-                //String name = path.substring(path.lastIndexOf("/") + 1, path.length());
-                //String folderPath = path.substring(0, path.lastIndexOf("/"));
+                Boolean worked = unZip(path);
 
-                Toast.makeText(context, "Path: " + path, Toast.LENGTH_LONG).show();
-                Log.d("Zip Path", path);
-                //Toast.makeText(context, "name: " + name, Toast.LENGTH_LONG).show();
-
-
-                Boolean worked = unpackZip(path);
-
-                if(worked)
+                if(worked) {
                     Toast.makeText(context, "Zip file extracted", Toast.LENGTH_LONG).show();
-                else
-                    Toast.makeText(context, "Zip file extraction failed....", Toast.LENGTH_LONG).show();
+                    Log.d("Zip downloaded", "Successfully extracted");
+                }
+                else {
+                    Toast.makeText(context, "Zip file extraction failed, please", Toast.LENGTH_LONG).show();
+                    Log.d("Zip downloaded", "Extraction failed");
+
+                    File file = new File(path);
+                    file.delete();
+                }
             }
             else {
 
-                Song newSong = factory.makeSongFromPath(path);
-                SongFile oldSong = (SongFile) MusicArrayList.allMusicTable.get(newSong.getName() + newSong.getAlbum() + newSong.getArtist());
+                importSong(path);
 
-                if (oldSong != null) {
-                    oldSong.setSong(path);
-                    lastSong = oldSong;
-                    MusicArrayList.insertLocalSong(oldSong);
-                } else {
-                    lastSong = newSong;
-                    MusicArrayList.insertLocalSong(newSong);
-                }
-
-                Toast.makeText(context, "Downloading " + newSong.getName() + " complete", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Downloading complete", Toast.LENGTH_LONG).show();
+                Log.d("Song Download", "Successfully downloaded: " + path);
             }
         }
     }
 
-    public boolean unpackZip(String zipPath)
+    public boolean unZip(String zipPath)
     {
         InputStream fileStream;
-        ZipInputStream zis;
+        ZipInputStream zipInputStream;
 
         SongFactory songFactory = new SongFactory(context.getResources());
 
@@ -213,15 +199,15 @@ public class Downloader extends BroadcastReceiver {
             String filename;
             String destPath = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC).getPath();
             fileStream = new FileInputStream(zipPath);
-            zis = new ZipInputStream(new BufferedInputStream(fileStream));
-            ZipEntry ze;
+            zipInputStream = new ZipInputStream(new BufferedInputStream(fileStream));
+            ZipEntry zipEntry;
             byte[] buffer = new byte[1024];
             int count;
 
-            while ((ze = zis.getNextEntry()) != null)
+            while ((zipEntry = zipInputStream.getNextEntry()) != null)
             {
-                filename = ze.getName();
-                if (ze.isDirectory()) {
+                filename = zipEntry.getName();
+                if (zipEntry.isDirectory()) {
                     File fmd = new File(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC), filename);
                     fmd.mkdirs();
                     continue;
@@ -231,19 +217,16 @@ public class Downloader extends BroadcastReceiver {
                 String filePath = destPath + "/" + filename;
                 FileOutputStream fout = new FileOutputStream(filePath);
 
-                while ((count = zis.read(buffer)) != -1)
-                {
+                while ((count = zipInputStream.read(buffer)) != -1)
                     fout.write(buffer, 0, count);
-                }
 
                 fout.close();
-                zis.closeEntry();
+                zipInputStream.closeEntry();
 
-                Song song = songFactory.makeSongFromPath(filePath);
-                MusicArrayList.insertLocalSong(song);
+                importSong(filePath);
             }
 
-            zis.close();
+            zipInputStream.close();
         }
         catch(IOException e)
         {
@@ -252,5 +235,24 @@ public class Downloader extends BroadcastReceiver {
         }
 
         return true;
+    }
+
+    private void importSong(String path) {
+        SongFile newSong = (SongFile) factory.makeSongFromPath(path);
+        SongFile existingSong = (SongFile) MusicArrayList.allMusicTable.get(MusicArrayList.getSongHash(newSong));
+
+        if (existingSong != null) {
+            existingSong.setSong(path);
+            lastSong = existingSong;
+            existingSong.setUrl(lastUrl);
+            MusicArrayList.insertLocalSong(existingSong);
+        } else {
+            lastSong = newSong;
+            newSong.setUrl(lastUrl);
+            MusicArrayList.insertLocalSong(newSong);
+
+            FirebaseData firebaseObject = new FirebaseData();
+            firebaseObject.writeNewSong(newSong);
+        }
     }
 }

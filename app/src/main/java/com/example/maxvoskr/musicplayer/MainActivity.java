@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
 
     private ListView background;
 
-    //private ArrayList<Song> musicList;
+    //private ArrayList<Song> localMusicList;
     private MusicAdapter adapter;
     private ListView trackList;
 
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             trackList.setAdapter(adapter);
         } else {
             // Song mode
-            sortedSongList = (ArrayList<Song>) sort(musicList.musicList);
+            sortedSongList = (ArrayList<Song>) sort(musicList.localMusicList);
             adapter = new MusicAdapter(this, R.layout.custom_track_cell, sortedSongList);
             background.setBackgroundColor(Color.parseColor("#5a47025c"));
             trackList.setAdapter(adapter);
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
                 } else {
 
 
-                    if (musicList.musicList.get(i).getLikeDislike() != -1) {
+                    if (musicList.localMusicList.get(i).getLikeDislike() != -1) {
                         anotherActivityIntent.putExtra("Position", i);
                         anotherActivityIntent.putExtra("changeSong", true);
                         anotherActivityIntent.putExtra("playerMode", SONG_MODE);
@@ -260,9 +260,6 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
                 }
 
                 playing = !playing;
-
-                Downloader downloader = new Downloader(getApplicationContext(), getResources());
-                downloader.unpackZip("/storage/emulated/0/Android/data/com.example.maxvoskr.musicplayer/files/Music/testAlbum.zip");
             }
         });
 

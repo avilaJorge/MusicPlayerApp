@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by avila on 3/8/2018.
@@ -84,12 +85,12 @@ public class SettingsActivity extends AppCompatActivity implements
 
         Intent intent = getIntent();
 
-        ArrayList<Song> downloadableSongs = MusicArrayList.allMusicList;
-        for(Song downloaded : MusicArrayList.musicList) {
-            downloadableSongs.remove(downloaded);
+        HashMap<String, Song> downloadableSongs = MusicArrayList.allMusicTable;
+        for(Song downloaded : MusicArrayList.localMusicList) {
+            downloadableSongs.remove(MusicArrayList.getSongHash(downloaded));
         }
 
-        downloadAdapter = new DownloadAdapter(this, R.layout.custom_track_download_cell, downloadableSongs);
+        downloadAdapter = new DownloadAdapter(this, R.layout.custom_track_download_cell, new ArrayList<Song>(downloadableSongs.values()));
         downloadListView.setAdapter(downloadAdapter);
 
         timeEditText.setOnClickListener(new View.OnClickListener() {

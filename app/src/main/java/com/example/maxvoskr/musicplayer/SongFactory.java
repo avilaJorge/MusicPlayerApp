@@ -43,7 +43,7 @@ public class SongFactory {
         if(metaData[1] == null)
             metaData[1] = "unknown album";
         if(metaData[2] == null)
-            metaData[3] = "unknown artist";
+            metaData[2] = "unknown artist";
 
         return  metaData;
 

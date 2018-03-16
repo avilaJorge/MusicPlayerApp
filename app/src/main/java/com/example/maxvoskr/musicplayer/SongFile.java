@@ -71,7 +71,10 @@ public class SongFile extends Song {
     }
 
     public String getUrl() {
-        return url;
+        if(url != null)
+            return url;
+        else
+            return "";
     }
 
     public void setUrl(String url) {
