@@ -59,7 +59,7 @@ public class SettingsActivity extends AppCompatActivity implements
     private View vibeMode;
     private Intent songPlayer;
     private Intent songList;
-    private Intent songListActivityIntent;
+    private Intent albumListIntent;
 
     private DownloadAdapter downloadAdapter;
     private ListView downloadListView;
@@ -111,7 +111,7 @@ public class SettingsActivity extends AppCompatActivity implements
 
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
-        songListActivityIntent = new Intent(this, MainActivity.class);
+        albumListIntent = new Intent(this, AlbumListActivity.class);
 
         Intent intent = getIntent();
 
@@ -165,8 +165,7 @@ public class SettingsActivity extends AppCompatActivity implements
         albumMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                songPlayer.putExtra("playerMode", ALBUM_MODE);
-                startActivity(songPlayer);
+                startActivity(albumListIntent);
             }
         });
 
