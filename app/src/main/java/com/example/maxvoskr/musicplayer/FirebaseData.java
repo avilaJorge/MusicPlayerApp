@@ -1,6 +1,7 @@
 package com.example.maxvoskr.musicplayer;
 
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -64,7 +65,6 @@ public class FirebaseData {
     }
 
     void writeNewSong(Song song) {
-        System.out.println("--------------------firebase Write-------------------");
 
         String song_id = myRef.push().getKey();
 
@@ -86,11 +86,14 @@ public class FirebaseData {
 
     }
 
-
     void addUser(FirebaseUser user) {
-        String user_id = myRef.push().getKey();
+        myRef.child("users").child(user.getUid()).child("email").setValue(user.getEmail());
+    }
 
-        myRef.child("users").child(user_id).child("email").setValue(user.getEmail());
+    void addUserSong(Song songObj) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        myRef.child("users").child(user.getUid()).child("lastSong").setValue(songObj.getSongID());
     }
 
     void updateSongData(Song songObj)

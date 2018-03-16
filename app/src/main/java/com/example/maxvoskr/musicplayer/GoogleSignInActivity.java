@@ -98,7 +98,6 @@ public class GoogleSignInActivity extends BaseActivity implements
 
         friendsEmails = new FriendsEmails();
 
-
         if(user != null) {
             /*// Read the authorization code from the standard input stream.
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -170,13 +169,12 @@ public class GoogleSignInActivity extends BaseActivity implements
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                String authCode = account.getServerAuthCode();
+                //String authCode = account.getServerAuthCode();
 
-
-                System.out.println("--------------------------------------");
+               /* System.out.println("--------------------------------------");
                 System.out.println(authCode);
 
-                /*People peopleService = null;
+                People peopleService = null;
                 try {
                     peopleService = setUp(GoogleSignInActivity.this, authCode);
                 } catch (IOException e) {
@@ -234,6 +232,8 @@ public class GoogleSignInActivity extends BaseActivity implements
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseData firebaseData = new FirebaseData();
+                            firebaseData.addUser(user);
                             startActivity(mainActivityIntent);
                             updateUI(user);
                         } else {

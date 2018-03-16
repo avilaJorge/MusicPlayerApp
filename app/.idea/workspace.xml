@@ -10,39 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="71ceb2ac-b2a1-4ebe-a1a1-91fce2472124" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/VibePlaylistManager.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/DowloaderTest.java" afterPath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/DowloaderTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/FlashbackPlaylistTest.java" afterPath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/FlashbackPlaylistTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/LikeDislikeTest.java" afterPath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/LikeDislikeTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/SharedPreferenceManagerTest.java" afterPath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/SharedPreferenceManagerTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/UserStoryFiveTest.java" afterPath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/UserStoryFiveTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/UserStoryFourTest.java" afterPath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/UserStoryFourTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/UserStoryOneTest.java" afterPath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/UserStoryOneTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/UserStorySevenTest.java" afterPath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/UserStorySevenTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/UserStorySixTest.java" afterPath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/UserStorySixTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/UserStoryThreeTest.java" afterPath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/UserStoryThreeTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/UserStoryTwoTest.java" afterPath="$PROJECT_DIR$/src/androidTest/java/com/example/maxvoskr/musicplayer/UserStoryTwoTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/Album.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/Album.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/AlbumListActivity.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/AlbumListActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/CurrentLocationTimeData.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/CurrentLocationTimeData.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/Downloader.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/Downloader.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/FirebaseData.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/FirebaseData.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/LoadingActivity.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/LoadingActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/MainActivity.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/MusicArrayList.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/MusicArrayList.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/MusicPlayerService.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/MusicPlayerService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/PriorityListActivity.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/PriorityListActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/SettingsActivity.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/SettingsActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/Song.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/Song.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/SongFactory.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/SongFactory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/SongFile.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/SongFile.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/SongHistorySharedPreferenceManager.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/SongHistorySharedPreferenceManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/SongPlayerScreen.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/SongPlayerScreen.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/SongRes.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/SongRes.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/VibeModePlaylist.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/VibeModePlaylist.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/res/layout/activity_song_player_screen.xml" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_song_player_screen.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/res/layout/settings.xml" afterPath="$PROJECT_DIR$/src/main/res/layout/settings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/GoogleSignInActivity.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/GoogleSignInActivity.java" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -146,11 +116,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FirebaseData.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="FirebaseData.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/FirebaseData.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="17" column="33" lean-forward="false" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
+            <state relative-caret-position="-430">
+              <caret line="66" column="34" lean-forward="false" selection-start-line="66" selection-start-column="34" selection-end-line="66" selection-end-column="34" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -158,11 +128,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GoogleSignInActivity.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="GoogleSignInActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/GoogleSignInActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="257">
-              <caret line="236" column="62" lean-forward="false" selection-start-line="236" selection-start-column="62" selection-end-line="236" selection-end-column="62" />
+            <state relative-caret-position="278">
+              <caret line="233" column="35" lean-forward="true" selection-start-line="233" selection-start-column="35" selection-end-line="233" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -220,6 +190,8 @@
       <find>musicList</find>
       <find>Toas</find>
       <find>dataAccess</find>
+      <find>mAuth</find>
+      <find>firebaseDa</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -2338,7 +2310,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521165651121" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521167172198" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -2386,7 +2358,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521165651121" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521167172198" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -2569,7 +2541,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521165651124" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521167172200" />
       </method>
     </configuration>
     <list size="1">
@@ -2616,19 +2588,19 @@
     <layout>
       <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32786885" sideWeight="0.4599428" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32786885" sideWeight="0.4599428" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32786885" sideWeight="0.5114449" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32786885" sideWeight="0.860515" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32786885" sideWeight="0.85550785" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329235" sideWeight="0.49427754" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329235" sideWeight="0.4914163" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32786885" sideWeight="0.54005724" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32786885" sideWeight="0.14449213" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -3109,20 +3081,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/GoogleSignInActivity.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/FirebaseData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="236" column="62" lean-forward="false" selection-start-line="236" selection-start-column="62" selection-end-line="236" selection-end-column="62" />
+        <state relative-caret-position="-430">
+          <caret line="66" column="34" lean-forward="false" selection-start-line="66" selection-start-column="34" selection-end-line="66" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/FirebaseData.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/maxvoskr/musicplayer/GoogleSignInActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="33" lean-forward="false" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
+        <state relative-caret-position="278">
+          <caret line="233" column="35" lean-forward="true" selection-start-line="233" selection-start-column="35" selection-end-line="233" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
