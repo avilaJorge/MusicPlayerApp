@@ -19,7 +19,7 @@ public class SongRes extends Song {
     SongRes(String location, long timeMS, int dayOfWeek, int timeOfDay,
             int likeDislike, String name, String album, String artist, int song){
         super();
-        this.location = location;
+        this.lastLocation = location;
         this.timeMS = timeMS;
         this.dayOfWeek = dayOfWeek;
         this.timeOfDay = timeOfDay;
@@ -33,7 +33,7 @@ public class SongRes extends Song {
     SongRes(String location, long timeMS, int dayOfWeek, int timeOfDay,
             int likeDislike, String name, String album, int song){
         super();
-        this.location = location;
+        this.lastLocation = location;
         this.timeMS = timeMS;
         this.dayOfWeek = dayOfWeek;
         this.timeOfDay = timeOfDay;

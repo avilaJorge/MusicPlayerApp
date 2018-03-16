@@ -1,15 +1,13 @@
 package com.example.maxvoskr.musicplayer;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import static android.content.Context.MODE_PRIVATE;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by maxvoskr on 3/13/18.
@@ -36,8 +34,33 @@ public class FirebaseData {
 
         mDatabase = FirebaseDatabase.getInstance();
         myRef = mDatabase.getReferenceFromUrl("https://musicplayer-c8dfe.firebaseio.com/");
+    }
 
-        //mDatabase = FirebaseDatabase.getInstance().getReference();
+    void updateSongList() {
+        Query q = myRef.child("songs");
+        q.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for(DataSnapshot data : children) {
+                    String name = data.child("name").getValue(String.class);
+                    String album = data.child("album").getValue(String.class);
+                    String artist = data.child("artist").getValue(String.class);
+                    String url = data.child("url").getValue(String.class);
+
+                    SongFile song = new SongFile(name, album, artist, "");
+                    song.setUrl(url);
+                    MusicArrayList.insertFBSong(song);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     void writeNewSong(Song song) {
@@ -49,17 +72,20 @@ public class FirebaseData {
             throw new NullPointerException("Cannot write an uninitialized song");
         }
 
-        if (song.getLocation() != null) {
-            myRef.child("songs").child(song_id).child("locations").child(song.getLocation()).setValue(true);
+        if (song.getLocations() != null) {
+            //TODO: Check
+            for(String location : song.getLocations())
+                myRef.child("songs").child(song_id).child("locations").child(location).setValue(true);
         }
-
 
        // mDatabase.child("songs").child(song_id).child("time").setValue(song.getTimeMS());
         myRef.child("songs").child(song_id).child("name").setValue(song.getName());
         myRef.child("songs").child(song_id).child("album").setValue(song.getAlbum());
         myRef.child("songs").child(song_id).child("artist").setValue(song.getArtist());
+        myRef.child("songs").child(song_id).child("url").setValue(song.getUrl());
 
     }
+
 
     void addUser(FirebaseUser user) {
         String user_id = myRef.push().getKey();
@@ -67,22 +93,23 @@ public class FirebaseData {
         myRef.child("users").child(user_id).child("email").setValue(user.getEmail());
     }
 
-    /*boolean updateData(Song songObj)
+    void updateSongData(Song songObj)
     {
         if(songObj == null){
             throw new NullPointerException("Cannot update a uninitialized song");
         }
         try{
-            songObj.setLocation(SongData.getString(songObj.getName()+LOCATION, songObj.getLocation()));
-            songObj.setTimeMS(Long.parseLong(SongData.getString(songObj.getName()+TIME_MS, Long.toString(songObj.getTimeMS()))));
-            songObj.setDayOfWeek(Integer.parseInt(SongData.getString(songObj.getName()+DAY_OF_WEEK, Integer.toString(songObj.getDayOfWeek()))));
-            songObj.setTimeOfDay(Integer.parseInt(SongData.getString(songObj.getName()+TIME_OF_DAY, Integer.toString(songObj.getTimeOfDay()))));
-            songObj.setLikeDislike(Integer.parseInt(SongData.getString(songObj.getName()+LIKE_DISLIKE, Integer.toString(songObj.getLikeDislike()))));
+            myRef.child("songs").child(songObj.getSongID()).child("name").setValue(songObj.getName());
+            myRef.child("songs").child(songObj.getSongID()).child("album").setValue(songObj.getAlbum());
+            myRef.child("songs").child(songObj.getSongID()).child("artist").setValue(songObj.getArtist());
+            myRef.child("songs").child(songObj.getSongID()).child("time").setValue(songObj.getTimeMS());
+
+            //TODO: Check
+            for(String location : songObj.getLocations())
+                myRef.child("songs").child(songObj.getSongID()).child("locations").child(location).setValue(true);
         }
         catch (Exception e){
             System.out.println("Unable to retrieve last play information");
-            return false;
         }
-        return true;
-    }*/
+    }
 }

@@ -23,18 +23,12 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
-import static android.support.test.espresso.matcher.ViewMatchers.withParentIndex;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.maxvoskr.musicplayer.MusicArrayList.albumList;
-import static com.example.maxvoskr.musicplayer.MusicArrayList.musicList;
+import static com.example.maxvoskr.musicplayer.MusicArrayList.localMusicList;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 @LargeTest
@@ -53,7 +47,7 @@ public class UserStorySixTest {
     @Before
     public void before(){
 
-        song = musicList.get(0);
+        song = localMusicList.get(0);
 
     }
 

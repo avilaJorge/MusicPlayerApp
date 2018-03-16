@@ -9,13 +9,13 @@ import java.util.ArrayList;
 public class Album {
 
     public String albumName;
-    //public MusicArrayList musicList;
+    //public MusicArrayList localMusicList;
     public ArrayList<Song> musicList;
     public String artist;
 
     public Album(String albumName, String artist) {
         this.albumName = albumName;
-        //this.musicList = musicList;
+        //this.localMusicList = localMusicList;
         this.musicList = new ArrayList<Song>();
         this.artist = artist;
     }

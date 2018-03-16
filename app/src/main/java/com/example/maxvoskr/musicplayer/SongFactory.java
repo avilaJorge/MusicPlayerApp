@@ -20,8 +20,8 @@ public class SongFactory {
 
     public Song makeSongFromPath(String path) {
         retriever.setDataSource(path);
-        Song song = new SongFile(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE), retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
-                retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST), path);
+        String[] metaData = getMetaData();
+        Song song = new SongFile(metaData[0], metaData[1], metaData[2], path);
         return song;
     }
 
@@ -29,10 +29,24 @@ public class SongFactory {
         AssetFileDescriptor afd = res.openRawResourceFd(resID);
         retriever.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 
-        Song song = new SongRes(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE), retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
-                retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST), resID);
+        String[] metaData = getMetaData();
+        Song song = new SongRes(metaData[0], metaData[1], metaData[2], resID);
 
         return song;
+    }
+
+    private String[] getMetaData() {
+        String[] metaData = {retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE), retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
+                retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST)};
+        if(metaData[0] == null)
+            metaData[0] = "unknown title";
+        if(metaData[1] == null)
+            metaData[1] = "unknown album";
+        if(metaData[2] == null)
+            metaData[2] = "unknown artist";
+
+        return  metaData;
+
     }
 }
 

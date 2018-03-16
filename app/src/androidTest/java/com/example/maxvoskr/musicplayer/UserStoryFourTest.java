@@ -2,12 +2,10 @@ package com.example.maxvoskr.musicplayer;
 
 
 import android.Manifest;
-import android.os.SystemClock;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -27,10 +25,9 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.maxvoskr.musicplayer.MusicArrayList.musicList;
+import static com.example.maxvoskr.musicplayer.MusicArrayList.localMusicList;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 @LargeTest
@@ -50,7 +47,7 @@ public class UserStoryFourTest {
     @Before
     public void before(){
 
-        songOne = musicList.get(0);
+        songOne = localMusicList.get(0);
 
     }
 
@@ -60,7 +57,7 @@ public class UserStoryFourTest {
 
 
         // TODO need to reset state of song to completely unplayed
-        songOne.setLocation("");
+        songOne.setLastLocation("");
         songOne.unsetPlayed();
         songOne.setTimeMS(0);
 
@@ -73,7 +70,7 @@ public class UserStoryFourTest {
     @Test
     public void viewLastPlayedInfoForSongInPlaybackModeTest() {
 
-        Song songTwo = musicList.get(1);
+        Song songTwo = localMusicList.get(1);
         songTwo.setTimeMS(0);
         songTwo.unsetPlayed();
 
@@ -83,7 +80,7 @@ public class UserStoryFourTest {
 
         onView(withId(R.id.songsMode)).perform(click());
 
-        songTwo.setLocation("Price Center");
+        songTwo.setLastLocation("Price Center");
         songTwo.setPlayed();
         songTwo.setDayOfWeek(1);
         songTwo.setTimeOfDay(1);
@@ -99,7 +96,7 @@ public class UserStoryFourTest {
     @Test
     public void viewLastPlayedInfoForSongInFlashbackModeTest() {
 
-        songOne.setLocation("Price Center");
+        songOne.setLastLocation("Price Center");
         songOne.setPlayed();
         songOne.setDayOfWeek(1);
         songOne.setTimeOfDay(1);
