@@ -45,10 +45,10 @@ public class UserDefinedDateTest {
 
     @Test
     public void userDefinedDateTest() {
-        long time = System.currentTimeMillis();
+        long time = 10000000;
         dateService.setCurrentTime(time);
         currentLocationTimeData.updateTempData();
-        assertEquals(currentLocationTimeData.getTimeMS(), time);
+        assertEquals(time, currentLocationTimeData.getTimeMS());
     }
 
     @After

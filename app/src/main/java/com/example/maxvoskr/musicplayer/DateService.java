@@ -48,7 +48,11 @@ public class DateService extends Service {
     }
 
     public long getCurrentTime() {
-        currentTime = new Date();
+        if(LoadingActivity.userDefinedTime) {
+            currentTime = new Date(userDate);
+        } else {
+            currentTime = new Date();
+        }
         return currentTime.getTime();
     }
 
