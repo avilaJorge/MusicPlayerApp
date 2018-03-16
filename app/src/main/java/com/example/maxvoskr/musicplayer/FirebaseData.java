@@ -1,6 +1,8 @@
 package com.example.maxvoskr.musicplayer;
 
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -63,10 +65,8 @@ public class FirebaseData {
     }
 
     void writeNewSong(Song song) {
-        System.out.println("--------------------firebase Write-------------------");
 
         String song_id = myRef.push().getKey();
-        song.setSongID(song_id);
 
         if (song == null){
             throw new NullPointerException("Cannot write an uninitialized song");
@@ -78,13 +78,22 @@ public class FirebaseData {
                 myRef.child("songs").child(song_id).child("locations").child(location).setValue(true);
         }
 
-
        // mDatabase.child("songs").child(song_id).child("time").setValue(song.getTimeMS());
         myRef.child("songs").child(song_id).child("name").setValue(song.getName());
         myRef.child("songs").child(song_id).child("album").setValue(song.getAlbum());
         myRef.child("songs").child(song_id).child("artist").setValue(song.getArtist());
         myRef.child("songs").child(song_id).child("url").setValue(song.getUrl());
 
+    }
+
+    void addUser(FirebaseUser user) {
+        myRef.child("users").child(user.getUid()).child("email").setValue(user.getEmail());
+    }
+
+    void addUserSong(Song songObj) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        myRef.child("users").child(user.getUid()).child("lastSong").setValue(songObj.getSongID());
     }
 
     void updateSongData(Song songObj)
