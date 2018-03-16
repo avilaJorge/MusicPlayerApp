@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
@@ -106,6 +107,12 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences screenSave = getSharedPreferences("MyActivities", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = screenSave.edit();
+        editor.putString("LastPage", "MainActivity");
+        editor.apply();
+
         setContentView(R.layout.activity_main);
 
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)

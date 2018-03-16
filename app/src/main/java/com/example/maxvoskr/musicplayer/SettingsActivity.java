@@ -3,7 +3,9 @@ package com.example.maxvoskr.musicplayer;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -59,6 +61,12 @@ public class SettingsActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences screenSave = getSharedPreferences("MyActivities", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = screenSave.edit();
+        editor.putString("LastPage", "SettingsActivity");
+        editor.apply();
+
         setContentView(R.layout.settings);
 
         year = month = day = hourOfDay = minute = 0;

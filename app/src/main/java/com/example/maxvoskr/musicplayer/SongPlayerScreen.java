@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -84,6 +85,12 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences screenSave = getSharedPreferences("MyActivities", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = screenSave.edit();
+        editor.putString("LastPage", "SongPlayerScreen");
+        editor.apply();
+
         setContentView(R.layout.activity_song_player_screen);
         sharedPref = new SongHistorySharedPreferenceManager(getApplicationContext());
 

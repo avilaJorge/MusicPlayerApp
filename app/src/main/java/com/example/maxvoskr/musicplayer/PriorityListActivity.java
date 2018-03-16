@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -133,6 +134,12 @@ public class PriorityListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences screenSave = getSharedPreferences("MyActivities", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = screenSave.edit();
+        editor.putString("LastPage", "PriorityListActivity");
+        editor.apply();
+
         setContentView(R.layout.priority_list);
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);

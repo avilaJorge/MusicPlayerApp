@@ -3,6 +3,7 @@ package com.example.maxvoskr.musicplayer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -28,6 +29,7 @@ public class LoadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_loading);
         context = getApplicationContext();
 
@@ -56,8 +58,18 @@ public class LoadingActivity extends AppCompatActivity {
         MusicArrayList.insertFBSong(song);
 
 
+        SharedPreferences sharedPref = getSharedPreferences("MyPages", Context.MODE_PRIVATE);
+        String page = sharedPref.getString("LastPage", "DEFAULT");
 
-        final Intent mainActivityIntent  = new Intent(this, GoogleSignInActivity.class);
+        Class toRun = GoogleSignInActivity.class;
+        try{
+            toRun = Class.forName(page);
+        }
+        catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
+
+        final Intent ActivityPage = new Intent(this, toRun);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -65,17 +77,13 @@ public class LoadingActivity extends AppCompatActivity {
             public void run() {
                 // Do something after 5s = 5000ms
 
-                startActivity(mainActivityIntent);
+                startActivity(ActivityPage);
             }
         }, 5000);
 
 
         currentLocationTimeData = new CurrentLocationTimeData(this);
 
-        // Is there an issue here? we start the CurrentLocationTimeData after we would have switched to MainActivity
-
-        final Intent mainActivityIntent2  = new Intent(this, MainActivity.class);
-        startActivity(mainActivityIntent2);
     }
 
 
@@ -125,7 +133,6 @@ public class LoadingActivity extends AppCompatActivity {
         currentLocationTimeData.unBindServices();
 
         for (Song song : musicList.musicList) {
-
             sharedPref.writeData(song);
         }
 
