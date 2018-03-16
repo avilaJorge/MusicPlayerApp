@@ -35,6 +35,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     private MediaPlayer mediaPlayer;
     private ArrayList<Song> songs;
     private VibeModePlaylist vibeModePlaylist;
+    private VibePlaylistManager vibePlaylistManager;
 
     public MusicPlayerService() {}
 
@@ -53,7 +54,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         super.onCreate();
         songIndex = 0;
         context = getApplicationContext();
-        vibeModePlaylist = new VibeModePlaylist(MusicArrayList.localMusicList);
+        //TODO: line below crashes after closing app
+        //vibeModePlaylist = new VibeModePlaylist(MusicArrayList.localMusicList);
     }
 
     @Override

@@ -22,6 +22,7 @@ public class DateService extends Service {
     private SimpleTimeZone timeZone;
     private Date currentTime;
     private Calendar calendar;
+    private long userDate;
 
     public DateService() {
     }
@@ -51,6 +52,10 @@ public class DateService extends Service {
         return currentTime.getTime();
     }
 
+    public void setCurrentTime(long timeMs) {
+        userDate = timeMs;
+    }
+
     public int getCurrentTimeOfDay() {
         updateTime();
         return getTimeOfDay(Calendar.HOUR_OF_DAY);
@@ -61,8 +66,13 @@ public class DateService extends Service {
     }
 
     private void updateTime() {
-        currentTime = new Date();
-        calendar.setTime(currentTime);
+        if(LoadingActivity.userDefinedTime) {
+            currentTime = new Date(userDate);
+            calendar.setTime(currentTime);
+        } else {
+            currentTime = new Date();
+            calendar.setTime(currentTime);
+        }
     }
 
     private int getTimeOfDay(int hourOfDay) {

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class LoadingActivity extends AppCompatActivity {
 
     public static CurrentLocationTimeData currentLocationTimeData;
+    public static boolean userDefinedTime;
     private ArrayList<Song> songList;
     private MusicArrayList musicList;
     private Context context;
