@@ -8,6 +8,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -176,6 +177,7 @@ public class SettingsActivity extends AppCompatActivity implements
                startActivity(songPlayer);
             }
         });
+
     }
 
     @Override

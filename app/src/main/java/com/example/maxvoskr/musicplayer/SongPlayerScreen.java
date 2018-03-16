@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -130,13 +131,18 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         priorityListIntent = new Intent(this, PriorityListActivity.class);
         playerMode = getIntent().getIntExtra("playerMode", SONG_MODE);
 
-
-        if(playerMode == SONG_MODE)
+        SharedPreferences.Editor editor = LoadingActivity.lastActivitySharedPref.edit();
+        if(playerMode == SONG_MODE) {
+            editor.putString("Activity_Name", LoadingActivity.SONG_LIST_STRING);
             background.setBackgroundColor(Color.parseColor("#5a47025c"));
-        else if(playerMode == ALBUM_MODE)
+        } else if(playerMode == ALBUM_MODE) {
+            editor.putString("Activity_Name", LoadingActivity.ALBUM_MODE_STRING);
             background.setBackgroundColor(Color.parseColor("#5a0208c6"));
-        else
+        } else {
+            editor.putString("Activity_Name", LoadingActivity.VIBE_MODE_STRING);
             background.setBackgroundColor(Color.parseColor("#6eff6701"));
+        }
+        editor.apply();
 
         if(!playing)
             play.setImageResource(R.drawable.play);

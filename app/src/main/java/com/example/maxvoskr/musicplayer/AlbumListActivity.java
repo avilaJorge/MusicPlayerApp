@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -289,6 +290,9 @@ public class AlbumListActivity extends AppCompatActivity {
             }
         });
 
+        SharedPreferences.Editor editor = LoadingActivity.lastActivitySharedPref.edit();
+        editor.putString("Activity_Name", LoadingActivity.ALBUM_MODE_STRING);
+        editor.apply();
     }
 
     @Override

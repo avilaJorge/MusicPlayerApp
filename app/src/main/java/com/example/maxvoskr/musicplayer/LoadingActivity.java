@@ -3,6 +3,7 @@ package com.example.maxvoskr.musicplayer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -19,6 +20,12 @@ import java.util.ArrayList;
 public class LoadingActivity extends AppCompatActivity {
 
     public static CurrentLocationTimeData currentLocationTimeData;
+    public static SharedPreferences lastActivitySharedPref;
+    public static final String SONG_LIST_STRING = "Song_List";
+    public static final String ALBUM_MODE_STRING = "Album_Mode";
+    public static final String VIBE_MODE_STRING = "Vibe_Mode";
+    private final int ALBUM_MODE = 1;
+    private final int VIBE_MODE = 2;
     public static boolean userDefinedTime;
     private ArrayList<Song> songList;
     private MusicArrayList musicList;
@@ -26,6 +33,7 @@ public class LoadingActivity extends AppCompatActivity {
     private SongHistorySharedPreferenceManager sharedPref;
     private SongFactory songFactory;
     private FirebaseData firebaseObject = new FirebaseData();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,25 +63,47 @@ public class LoadingActivity extends AppCompatActivity {
 
         importSongsToApp();
 
-        final Intent mainActivityIntent  = new Intent(this, GoogleSignInActivity.class);
+        currentLocationTimeData = new CurrentLocationTimeData(this);
+
+        final Intent signInActivity = new Intent(this, GoogleSignInActivity.class);
+        final Intent songListIntent = new Intent(this, MainActivity.class);
+        final Intent songPlayerIntent = new Intent(this, SongPlayerScreen.class);
+        final Intent albumListIntent = new Intent(this, AlbumListActivity.class);
+
+        lastActivitySharedPref = getSharedPreferences("LastActivity", Context.MODE_PRIVATE);
+        final String activity = lastActivitySharedPref.getString("Activity_Name", "");
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 // Do something after 5s = 5000ms
+                Intent activityIntent;
+                switch(activity) {
+                    case SONG_LIST_STRING:
+                        songListIntent.putExtra("Position", -1);
+                        startActivity(songListIntent);
+                        break;
+                    case ALBUM_MODE_STRING:
+                        startActivity(albumListIntent);
+                        break;
+                    case VIBE_MODE_STRING:
+                        songPlayerIntent.putExtra("playerMode", VIBE_MODE);
+                        startActivity(songPlayerIntent);
+                        break;
+                    default:
+                        startActivity(signInActivity);
+                }
 
-                startActivity(mainActivityIntent);
             }
         }, 5000);
 
 
-        currentLocationTimeData = new CurrentLocationTimeData(this);
 
         // Is there an issue here? we start the CurrentLocationTimeData after we would have switched to MainActivity
 
-        final Intent mainActivityIntent2  = new Intent(this, MainActivity.class);
-        startActivity(mainActivityIntent2);
+        //final Intent mainActivityIntent2  = new Intent(this, MainActivity.class);
+        //startActivity(mainActivityIntent2);
     }
 
 
