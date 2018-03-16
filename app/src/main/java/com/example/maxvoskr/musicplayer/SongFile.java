@@ -20,7 +20,7 @@ public class SongFile extends Song {
     SongFile(String location, long timeMS, int dayOfWeek, int timeOfDay,
             int likeDislike, String name, String album, String artist, String song){
         super();
-        this.location = location;
+        this.lastLocation = location;
         this.timeMS = timeMS;
         this.dayOfWeek = dayOfWeek;
         this.timeOfDay = timeOfDay;
@@ -34,7 +34,7 @@ public class SongFile extends Song {
     SongFile(String location, long timeMS, int dayOfWeek, int timeOfDay,
             int likeDislike, String name, String album, String song){
         super();
-        this.location = location;
+        this.lastLocation = location;
         this.timeMS = timeMS;
         this.dayOfWeek = dayOfWeek;
         this.timeOfDay = timeOfDay;
@@ -55,7 +55,10 @@ public class SongFile extends Song {
     }
 
     public String getUrl() {
-        return url;
+        if(url != null)
+            return url;
+        else
+            return "";
     }
 
     public void setUrl(String url) {

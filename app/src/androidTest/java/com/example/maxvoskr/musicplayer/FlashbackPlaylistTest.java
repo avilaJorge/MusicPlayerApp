@@ -1,14 +1,8 @@
 package com.example.maxvoskr.musicplayer;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
-import org.junit.Test;
 
 import java.util.ArrayList;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 /**
  * Created by mdavi on 2/10/2018.
@@ -55,7 +49,7 @@ public class FlashbackPlaylistTest {
         list.add(song4);
         list.add(song5);
     }
-
+/*
     @Test
     public void TestGetNextSong(){
         song1.setWeight(2);
@@ -114,5 +108,5 @@ public class FlashbackPlaylistTest {
         song5.setWeight(1);
         Assert.assertEquals(song4, flashback.getNextSong());
     }
-
+*/
 }

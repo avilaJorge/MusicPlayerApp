@@ -16,6 +16,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    signingConfigs {
+        debug {
+            keyAlias 'AndroidDebugKey'
+            keyPassword 'android'
+            storePassword 'android'
+            storeFile file('../keystore/debug.keystore')
+        }
+    }
 }
 
 dependencies {
@@ -41,4 +50,5 @@ buildscript {
         classpath 'com.google.gms:google-services:3.1.0'
     }
 }
+
 apply plugin: 'com.google.gms.google-services'

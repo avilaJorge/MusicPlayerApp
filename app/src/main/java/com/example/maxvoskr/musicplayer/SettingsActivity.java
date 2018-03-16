@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by avila on 3/8/2018.
@@ -36,6 +37,9 @@ public class SettingsActivity extends AppCompatActivity implements
 
     private CheckBox privacyCheckBox;
     private EditText timeEditText;
+
+    private CheckBox manualTimeCheckBox;
+    private boolean manualTimeSet;
 
     private EditText urlEditText;
     private ImageView urlDownload;
@@ -81,6 +85,7 @@ public class SettingsActivity extends AppCompatActivity implements
         albumMode = (View) findViewById(R.id.navMid);
         vibeMode = (View) findViewById(R.id.navRight);
         privacyCheckBox = (CheckBox) findViewById(R.id.privacyCheckBox);
+        manualTimeCheckBox = (CheckBox) findViewById(R.id.manualTimeCheckBox);
 
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
@@ -88,14 +93,12 @@ public class SettingsActivity extends AppCompatActivity implements
 
         Intent intent = getIntent();
 
-        ArrayList<Song> downloadableSongs = MusicArrayList.allMusicList;
-        for(Song downloaded : MusicArrayList.musicList) {
-            Toast.makeText(getApplicationContext(), downloaded.getName() + " was removed",
-                    Toast.LENGTH_SHORT).show();
-            downloadableSongs.remove(downloaded);
+        HashMap<String, Song> downloadableSongs = MusicArrayList.allMusicTable;
+        for(Song downloaded : MusicArrayList.localMusicList) {
+            downloadableSongs.remove(MusicArrayList.getSongHash(downloaded));
         }
 
-        downloadAdapter = new DownloadAdapter(this, R.layout.custom_track_download_cell, downloadableSongs);
+        downloadAdapter = new DownloadAdapter(this, R.layout.custom_track_download_cell, new ArrayList<Song>(downloadableSongs.values()));
         downloadListView.setAdapter(downloadAdapter);
 
         timeEditText.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +179,11 @@ public class SettingsActivity extends AppCompatActivity implements
         Date date = calendar.getTime();
         SimpleDateFormat format = new SimpleDateFormat();
         String dateString = format.format(date);
+        manualTimeSet = true;
         timeEditText.setText(dateString);
+
+        Toast.makeText(getApplicationContext(), "Date set: " + dateString, Toast.LENGTH_SHORT).show();
+
 
         //TODO: Store the user defined date somewhere
     }
@@ -189,5 +196,28 @@ public class SettingsActivity extends AppCompatActivity implements
             //TODO: Update this setting somewhere else
             Toast.makeText(getApplicationContext(), "Private Mode Off!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void onManualTimeCheckBoxClicked(View view) {
+        if (manualTimeCheckBox.isChecked()) {
+            //TODO: Update this setting somewhere else
+
+            if (!manualTimeSet){
+                timeEditText.callOnClick();
+            }
+
+
+
+
+
+
+
+            Toast.makeText(getApplicationContext(), "Enable Manual time!", Toast.LENGTH_SHORT).show();
+
+        } else {
+            //TODO: Update this settings somewhere else
+            Toast.makeText(getApplicationContext(), "Disable Manual Time!", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

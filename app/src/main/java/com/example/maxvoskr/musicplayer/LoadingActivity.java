@@ -25,6 +25,7 @@ public class LoadingActivity extends AppCompatActivity {
     private Context context;
     private SongHistorySharedPreferenceManager sharedPref;
     private SongFactory songFactory;
+    private FirebaseData firebaseObject = new FirebaseData();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +46,17 @@ public class LoadingActivity extends AppCompatActivity {
         //context.registerReceiver(mReceiver);
 
 
+        firebaseObject = new FirebaseData();
+
+        firebaseObject.updateSongList();
+
         loadSongsFromMusicFolder();
 
         loadSongsFromResRaw();
 
         importSongsToApp();
 
+<<<<<<< HEAD
 
         // TODO: remove this, only for testing until FB is up
         SongFile song = new SongFile("Back On The Road Again", "Music for TV and Film Vol. 1", "Scott Holmes", "");
@@ -93,11 +99,13 @@ public class LoadingActivity extends AppCompatActivity {
         File[] songFiles = musicDir.listFiles();
 
         for(File songFile : songFiles) {
-            Song song = songFactory.makeSongFromPath(songFile.getPath());
+            if(!songFile.getPath().contains(".zip")) {
+                Song song = songFactory.makeSongFromPath(songFile.getPath());
 
-            songList.add(song);
+                songList.add(song);
 
-            sharedPref.updateData(song);
+                sharedPref.updateData(song);
+            }
         }
     }
 
@@ -132,7 +140,12 @@ public class LoadingActivity extends AppCompatActivity {
     protected void onDestroy() {
         currentLocationTimeData.unBindServices();
 
+<<<<<<< HEAD
         for (Song song : musicList.musicList) {
+=======
+        for (Song song : musicList.localMusicList) {
+
+>>>>>>> origin/dev_branch
             sharedPref.writeData(song);
         }
 

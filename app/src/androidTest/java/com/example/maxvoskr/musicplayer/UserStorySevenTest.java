@@ -21,19 +21,17 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.maxvoskr.musicplayer.MusicArrayList.localMusicList;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.is;
+
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class UserStorySixTest {
+public class UserStorySevenTest {
 
     private Song song;
 
@@ -49,47 +47,42 @@ public class UserStorySixTest {
 
         song = localMusicList.get(0);
 
+        //TODO set google sign in variables!!!
+
+
+
+
     }
 
-    @Test
-    public void userDislikesNeutralSong() {
 
-        song.setLikeDislike(0);
-        // App should be open, check for song list mode and click first song
+
+    @Test
+    public void UserNavigatesFromPlaybackToVibeMode() {
+
+        onView(withId(R.id.vibeMode)).perform(click());
+
+        onView(withText("Last Played:")).check(matches(isDisplayed()));
+
+    }
+
+
+
+    @Test
+    public void UserNavigatesFromVibeModeToPlayback() {
+
+        onView(withId(R.id.vibeMode)).perform(click());
+
+        onView(withText("Last Played:")).check(matches(isDisplayed()));
+
+        onView(withId(R.id.songsMode)).perform(click());
+
         onData(anything()).inAdapterView(withId(R.id.trackList))
                 .atPosition(0)
                 .perform(click());
 
         onView(withText(song.getName())).check(matches(isDisplayed()));
-
-        onView(withId(R.id.dislike)).perform(click());
-
-
     }
 
-
-    @Test
-    public void userPlaysDislikedSongFromSongList(){
-
-        song.setLikeDislike(-1);
-        // App should be open, check for song list mode and click first song
-        onData(anything()).inAdapterView(withId(R.id.trackList))
-                .atPosition(0)
-                .perform(click());
-
-        onView(withText("Last Played")).check(doesNotExist());
-
-
-    }
-
-
-    @Test
-    public void userMakesDislikedSongNeutral() {
-
-        //TODO Unable to find dislike button in hierarchy
-
-
-    }
 
 
     private static Matcher<View> childAtPosition(

@@ -26,11 +26,9 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.maxvoskr.musicplayer.MusicArrayList.albumList;
-import static com.example.maxvoskr.musicplayer.MusicArrayList.musicList;
+import static com.example.maxvoskr.musicplayer.MusicArrayList.localMusicList;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 
@@ -50,7 +48,7 @@ public class UserStoryThreeTest {
     @Before
     public void before(){
 
-        song = musicList.get(0);
+        song = localMusicList.get(0);
 
     }
 
@@ -59,7 +57,7 @@ public class UserStoryThreeTest {
     @Test
     public void UserNavigatesFromPlaybackToFlashBack() {
 
-        onView(withId(R.id.flashbackMode)).perform(click());
+        onView(withId(R.id.vibeMode)).perform(click());
 
         onView(withText("Last Played:")).check(matches(isDisplayed()));
 
@@ -68,7 +66,7 @@ public class UserStoryThreeTest {
     @Test
     public void UserNavigatesFromFlashbackToPlayback() {
 
-        onView(withId(R.id.flashbackMode)).perform(click());
+        onView(withId(R.id.vibeMode)).perform(click());
 
         onView(withText("Last Played:")).check(matches(isDisplayed()));
 

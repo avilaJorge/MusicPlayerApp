@@ -9,14 +9,14 @@ import java.util.HashMap;
 
 public class MusicArrayList {
 
-    public static ArrayList<Song> musicList;
+    public static ArrayList<Song> localMusicList;
     public static ArrayList<Song> allMusicList;
     public static HashMap<String, Song> allMusicTable;
     public static ArrayList<Album> albumList;
     //public static Set<Album> albumSet;
 
     public MusicArrayList() {
-        musicList = new ArrayList<Song>();
+        localMusicList = new ArrayList<Song>();
         albumList = new ArrayList<Album>();
       //  albumSet = new HashSet<Album>();
         allMusicList = new ArrayList<Song>();
@@ -24,15 +24,19 @@ public class MusicArrayList {
     }
 
     public static void insertLocalSong(Song song) {
-        if(musicList.indexOf(song) == -1) {
-            musicList.add(song);
-        }
-
         if(allMusicList.indexOf(song) == -1) {
             allMusicList.add(song);
-            String key = song.getName() + song.getAlbum() + song.getArtist();
+            String key = getSongHash(song);
             allMusicTable.put(key, song);
+
         }
+
+
+        if(localMusicList.indexOf(song) == -1) {
+            localMusicList.add(song);
+        }
+
+
 
 
         boolean added = false;
@@ -59,5 +63,9 @@ public class MusicArrayList {
             String key = song.getName() + song.getAlbum() + song.getArtist();
             allMusicTable.put(key, song);
         }
+    }
+
+    public static String getSongHash(Song song) {
+        return song.getName() + song.getAlbum() + song.getArtist();
     }
 }

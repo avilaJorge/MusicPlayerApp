@@ -53,7 +53,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         super.onCreate();
         songIndex = 0;
         context = getApplicationContext();
-        vibeModePlaylist = new VibeModePlaylist(MusicArrayList.musicList);
+        vibeModePlaylist = new VibeModePlaylist(MusicArrayList.localMusicList);
     }
 
     @Override
@@ -88,6 +88,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     public void onTaskRemoved(Intent rootIntent) {
         Log.e("ClearFromRecentService", "END");
         if(mediaPlayer != null) {
+            //TODO: crash here
             mediaPlayer.release();
             playerReleased = true;
             stopSelf();
@@ -125,7 +126,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
         if (mode == VIBE_MODE && songs.isEmpty()) {
             Toast.makeText(context, "Starting vibe mode over", Toast.LENGTH_SHORT).show();
-            vibeModePlaylist = new VibeModePlaylist(MusicArrayList.musicList);
+            vibeModePlaylist = new VibeModePlaylist(MusicArrayList.localMusicList);
             vibeModePlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
             Song next = vibeModePlaylist.getNextSong();
             if(next != null) {
