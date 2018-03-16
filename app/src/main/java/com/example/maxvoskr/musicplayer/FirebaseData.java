@@ -121,6 +121,7 @@ public class FirebaseData {
             //TODO: Check
             for(String location : songObj.getLocations())
                 myRef.child("songs").child(songObj.getSongID()).child("locations").child(location).setValue(true);
+
         }
         catch (Exception e){
             System.out.println("Unable to retrieve last play information");

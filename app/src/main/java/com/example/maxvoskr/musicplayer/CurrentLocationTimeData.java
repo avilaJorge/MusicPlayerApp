@@ -83,7 +83,7 @@ public class CurrentLocationTimeData {
         if(locationService != null)
             location =  locationService.getLocationName();
         else
-            location = "";
+            if (location == null) location = "";
         return location;
     }
 
