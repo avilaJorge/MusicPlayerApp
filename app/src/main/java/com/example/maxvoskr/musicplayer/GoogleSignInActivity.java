@@ -99,6 +99,9 @@ public class GoogleSignInActivity extends BaseActivity implements
         friendsEmails = new FriendsEmails();
 
         if(user != null) {
+
+            FirebaseData firebaseObj = new FirebaseData();
+            firebaseObj.readFriendsList(user);
             /*// Read the authorization code from the standard input stream.
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("What is the authorization code?");
