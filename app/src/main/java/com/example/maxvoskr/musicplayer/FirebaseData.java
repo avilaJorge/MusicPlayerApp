@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -43,7 +44,6 @@ public class FirebaseData {
         System.out.println("--------------------firebase Write-------------------");
 
         String song_id = myRef.push().getKey();
-        myRef.setValue("hello");
 
         if (song == null){
             throw new NullPointerException("Cannot write an uninitialized song");
@@ -59,6 +59,12 @@ public class FirebaseData {
         myRef.child("songs").child(song_id).child("album").setValue(song.getAlbum());
         myRef.child("songs").child(song_id).child("artist").setValue(song.getArtist());
 
+    }
+
+    void addUser(FirebaseUser user) {
+        String user_id = myRef.push().getKey();
+
+        myRef.child("users").child(user_id).child("email").setValue(user.getEmail());
     }
 
     /*boolean updateData(Song songObj)
