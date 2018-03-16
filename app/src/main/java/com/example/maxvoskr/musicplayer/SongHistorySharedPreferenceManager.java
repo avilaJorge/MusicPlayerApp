@@ -29,10 +29,10 @@ public class SongHistorySharedPreferenceManager {
         if (song == null){
             throw new NullPointerException("Cannot write an uninitialized song");
         }
-        SongDataEditor.putString(song.getName()+LOCATION, song.getLastLocation());
-        SongDataEditor.putString(song.getName()+TIME_MS, Long.toString(song.getTimeMS()));
-        SongDataEditor.putString(song.getName()+DAY_OF_WEEK, Integer.toString(song.getDayOfWeek()));
-        SongDataEditor.putString(song.getName()+TIME_OF_DAY, Integer.toString(song.getTimeOfDay()));
+        //SongDataEditor.putString(song.getName()+LOCATION, song.getLastLocation());
+        //SongDataEditor.putString(song.getName()+TIME_MS, Long.toString(song.getTimeMS()));
+        //SongDataEditor.putString(song.getName()+DAY_OF_WEEK, Integer.toString(song.getDayOfWeek()));
+        //SongDataEditor.putString(song.getName()+TIME_OF_DAY, Integer.toString(song.getTimeOfDay()));
         SongDataEditor.putString(song.getName()+LIKE_DISLIKE, Integer.toString(song.getLikeDislike()));
         SongDataEditor.apply();
     }
@@ -43,10 +43,10 @@ public class SongHistorySharedPreferenceManager {
             throw new NullPointerException("Cannot update a uninitialized song");
         }
         try{
-            songObj.setLastLocation(SongData.getString(songObj.getName()+LOCATION, songObj.getLastLocation()));
-            songObj.setTimeMS(Long.parseLong(SongData.getString(songObj.getName()+TIME_MS, Long.toString(songObj.getTimeMS()))));
-            songObj.setDayOfWeek(Integer.parseInt(SongData.getString(songObj.getName()+DAY_OF_WEEK, Integer.toString(songObj.getDayOfWeek()))));
-            songObj.setTimeOfDay(Integer.parseInt(SongData.getString(songObj.getName()+TIME_OF_DAY, Integer.toString(songObj.getTimeOfDay()))));
+          //  songObj.setLastLocation(SongData.getString(songObj.getName()+LOCATION, songObj.getLastLocation()));
+          //  songObj.setTimeMS(Long.parseLong(SongData.getString(songObj.getName()+TIME_MS, Long.toString(songObj.getTimeMS()))));
+           // songObj.setDayOfWeek(Integer.parseInt(SongData.getString(songObj.getName()+DAY_OF_WEEK, Integer.toString(songObj.getDayOfWeek()))));
+            //songObj.setTimeOfDay(Integer.parseInt(SongData.getString(songObj.getName()+TIME_OF_DAY, Integer.toString(songObj.getTimeOfDay()))));
             songObj.setLikeDislike(Integer.parseInt(SongData.getString(songObj.getName()+LIKE_DISLIKE, Integer.toString(songObj.getLikeDislike()))));
         }
         catch (Exception e){

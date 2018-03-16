@@ -7,16 +7,16 @@ import java.util.ArrayList;
  */
 
 class Song {
-    protected String lastLocation;
-    protected long timeMS;
-    protected int dayOfWeek;
-    protected int timeOfDay;
-    protected int likeDislike;
+    protected volatile String lastLocation;
+    protected volatile long timeMS;
+    protected volatile int dayOfWeek;
+    protected volatile int timeOfDay;
+    protected volatile int likeDislike;
     protected String nameOfSong;
     protected String nameOfAlbum;
     protected String nameOfArtist;
     protected boolean played;
-    protected boolean playedByFriend;
+    protected volatile boolean playedByFriend;
     protected int weight;
     protected String songID;
 

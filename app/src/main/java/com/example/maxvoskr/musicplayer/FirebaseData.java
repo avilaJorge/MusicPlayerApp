@@ -12,6 +12,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Date;
+
 /**
  * Created by maxvoskr on 3/13/18.
  */
@@ -144,19 +146,55 @@ public class FirebaseData {
     }
 
 
-    public void getLastPlayed(final Song song) {
+    public void getLastPlayed(Song song) {
         if(song == null)
             return;
         else {
-            Query q = myRef.child("songs").child(song.getSongID()).child("LastPlayed");
+            Query q = myRef.child("songs");
             q.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    song.setTimeMS(dataSnapshot.child("Time").getValue(Long.class));
-                    song.setLastLocation(dataSnapshot.child("Location").getValue(String.class));
+                    Log.d("getLastPlayed", "start");
+                    Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                    for(DataSnapshot data : children) {
+                        String name = data.child("name").getValue(String.class);
+                        String album = data.child("album").getValue(String.class);
+                        String artist = data.child("artist").getValue(String.class);
+                        //TODO: Username (2 pts)
 
-                    Log.d("getLastPlayed", "Song: " + song.getName() + " was updated!");
-                    //TODO: Username (2 pts)
+                        Song localSong = null;
+
+                        for(Song song : MusicArrayList.localMusicList) {
+                            Log.d("getLastPlayed", "Song: " + song.getName() + " " + song.getAlbum() + " " + song.getArtist());
+                            Log.d("getLastPlayed", "song: " + name + " " + album + " " + artist);
+                            if(song.getName().equals(name) && song.getAlbum().equals(album) && song.getArtist().equals(artist)) {
+                                Log.d("getLastPlayed", "found!");
+                                localSong = song;
+                            }
+                        }
+
+                        Log.d("getLastPlayed", "null check");
+                        if(localSong != null) {
+                            localSong.setTimeMS(data.child("LastPlayed").child("Time").getValue(Long.class));
+                            localSong.setLastLocation(data.child("LastPlayed").child("Location").getValue(String.class));
+
+                            Date songDate = new Date(localSong.getTimeMS());
+                            String minutes = Integer.toString(songDate.getMinutes());
+                            if (songDate.getMinutes() < 10)
+                                minutes = "0" + songDate.getMinutes();
+
+                            String AM_PM = "am";
+                            int hour = songDate.getHours();
+                            if (hour > 12) {
+                                hour -= 12;
+                                AM_PM = "pm";
+                            }
+
+                            Log.d("getLastPlayed", "Song: " + localSong.getName() + " was updated to time: " + (hour + ":" + minutes + " " + AM_PM));
+                        }
+                        Log.d("getLastPlayed", "end_innner_loop");
+                    }
+                    Log.d("getLastPlayed", "end");
                 }
 
 

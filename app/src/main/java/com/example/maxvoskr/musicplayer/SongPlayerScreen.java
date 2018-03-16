@@ -167,19 +167,37 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSong.getLikeDislike() <= 0) {
-                    like.setImageResource(R.drawable.like_green);
-                    dislike.setImageResource(R.drawable.dislike_black);
-                    currentSong.setLikeDislike(1);
-                }
-                else
-                {
-                    like.setImageResource(R.drawable.like_black);
-                    dislike.setImageResource(R.drawable.dislike_black);
-                    currentSong.setLikeDislike(0);
-                }
+                if(currentSong != null) {
+                    if (currentSong.getLikeDislike() <= 0) {
+                        like.setImageResource(R.drawable.like_green);
+                        dislike.setImageResource(R.drawable.dislike_black);
+                        currentSong.setLikeDislike(1);
+                    } else {
+                        like.setImageResource(R.drawable.like_black);
+                        dislike.setImageResource(R.drawable.dislike_black);
+                        currentSong.setLikeDislike(0);
+                    }
 
-                sharedPref.writeData(currentSong);
+                    sharedPref.writeData(currentSong);
+
+
+
+                    Date songDate = new Date(currentSong.getTimeMS());
+                    String minutes = Integer.toString(songDate.getMinutes());
+                    if (songDate.getMinutes() < 10)
+                        minutes = "0" + songDate.getMinutes();
+
+                    String AM_PM = "am";
+                    int hour = songDate.getHours();
+                    if (hour > 12) {
+                        hour -= 12;
+                        AM_PM = "pm";
+                    }
+
+
+
+                    Log.d("getLastPlayed", "Song: " + currentSong.getName()  + (hour + ":" + minutes + " " + AM_PM));
+                }
             }
         });
 
