@@ -15,6 +15,11 @@ import static org.junit.Assert.fail;
 
 /**
  * Tests that modify the shared preferences.
+ *
+ * OLD TEST KEPT AS REFERENCE
+ *
+ *
+ *
  */
 @SmallTest
 public class SharedPreferenceManagerTest {

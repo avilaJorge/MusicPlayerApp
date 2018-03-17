@@ -1,12 +1,16 @@
 package com.example.maxvoskr.musicplayer;
 
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 
 /**
  * Created by mdavi on 2/14/2018.
- */
+ * DO NOT RUN, TEST NO LONGER RELEVANT
+ * KEPT AS REFERENCE
+ * */
 
 public class LikeDislikeTest{
 
@@ -50,7 +54,7 @@ public class LikeDislikeTest{
         list.add(song5);
         list.add(song6);
     }
-/*
+
     @Test
     public void TestGetNextSongBreakTieByLike(){
         song1.setWeight(2);
@@ -59,8 +63,8 @@ public class LikeDislikeTest{
         song4.setWeight(4);
         song5.setWeight(6);
         song6.setWeight(1);
-        FlashbackPlaylist flashback = new FlashbackPlaylist(list);
-        Assert.assertEquals(song2, flashback.getNextSong());
+        VibeModePlaylist vibe = new VibeModePlaylist(list);
+        Assert.assertEquals(song2, vibe.getNextSong());
     }
     @Test
     public void TestDontPlayDisliked(){
@@ -70,8 +74,8 @@ public class LikeDislikeTest{
         song4.setWeight(0);
         song5.setWeight(0);
         song6.setWeight(10);
-        FlashbackPlaylist flashback = new FlashbackPlaylist(list);
-        Assert.assertEquals(null, flashback.getNextSong());
+        VibeModePlaylist vibe = new VibeModePlaylist(list);
+        Assert.assertEquals(null, vibe.getNextSong());
     }
-*/
+
 }
