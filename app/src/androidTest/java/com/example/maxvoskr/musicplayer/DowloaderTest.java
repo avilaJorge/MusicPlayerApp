@@ -42,7 +42,7 @@ public class DowloaderTest {
 
     @Test
     public void downloadSong() {
-        path = downloader.download("https://freemusicarchive.org/music/download/b7a5e80ed9d87daf7a9418f5bfea54d0693878ec");
+        path = downloader.download("https://www.dropbox.com/sh/0bu0f6otb0ycc6d/AABErbEj4JbrajZlFdRIxYgKa/wait-for-heaven.mp3?dl=1");
 
         while(!downloader.downloadRunning());
 
