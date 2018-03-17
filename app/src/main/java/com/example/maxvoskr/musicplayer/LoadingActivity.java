@@ -24,6 +24,7 @@ public class LoadingActivity extends AppCompatActivity {
     public static SharedPreferences lastActivitySharedPref;
     public static FriendsNames friendsNames = new FriendsNames();
     public static String userName = "";
+    //public static VibePlaylistManager playlistManager;
     public static final String SONG_LIST_STRING = "Song_List";
     public static final String ALBUM_MODE_STRING = "Album_Mode";
     public static final String VIBE_MODE_STRING = "Vibe_Mode";
@@ -89,8 +90,11 @@ public class LoadingActivity extends AppCompatActivity {
 
                 for(Song song : MusicArrayList.localMusicList)
                     Log.d("Loading", "localList after Import: " + song.getName() + " " + song.getSongID());
+
+                //playlistManager = new VibePlaylistManager(MusicArrayList.allMusicList, new Downloader(context, getResources()));
             }
-        }, 1000);
+        }, 3000);
+
 
         lastActivitySharedPref = getSharedPreferences("LastActivity", Context.MODE_PRIVATE);
         final String activity = lastActivitySharedPref.getString("Activity_Name", "");

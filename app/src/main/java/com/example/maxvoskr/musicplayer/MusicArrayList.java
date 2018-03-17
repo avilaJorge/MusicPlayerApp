@@ -33,8 +33,13 @@ public class MusicArrayList {
         else {
             Log.d("Importing Songs", "Song: " + song.getName() + "was found hashTable");
             Song fbSong = allMusicTable.get(getSongHash(song));
+
+            ((SongFile) fbSong).setSong(((SongFile) song).getSong());
+
+            song = fbSong;
+            /*
             ((SongFile) song).setUrl(((SongFile) fbSong).getUrl());
-            song.setSongID(fbSong.getSongID());
+            song.setSongID(fbSong.getSongID());*/
         }
 
 

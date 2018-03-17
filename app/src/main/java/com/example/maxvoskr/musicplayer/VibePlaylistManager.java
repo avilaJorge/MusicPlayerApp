@@ -1,5 +1,7 @@
 package com.example.maxvoskr.musicplayer;
 
+import android.util.Log;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -21,6 +23,7 @@ public class VibePlaylistManager {
         this.listOfSongs = listOfSongs;
         for(Song s : listOfSongs){
             s.unsetPlayed();
+            Log.d("UNSETTING PLAY", s.getName());
         }
         this.downloader = downloader;
         listOfDownloading = new ArrayList<SongFile>();
@@ -35,6 +38,7 @@ public class VibePlaylistManager {
         for(Song s : listOfSongs){
             int weight = 0;
             if (s.getTimeMS() == 0 || (s.getClass()==SongRes.class) || s.beenPlayed()) {
+                Log.d("SETTING WEIGHT AS ", s.getName() +":" + 0);
                 s.setWeight(0);
                 continue;
             }
@@ -47,6 +51,7 @@ public class VibePlaylistManager {
                 }}
             if ((dataObj.getTimeMS()-MS_IN_WEEK) <= s.getTimeMS()) weight++;
             if (s.isPlayedByFriend()) weight++;
+            Log.d("SETTING WEIGHT AS ", s.getName() +":" + weight);
             s.setWeight(weight);
         }
     }
@@ -57,6 +62,7 @@ public class VibePlaylistManager {
      */
     public Song getNextSong(boolean network) {
         sortByWeight();
+
         Song nextSong = null;
         if (sortedListOfSongs.isEmpty()) return nextSong;
 
@@ -69,6 +75,7 @@ public class VibePlaylistManager {
         //Downloads ignored if network is off
         for (int i = 0; i < 2 && i < sortedListOfSongs.size(); i++) {
             next = sortedListOfSongs.get(i);
+            Log.d("SONG PATH FOR NEXT SONG",next.getSong());
             if (next.getSong().isEmpty()) {
                 if (!listOfDownloading.contains(next) && network) {
                     listOfDownloading.add(next);

@@ -140,7 +140,12 @@ public class Downloader extends BroadcastReceiver {
             if (c.moveToFirst()) {
                 int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
                 if (status == DownloadManager.STATUS_SUCCESSFUL) {
-                    path = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
+                    String downloadFileLocalUri = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+                    if (downloadFileLocalUri != null){
+                        File mFile = new File (Uri.parse(downloadFileLocalUri).getPath());
+                        path = mFile.getAbsolutePath();
+                    }
+
                     title = c.getString(c.getColumnIndex(DownloadManager.COLUMN_TITLE));
                 }
                 else{

@@ -68,7 +68,7 @@ public class FirebaseData {
 
     void updateSongList() {
         Query q = myRef.child("songs");
-        q.addValueEventListener(new ValueEventListener() {
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
@@ -288,7 +288,7 @@ public class FirebaseData {
                             }
                         }
 
-                        if(localSong != null) {
+                        if(localSong != null && localSong.getSongID() != null) {
 
                             Iterable<DataSnapshot> childrenLastPlayed = dataSnapshot.child(localSong.getSongID()).getChildren();
                             for(DataSnapshot lastData : childrenLastPlayed) {

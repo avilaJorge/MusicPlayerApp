@@ -34,8 +34,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     private boolean playerReleased = true;
     private MediaPlayer mediaPlayer;
     private ArrayList<Song> songs;
-    private VibeModePlaylist vibeModePlaylist;
-    private VibePlaylistManager vibePlaylistManager;
+    private VibePlaylistManager vibeModePlaylist;
 
     public MusicPlayerService() {}
 
@@ -127,11 +126,15 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
         if (mode == VIBE_MODE && songs.isEmpty()) {
             Toast.makeText(context, "Starting vibe mode over", Toast.LENGTH_SHORT).show();
-            vibeModePlaylist = new VibeModePlaylist(MusicArrayList.localMusicList);
+            vibeModePlaylist = VibePlaylistHolder.playlistManager;
             vibeModePlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
-            Song next = vibeModePlaylist.getNextSong();
+            Toast.makeText(context,"Getting Next Song",Toast.LENGTH_SHORT).show();
+            Song next = vibeModePlaylist.getNextSong(NetworkConnect.haveNetworkConnection(context));
             if(next != null) {
                 songs.add(next);
+            }
+            else{
+                Toast.makeText(context,"Getting Next Song 140",Toast.LENGTH_SHORT).show();
             }
             songIndex = 0;
         }
@@ -151,7 +154,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                     currentLocationTimeData.updateSongUsingTemp(songs.get(songIndex));
                     FirebaseData firebaseData = new FirebaseData();
                     firebaseData.updateLastPlayed(songs.get(songIndex));
-
+                    songs.get(songIndex).setPlayed();
                     Toast.makeText(context, "Song ID: " + songs.get(songIndex).getSongID(), Toast.LENGTH_SHORT).show();
 
 
@@ -163,12 +166,15 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                         }
                     } else if (mode == VIBE_MODE) {
                         vibeModePlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
-                        Song next = vibeModePlaylist.getNextSong();
+                        Song next = vibeModePlaylist.getNextSong(NetworkConnect.haveNetworkConnection(context));
                         if(next != null) {
                             songs.set(0, next);
                             songIndex = 0;
                             activity.updateUI(getCurrentSong());
                             playSong();
+                        }
+                        else{
+                            Toast.makeText(context,"Getting Next Song 177",Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         mediaPlayer.release();
@@ -211,12 +217,15 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                     }
                 } else if(mode == VIBE_MODE) {
                     vibeModePlaylist.setCurrentWeights(LoadingActivity.currentLocationTimeData);
-                    Song next = vibeModePlaylist.getNextSong();
+                    Song next = vibeModePlaylist.getNextSong(NetworkConnect.haveNetworkConnection(context));
                     if(next != null) {
                         songs.set(0, next);
                         songIndex = 0;
                         activity.updateUI(getCurrentSong());
                         playSong();
+                    }
+                    else{
+                        Toast.makeText(context,"Getting Next Song 228",Toast.LENGTH_SHORT).show();
                     }
                 }
                 else if (mode == SONG_MODE)

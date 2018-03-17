@@ -156,7 +156,7 @@ public class PriorityListActivity extends AppCompatActivity {
         like = findViewById(R.id.like);
         dislike = findViewById(R.id.dislike);
 
-        adapter = new PriorityAdapter(this, R.layout.custom_priority_cell, musicList.localMusicList);
+        adapter = new PriorityAdapter(this, R.layout.custom_priority_cell, VibePlaylistHolder.playlistManager.getListOfUpcomingSongs());
         albumListView.setAdapter(adapter);
 
         albumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

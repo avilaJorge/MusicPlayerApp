@@ -128,8 +128,6 @@ public class GoogleSignInActivity extends BaseActivity implements
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-        LoadingActivity.userName = user.getDisplayName();
-        Log.d("USERNAME", LoadingActivity.userName);
     }
 
     // [START on_start_check_user]
@@ -140,6 +138,7 @@ public class GoogleSignInActivity extends BaseActivity implements
         mGoogleApiClient.connect();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
+
     }
     // [END on_start_check_user]
 
@@ -351,6 +350,10 @@ public class GoogleSignInActivity extends BaseActivity implements
                     try {
                         // Google Sign In was successful, authenticate with Firebase
                         GoogleSignInAccount account = task.getResult(ApiException.class);
+
+                        LoadingActivity.userName = account.getDisplayName();
+                        Log.d("USERNAME", LoadingActivity.userName);
+
                         String authCode = account.getServerAuthCode();
 
                         System.out.println("--------------------------------------");

@@ -52,6 +52,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
     private Intent albumList;
     private Intent settingsIntent;
     private Intent priorityListIntent;
+    private VibePlaylistManager playlistManager;
 
     private TextView songTitleTextView;
     private TextView artistTextView;
@@ -62,6 +63,9 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
     private TextView LP_location;
 
     public MusicPlayerService musicPlayerService;
+    //public static VibePlaylistManager playlistManager;
+
+
     boolean musicPlayerBound = false;
 
     private static SongHistorySharedPreferenceManager sharedPref;
@@ -87,7 +91,8 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_player_screen);
         sharedPref = new SongHistorySharedPreferenceManager(getApplicationContext());
-
+        VibePlaylistHolder.setPlaylistManager(new VibePlaylistManager(MusicArrayList.allMusicList,new Downloader(getApplicationContext(),getResources())));
+        playlistManager = VibePlaylistHolder.playlistManager;
         // buttons
         play = findViewById(R.id.play);
         next = findViewById(R.id.next);
@@ -371,7 +376,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
             }
             else if (playerMode == VIBE_MODE) {
                 musicPlayerService.stop();
-                musicPlayerService.setList(new ArrayList<Song>());
+                musicPlayerService.setList(playlistManager.getListOfUpcomingSongs());
                 musicPlayerService.playSong();
                 currentSong = musicPlayerService.getCurrentSong();
                 if (currentSong != null)
