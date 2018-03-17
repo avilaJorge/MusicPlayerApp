@@ -82,42 +82,42 @@ public class LoadingActivity extends AppCompatActivity {
 
                 importSongsToApp();
 
-                lastActivitySharedPref = getSharedPreferences("LastActivity", Context.MODE_PRIVATE);
-                final String activity = lastActivitySharedPref.getString("Activity_Name", "");
 
                 for(Song song : MusicArrayList.allMusicTable.values())
                     Log.d("Loading", "HashMap after Import: " + song.getName() + " " + song.getSongID());
 
                 for(Song song : MusicArrayList.localMusicList)
                     Log.d("Loading", "localList after Import: " + song.getName() + " " + song.getSongID());
-
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Do something after 5s = 5000ms
-                        Intent activityIntent;
-                        switch(activity) {
-                            case SONG_LIST_STRING:
-                                songListIntent.putExtra("Position", -1);
-                                startActivity(songListIntent);
-                                break;
-                            case ALBUM_MODE_STRING:
-                                startActivity(albumListIntent);
-                                break;
-                            case VIBE_MODE_STRING:
-                                songPlayerIntent.putExtra("playerMode", VIBE_MODE);
-                                startActivity(songPlayerIntent);
-                                break;
-                            default:
-                                startActivity(signInActivity);
-                        }
-
-                    }
-                }, 5000);
-
             }
         }, 1000);
+
+        lastActivitySharedPref = getSharedPreferences("LastActivity", Context.MODE_PRIVATE);
+        final String activity = lastActivitySharedPref.getString("Activity_Name", "");
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+                Intent activityIntent;
+                switch(activity) {
+                    case SONG_LIST_STRING:
+                        songListIntent.putExtra("Position", -1);
+                        startActivity(songListIntent);
+                        break;
+                    case ALBUM_MODE_STRING:
+                        startActivity(albumListIntent);
+                        break;
+                    case VIBE_MODE_STRING:
+                        songPlayerIntent.putExtra("playerMode", VIBE_MODE);
+                        startActivity(songPlayerIntent);
+                        break;
+                    default:
+                        startActivity(signInActivity);
+                }
+
+            }
+        }, 5000);
     }
 
 

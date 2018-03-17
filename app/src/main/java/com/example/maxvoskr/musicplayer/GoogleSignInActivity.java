@@ -49,8 +49,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -130,7 +128,6 @@ public class GoogleSignInActivity extends BaseActivity implements
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-
     }
 
     // [START on_start_check_user]
@@ -152,7 +149,6 @@ public class GoogleSignInActivity extends BaseActivity implements
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_INTENT);
     }
-
 
     // [START auth_with_google]
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
@@ -196,32 +192,38 @@ public class GoogleSignInActivity extends BaseActivity implements
         // Redirect URL for web based applications.
         // Can be empty too.
         String redirectUrl = "urn:ietf:wg:oauth:2.0:oob";
+        //String redirectUrl = "";
 
         String clientId = "630586042148-fdsurme8a0jv9nbatms408s64sf9haqj.apps.googleusercontent.com";
         String clientSecret = "tvEfpZaSBTrvI9Egr6VpUZZ_";
 
-        // STEP 1
-        GoogleTokenResponse tokenResponse = new GoogleAuthorizationCodeTokenRequest(
-                httpTransport,
-                jsonFactory,
-                clientId,
-                clientSecret,
-                serverAuthCode,
-                redirectUrl).execute();
 
-        // STEP 2
-        GoogleCredential credential = new GoogleCredential.Builder()
-                .setClientSecrets(clientId, clientSecret)
-                .setTransport(httpTransport)
-                .setJsonFactory(jsonFactory)
-                .build();
+            // STEP 1
+            GoogleTokenResponse tokenResponse = new GoogleAuthorizationCodeTokenRequest(
+                    httpTransport,
+                    jsonFactory,
+                    clientId,
+                    clientSecret,
+                    serverAuthCode,
+                    redirectUrl).execute();
+            ;
 
-        credential.setFromTokenResponse(tokenResponse);
+            // STEP 2
+            GoogleCredential credential = new GoogleCredential.Builder()
+                    .setClientSecrets(clientId, clientSecret)
+                    .setTransport(httpTransport)
+                    .setJsonFactory(jsonFactory)
+                    .build();
+
+            credential.setFromTokenResponse(tokenResponse);
+
 
         // STEP 3
         //return new People.Builder(httpTransport, jsonFactory, credential)
                 //.build();
+
         return new People.Builder(httpTransport, jsonFactory, credential).build();
+
     }
 
     // [START signin]
