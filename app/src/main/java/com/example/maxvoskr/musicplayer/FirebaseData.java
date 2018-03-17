@@ -43,7 +43,7 @@ public class FirebaseData {
         mDatabase = FirebaseDatabase.getInstance();
         myRef = mDatabase.getReferenceFromUrl("https://musicplayer-c8dfe.firebaseio.com/");
 
-        readFriendsList(getCurrentUser());
+        //readFriendsList(getCurrentUser());
     }
 
     void readFriendsList(FirebaseUser user) {

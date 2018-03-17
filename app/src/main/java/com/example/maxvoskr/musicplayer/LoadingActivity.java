@@ -22,7 +22,8 @@ public class LoadingActivity extends AppCompatActivity {
 
     public static CurrentLocationTimeData currentLocationTimeData;
     public static SharedPreferences lastActivitySharedPref;
-    public static FriendsEmails friendsEmails = new FriendsEmails();
+    public static FriendsNames friendsNames = new FriendsNames();
+    public static String userName = "";
     public static final String SONG_LIST_STRING = "Song_List";
     public static final String ALBUM_MODE_STRING = "Album_Mode";
     public static final String VIBE_MODE_STRING = "Vibe_Mode";
@@ -94,6 +95,20 @@ public class LoadingActivity extends AppCompatActivity {
         lastActivitySharedPref = getSharedPreferences("LastActivity", Context.MODE_PRIVATE);
         final String activity = lastActivitySharedPref.getString("Activity_Name", "");
 
+        switch(activity) {
+            case SONG_LIST_STRING:
+                startActivity(signInActivity);
+                break;
+            case ALBUM_MODE_STRING:
+                startActivity(signInActivity);
+                break;
+            case VIBE_MODE_STRING:
+                startActivity(signInActivity);
+                break;
+            default:
+                startActivity(signInActivity);
+        }
+
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -102,13 +117,16 @@ public class LoadingActivity extends AppCompatActivity {
                 Intent activityIntent;
                 switch(activity) {
                     case SONG_LIST_STRING:
+                        //startActivity(signInActivity);
                         songListIntent.putExtra("Position", -1);
                         startActivity(songListIntent);
                         break;
                     case ALBUM_MODE_STRING:
+                        //startActivity(signInActivity);
                         startActivity(albumListIntent);
                         break;
                     case VIBE_MODE_STRING:
+                        //startActivity(signInActivity);
                         songPlayerIntent.putExtra("playerMode", VIBE_MODE);
                         startActivity(songPlayerIntent);
                         break;

@@ -128,6 +128,8 @@ public class GoogleSignInActivity extends BaseActivity implements
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
+        LoadingActivity.userName = user.getDisplayName();
+        Log.d("USERNAME", LoadingActivity.userName);
     }
 
     // [START on_start_check_user]
@@ -374,12 +376,12 @@ public class GoogleSignInActivity extends BaseActivity implements
 
                         for (Person person : connections) {
                             if (!person.isEmpty()) {
-                                List<EmailAddress> emails = person.getEmailAddresses();
+                                List<Name> names = person.getNames();
 
-                                if (emails != null)
-                                    for (EmailAddress email : emails) {
-                                        Log.d(TAG, "email: " + email.getValue());
-                                        LoadingActivity.friendsEmails.add(email.getValue());
+                                if (names != null)
+                                    for (Name name : names) {
+                                        Log.d(TAG, "Name: " + name.getDisplayName());
+                                        LoadingActivity.friendsNames.add(name.getDisplayName());
                                     }
 
                             }
