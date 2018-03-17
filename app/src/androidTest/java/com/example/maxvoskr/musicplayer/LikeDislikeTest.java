@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 /**
  * Created by mdavi on 2/14/2018.
- * DO NOT RUN, TEST NO LONGER RELEVANT
- * KEPT AS REFERENCE
  * */
 
 public class LikeDislikeTest{
