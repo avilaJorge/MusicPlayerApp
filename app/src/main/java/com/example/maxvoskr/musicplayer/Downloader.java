@@ -29,7 +29,7 @@ import static android.app.DownloadManager.STATUS_RUNNING;
 import static android.app.DownloadManager.STATUS_SUCCESSFUL;
 
 /**
- * Created by tevor on 3/7/2018.
+ * Created by trevor on 3/7/2018.
  */
 
 

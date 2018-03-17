@@ -28,6 +28,7 @@ public class FirebaseData {
     private DatabaseReference myRef;
     public static ArrayList<String> friendsIDs = new ArrayList<>();
     public static ArrayList<String> usersPlayedSong = new ArrayList<>();
+    public static String email = "temp";
 
     static final String LOCATION = "LOC";
     static final String TIME_MS = "T_MS";
@@ -186,8 +187,8 @@ public class FirebaseData {
             myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("Time").setValue(songObj.getTimeMS());
             myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("Location").setValue(songObj.getLastLocation());
             //TODO : MATTHEW CHANGED
-            myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("User").setValue(myRef.child("users").child(getCurrentUserID()).child("Email"));
-            myRef.child("songs").child(songObj.getSongID()).child("UsersPlayed").child(getCurrentUserID()).setValue(true);
+            myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("User").setValue(email);
+            myRef.child("songs").child(songObj.getSongID()).child("UsersPlayed").child(email).setValue(true);
 
             //TODO: Check
         //    for(String location : songObj.getLocations())
@@ -218,10 +219,7 @@ public class FirebaseData {
                 String artist = dataSnapshot.child("artist").getValue(String.class);
                 Song localSong = null;
                 for(Song song : MusicArrayList.localMusicList) {
-                    //    Log.d("getLastPlayed", "Song: " + song.getName() + " " + song.getAlbum() + " " + song.getArtist());
-                    //    Log.d("getLastPlayed", "song: " + name + " " + album + " " + artist);
                     if(song.getName().equals(name) && song.getAlbum().equals(album) && song.getArtist().equals(artist)) {
-                        //        Log.d("getLastPlayed", "found!");
                         localSong = song;
                     }
                 }
@@ -250,14 +248,7 @@ public class FirebaseData {
 
             }
         });
-/*
-        try {
-            sleep(3000);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-*/
+
         return usersPlayedSong;
     }
 
