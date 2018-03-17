@@ -35,6 +35,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     private MediaPlayer mediaPlayer;
     private ArrayList<Song> songs;
     private VibeModePlaylist vibeModePlaylist;
+    private VibePlaylistManager vibePlaylistManager;
 
     public MusicPlayerService() {}
 
@@ -53,7 +54,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         super.onCreate();
         songIndex = 0;
         context = getApplicationContext();
-        vibeModePlaylist = new VibeModePlaylist(MusicArrayList.localMusicList);
+        //TODO: line below crashes after closing app
+        //vibeModePlaylist = new VibeModePlaylist(MusicArrayList.localMusicList);
     }
 
     @Override
@@ -145,8 +147,15 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
-
+                    Toast.makeText(context, "On completion", Toast.LENGTH_SHORT).show();
                     currentLocationTimeData.updateSongUsingTemp(songs.get(songIndex));
+                    FirebaseData firebaseData = new FirebaseData();
+                    firebaseData.updateLastPlayed(songs.get(songIndex));
+
+                    Toast.makeText(context, "Song ID: " + songs.get(songIndex).getSongID(), Toast.LENGTH_SHORT).show();
+
+
+
                     if (mode == ALBUM_MODE) {
                         if (++songIndex <= songs.size() && !songs.isEmpty()) {
                             activity.updateUI(getCurrentSong());
@@ -170,7 +179,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                 }
             });
             // TODO: Erase this before demo.
-            double time = mediaPlayer.getDuration() * 0.9;
+            double time = mediaPlayer.getDuration() * 0.95;
             mediaPlayer.seekTo((int) time);
         }
     }

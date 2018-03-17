@@ -18,10 +18,10 @@ public class VibeModePlaylist {
 
     /* sets the weights of all songs based on the current lastLocation/time/etc */
     public void setCurrentWeights(CurrentLocationTimeData dataObj){
-        for(Song s : listOfSongs){
-            if (!s.beenPlayed())
-                s.findWeight(dataObj);
-        }
+        //for(Song s : listOfSongs){
+            //if (!s.beenPlayed())
+                //s.findWeight(dataObj);
+        //}
     }
     /*
 <<<<<<< HEAD:app/src/main/java/com/example/maxvoskr/musicplayer/FlashbackPlaylist.java

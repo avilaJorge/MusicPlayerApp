@@ -7,22 +7,23 @@ import java.util.ArrayList;
  */
 
 class Song {
-    protected String lastLocation;
-    protected long timeMS;
-    protected int dayOfWeek;
-    protected int timeOfDay;
-    protected int likeDislike;
+    protected volatile String lastLocation;
+    protected volatile long timeMS;
+    protected volatile int dayOfWeek;
+    protected volatile int timeOfDay;
+    protected volatile int likeDislike;
     protected String nameOfSong;
     protected String nameOfAlbum;
     protected String nameOfArtist;
     protected boolean played;
-    protected boolean playedByFriend;
+    protected volatile boolean playedByFriend;
     protected int weight;
     protected String songID;
 
     protected ArrayList<String> locations;
 
     Song() {
+        this.locations = new ArrayList<String>();
         this.weight = 0;
         this.played = false;
     }
@@ -142,6 +143,7 @@ class Song {
         this.locations.add(location);
     }
 
+    /* not SRP
     public void findWeight(CurrentLocationTimeData dataObj) {
         weight = 0;
         if (timeMS == 0) return;
@@ -152,8 +154,8 @@ class Song {
         //Like Dislike Breaks Ties Only
         //if (likeDislike == 1) weight++;
     }
+    */
 
-    //ONLY TO BE USED BY TESTERS
     public void setWeight(int weight){
         this.weight = weight;
     }

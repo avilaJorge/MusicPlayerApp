@@ -1,11 +1,20 @@
 package com.example.maxvoskr.musicplayer;
 
+import android.*;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -15,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,6 +41,9 @@ public class SettingsActivity extends AppCompatActivity implements
     private final int ALBUM_MODE = 1;
     private final int VIBE_MODE = 2;
 
+    private static DateService dateService;
+    private boolean dateBound = false;
+
     private CheckBox privacyCheckBox;
     private EditText timeEditText;
 
@@ -48,7 +59,7 @@ public class SettingsActivity extends AppCompatActivity implements
     private View vibeMode;
     private Intent songPlayer;
     private Intent songList;
-    private Intent songListActivityIntent;
+    private Intent albumListIntent;
 
     private DownloadAdapter downloadAdapter;
     private ListView downloadListView;
@@ -59,6 +70,25 @@ public class SettingsActivity extends AppCompatActivity implements
 
     private int year, month, day, hourOfDay, minute;
     long userDate;
+
+    private ServiceConnection dateConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            DateService.DateBinder dateBinder = (DateService.DateBinder) iBinder;
+            dateService = dateBinder.getDateService();
+            dateBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) { dateBound = false; }
+    };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent dateIntent = new Intent(this, DateService.class);
+        bindService(dateIntent, dateConnection, Context.BIND_AUTO_CREATE);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +111,7 @@ public class SettingsActivity extends AppCompatActivity implements
 
         songList = new Intent(this, MainActivity.class);
         songPlayer = new Intent(this, SongPlayerScreen.class);
-        songListActivityIntent = new Intent(this, MainActivity.class);
+        albumListIntent = new Intent(this, AlbumListActivity.class);
 
         Intent intent = getIntent();
 
@@ -135,8 +165,7 @@ public class SettingsActivity extends AppCompatActivity implements
         albumMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                songPlayer.putExtra("playerMode", ALBUM_MODE);
-                startActivity(songPlayer);
+                startActivity(albumListIntent);
             }
         });
 
@@ -147,6 +176,7 @@ public class SettingsActivity extends AppCompatActivity implements
                startActivity(songPlayer);
             }
         });
+
     }
 
     @Override
@@ -166,6 +196,7 @@ public class SettingsActivity extends AppCompatActivity implements
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day, this.hourOfDay, this.minute);
         userDate = calendar.getTimeInMillis();
+        dateService.setCurrentTime(userDate);
 
         // Update the UI textbox
         Date date = calendar.getTime();
@@ -175,9 +206,6 @@ public class SettingsActivity extends AppCompatActivity implements
         timeEditText.setText(dateString);
 
         Toast.makeText(getApplicationContext(), "Date set: " + dateString, Toast.LENGTH_SHORT).show();
-
-
-        //TODO: Store the user defined date somewhere
     }
 
     public void onPrivacyCheckBoxClicked(View view) {
@@ -192,24 +220,22 @@ public class SettingsActivity extends AppCompatActivity implements
 
     public void onManualTimeCheckBoxClicked(View view) {
         if (manualTimeCheckBox.isChecked()) {
-            //TODO: Update this setting somewhere else
-
-            if (!manualTimeSet){
-                timeEditText.callOnClick();
-            }
-
-
-
-
-
-
-
+            LoadingActivity.userDefinedTime = true;
+            timeEditText.callOnClick();
             Toast.makeText(getApplicationContext(), "Enable Manual time!", Toast.LENGTH_SHORT).show();
-
         } else {
-            //TODO: Update this settings somewhere else
+            LoadingActivity.userDefinedTime = false;
             Toast.makeText(getApplicationContext(), "Disable Manual Time!", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (dateBound) {
+            unbindService(dateConnection);
+            dateBound = false;
+        }
     }
 }

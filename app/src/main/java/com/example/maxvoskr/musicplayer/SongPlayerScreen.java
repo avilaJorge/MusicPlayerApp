@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -130,18 +131,26 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         priorityListIntent = new Intent(this, PriorityListActivity.class);
         playerMode = getIntent().getIntExtra("playerMode", SONG_MODE);
 
-
-        if(playerMode == SONG_MODE)
+        SharedPreferences.Editor editor = LoadingActivity.lastActivitySharedPref.edit();
+        if(playerMode == SONG_MODE) {
+            editor.putString("Activity_Name", LoadingActivity.SONG_LIST_STRING);
             background.setBackgroundColor(Color.parseColor("#5a47025c"));
-        else if(playerMode == ALBUM_MODE)
+        } else if(playerMode == ALBUM_MODE) {
+            editor.putString("Activity_Name", LoadingActivity.ALBUM_MODE_STRING);
             background.setBackgroundColor(Color.parseColor("#5a0208c6"));
-        else
+        } else {
+            editor.putString("Activity_Name", LoadingActivity.VIBE_MODE_STRING);
             background.setBackgroundColor(Color.parseColor("#6eff6701"));
+        }
+        editor.apply();
 
         if(!playing)
             play.setImageResource(R.drawable.play);
         else
             play.setImageResource(R.drawable.pause);
+
+
+
 
 
         play.setOnClickListener(new View.OnClickListener() {
@@ -167,19 +176,25 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSong.getLikeDislike() <= 0) {
-                    like.setImageResource(R.drawable.like_green);
-                    dislike.setImageResource(R.drawable.dislike_black);
-                    currentSong.setLikeDislike(1);
-                }
-                else
-                {
-                    like.setImageResource(R.drawable.like_black);
-                    dislike.setImageResource(R.drawable.dislike_black);
-                    currentSong.setLikeDislike(0);
-                }
+                if(currentSong != null) {
+                    if (currentSong.getLikeDislike() <= 0) {
+                        like.setImageResource(R.drawable.like_green);
+                        dislike.setImageResource(R.drawable.dislike_black);
+                        currentSong.setLikeDislike(1);
+                    } else {
+                        like.setImageResource(R.drawable.like_black);
+                        dislike.setImageResource(R.drawable.dislike_black);
+                        currentSong.setLikeDislike(0);
+                    }
 
-                sharedPref.writeData(currentSong);
+                    sharedPref.writeData(currentSong);
+
+
+                    Log.d("SongsPlayedBy~~~~~~~~~", "was clicked!!!");
+                    FirebaseData firebase = new FirebaseData();
+                    for(String name : firebase.getSongPlayedBy(currentSong.getSongID()))
+                        Log.d(currentSong.getName() + " played by", name);
+                }
             }
         });
 

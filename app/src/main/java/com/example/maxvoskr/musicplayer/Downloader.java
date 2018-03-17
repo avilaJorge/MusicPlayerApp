@@ -126,7 +126,7 @@ public class Downloader extends BroadcastReceiver {
     @TargetApi(26)
     @Override
     public void onReceive(Context context, Intent intent) {
-        String title = "This DID NOT WORK!!!!!!~!!!!!!!!";
+        String title = "";
         //Get path of music downloads
         String path = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC).getPath() + '/';
 
