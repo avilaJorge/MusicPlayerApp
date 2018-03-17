@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -177,12 +178,14 @@ public class MainActivity extends AppCompatActivity implements MusicPlayerServic
             adapter = new MusicAdapter(this, R.layout.custom_track_cell, sortedSongList);
             background.setBackgroundColor(Color.parseColor("#5a0208c6"));
             trackList.setAdapter(adapter);
+            Log.d("UI MODE", "For Testing: You are in Album Mode");
         } else {
             // Song mode
             sortedSongList = (ArrayList<Song>) sort(musicList.localMusicList);
             adapter = new MusicAdapter(this, R.layout.custom_track_cell, sortedSongList);
             background.setBackgroundColor(Color.parseColor("#5a47025c"));
             trackList.setAdapter(adapter);
+            Log.d("UI MODE", "For Testing: You are in Playback Mode");
         }
 
         trackList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

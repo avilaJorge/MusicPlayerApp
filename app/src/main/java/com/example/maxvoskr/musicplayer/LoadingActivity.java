@@ -142,8 +142,6 @@ public class LoadingActivity extends AppCompatActivity {
         }, 5000);
     }
 
-
-
     private void loadSongsFromMusicFolder() {
         File musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
         File[] songFiles = musicDir.listFiles();

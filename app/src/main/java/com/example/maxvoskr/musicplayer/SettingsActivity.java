@@ -106,7 +106,7 @@ public class SettingsActivity extends AppCompatActivity implements
         songMode = (View) findViewById(R.id.navLeft);
         albumMode = (View) findViewById(R.id.navMid);
         vibeMode = (View) findViewById(R.id.navRight);
-        privacyCheckBox = (CheckBox) findViewById(R.id.privacyCheckBox);
+        //privacyCheckBox = (CheckBox) findViewById(R.id.privacyCheckBox);
         manualTimeCheckBox = (CheckBox) findViewById(R.id.manualTimeCheckBox);
 
         songList = new Intent(this, MainActivity.class);
@@ -176,7 +176,6 @@ public class SettingsActivity extends AppCompatActivity implements
                startActivity(songPlayer);
             }
         });
-
     }
 
     @Override
@@ -205,9 +204,11 @@ public class SettingsActivity extends AppCompatActivity implements
         manualTimeSet = true;
         timeEditText.setText(dateString);
 
-        Toast.makeText(getApplicationContext(), "Date set: " + dateString, Toast.LENGTH_SHORT).show();
+        Log.d("MANUAL_TIME","Date set: " + dateString);
+        //Toast.makeText(getApplicationContext(), "Date set: " + dateString, Toast.LENGTH_SHORT).show();
     }
 
+    /*
     public void onPrivacyCheckBoxClicked(View view) {
         if(privacyCheckBox.isChecked()) {
             //TODO: Update this setting somewhere else
@@ -217,15 +218,18 @@ public class SettingsActivity extends AppCompatActivity implements
             Toast.makeText(getApplicationContext(), "Private Mode Off!", Toast.LENGTH_SHORT).show();
         }
     }
+    */
 
     public void onManualTimeCheckBoxClicked(View view) {
         if (manualTimeCheckBox.isChecked()) {
             LoadingActivity.userDefinedTime = true;
             timeEditText.callOnClick();
-            Toast.makeText(getApplicationContext(), "Enable Manual time!", Toast.LENGTH_SHORT).show();
+            Log.d("MANUAL_TIME", "Manual time enabled.");
+            //Toast.makeText(getApplicationContext(), "Enable Manual time!", Toast.LENGTH_SHORT).show();
         } else {
             LoadingActivity.userDefinedTime = false;
-            Toast.makeText(getApplicationContext(), "Disable Manual Time!", Toast.LENGTH_SHORT).show();
+            Log.d("MANUAL_TIME", "Manual time disabled.");
+            //Toast.makeText(getApplicationContext(), "Disable Manual Time!", Toast.LENGTH_SHORT).show();
         }
 
     }

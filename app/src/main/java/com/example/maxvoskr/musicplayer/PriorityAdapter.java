@@ -1,6 +1,7 @@
 package com.example.maxvoskr.musicplayer;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,11 @@ class PriorityAdapter extends BaseAdapter {
         this.context = context;
         this.layout = layout;
         this.musicList = musicList;
+        int i = 1;
+        for(Song logSong : musicList) {
+            Log.d("SONG_PRIORITY_TEST", "Priority: " + i + ": " + logSong.getName());
+            i++;
+        }
     }
 
     @Override

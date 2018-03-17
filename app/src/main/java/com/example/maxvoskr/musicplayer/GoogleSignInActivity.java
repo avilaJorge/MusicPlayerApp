@@ -8,9 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.Contacts;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -39,18 +36,16 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.people.v1.People;
 import com.google.api.services.people.v1.PeopleScopes;
-import com.google.api.services.people.v1.model.EmailAddress;
 import com.google.api.services.people.v1.model.ListConnectionsResponse;
 import com.google.api.services.people.v1.model.Name;
 import com.google.api.services.people.v1.model.Person;
-import com.google.api.services.people.v1.model.PhoneNumber;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -141,15 +136,6 @@ public class GoogleSignInActivity extends BaseActivity implements
 
     }
     // [END on_start_check_user]
-
-    // Performed on Google Sign in click
-    private void getIdToken() {
-        // Show an account picker to let the user choose a Google account from the device.
-        // If the GoogleSignInOptions only asks for IDToken and/or profile and/or email then no
-        // consent screen will be shown here.
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_INTENT);
-    }
 
     // [START auth_with_google]
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
@@ -295,16 +281,19 @@ public class GoogleSignInActivity extends BaseActivity implements
         }
     }
 
+    //Must implement
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
     }
 
+    //Must implement
     @Override
     public void onConnectionSuspended(int i) {
 
     }
 
+    //Must implement
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 

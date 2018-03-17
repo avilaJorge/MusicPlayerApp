@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -140,12 +141,15 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         if(playerMode == SONG_MODE) {
             editor.putString("Activity_Name", LoadingActivity.SONG_LIST_STRING);
             background.setBackgroundColor(Color.parseColor("#5a47025c"));
+            Log.d("UI MODE", "For Testing: You are in Playback Mode");
         } else if(playerMode == ALBUM_MODE) {
             editor.putString("Activity_Name", LoadingActivity.ALBUM_MODE_STRING);
             background.setBackgroundColor(Color.parseColor("#5a0208c6"));
+            Log.d("UI MODE", "For Testing: You are in Album Mode");
         } else {
             editor.putString("Activity_Name", LoadingActivity.VIBE_MODE_STRING);
             background.setBackgroundColor(Color.parseColor("#6eff6701"));
+            Log.d("UI MODE", "For Testing: You are in Vibe Mode");
         }
         editor.apply();
 
@@ -309,10 +313,14 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                 }
 
                 String location = currentSong.getLastLocation();
+                Log.d("LOCATION", "Location was changed to " + location);
                 if (location.length() > 30)
                     location = location.substring(0, 26) + "...";
 
                 LP_time.setText((hour + ":" + minutes + " " + AM_PM));
+                Log.d("LAST_TIME_SONG_PLAYED", "Song was last played " + day[songDate.getDay()]
+                    + " " + month[songDate.getMonth()] + " " + songDate.getDate() + ", " + (1900 + songDate.getYear())
+                        + hour + ":" + minutes + " " + AM_PM);
                 LP_dayOfWeek.setText(day[songDate.getDay()]);
                 LP_date.setText((month[songDate.getMonth()] + " " +
                         songDate.getDate() + ", " + (1900 + songDate.getYear())));
