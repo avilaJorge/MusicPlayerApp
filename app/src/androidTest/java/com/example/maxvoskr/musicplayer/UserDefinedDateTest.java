@@ -20,6 +20,8 @@ import static org.junit.Assert.assertThat;
 
 /**
  * Created by avila on 3/15/2018.
+ *
+ * VALID TEST, KEEP
  */
 
 public class UserDefinedDateTest {
