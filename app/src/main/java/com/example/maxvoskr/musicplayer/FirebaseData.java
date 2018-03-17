@@ -150,6 +150,13 @@ public class FirebaseData {
         myRef.child("users").child(user.getUid()).child("lastSong").setValue(songObj.getSongID());
     }
 
+    //TODO : MATTHEW CHANGED
+    void addUserFriend(String email) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        myRef.child("users").child(user.getUid()).child("friends").child(email).setValue(true);
+    }
+
     void updateSongData(Song songObj)
     {
         if(songObj == null){
@@ -178,7 +185,8 @@ public class FirebaseData {
         try {
             myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("Time").setValue(songObj.getTimeMS());
             myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("Location").setValue(songObj.getLastLocation());
-            myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("User").setValue(getCurrentUserID());
+            //TODO : MATTHEW CHANGED
+            myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("User").setValue(myRef.child("users").child(getCurrentUserID()).child("Email"));
             myRef.child("songs").child(songObj.getSongID()).child("UsersPlayed").child(getCurrentUserID()).setValue(true);
 
             //TODO: Check
