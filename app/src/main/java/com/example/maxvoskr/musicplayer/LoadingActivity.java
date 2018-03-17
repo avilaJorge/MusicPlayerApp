@@ -94,6 +94,10 @@ public class LoadingActivity extends AppCompatActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+
+                        new FirebaseData();
+                        new FirebaseData();
+
                         // Do something after 5s = 5000ms
                         Intent activityIntent;
                         switch(activity) {

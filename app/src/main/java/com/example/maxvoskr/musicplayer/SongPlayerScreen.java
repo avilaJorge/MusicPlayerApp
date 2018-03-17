@@ -190,7 +190,7 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                     sharedPref.writeData(currentSong);
 
 
-
+                    Log.d("SongsPlayedBy~~~~~~~~~", "was clicked!!!");
                     FirebaseData firebase = new FirebaseData();
                     for(String name : firebase.getSongPlayedBy(currentSong.getSongID()))
                         Log.d(currentSong.getName() + " played by", name);
