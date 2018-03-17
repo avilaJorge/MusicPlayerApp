@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -293,6 +294,7 @@ public class AlbumListActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = LoadingActivity.lastActivitySharedPref.edit();
         editor.putString("Activity_Name", LoadingActivity.ALBUM_MODE_STRING);
         editor.apply();
+        Log.d("UI MODE", "For Testing: You are in Album Mode");
     }
 
     @Override
