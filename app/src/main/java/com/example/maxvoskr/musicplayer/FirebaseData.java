@@ -68,7 +68,7 @@ public class FirebaseData {
 
     void updateSongList() {
         Query q = myRef.child("songs");
-        q.addValueEventListener(new ValueEventListener() {
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
@@ -186,8 +186,12 @@ public class FirebaseData {
             myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("Time").setValue(songObj.getTimeMS());
             myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("Location").setValue(songObj.getLastLocation());
             //TODO : MATTHEW CHANGED
-            myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("User").setValue(myRef.child("users").child(getCurrentUserID()).child("Email"));
-            myRef.child("songs").child(songObj.getSongID()).child("UsersPlayed").child(getCurrentUserID()).setValue(true);
+
+            myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("User").setValue(LoadingActivity.userName);
+            myRef.child("songs").child(songObj.getSongID()).child("UsersPlayed").child(LoadingActivity.userName).setValue(true);
+
+            System.out.println("Updated last played info");
+            System.out.println("Username: " + LoadingActivity.userName);
 
             //TODO: Check
         //    for(String location : songObj.getLocations())
@@ -230,10 +234,10 @@ public class FirebaseData {
                     Log.d("SongsPlayedBy~~~~~~~~~", "song: " + localSong.getName());
                     for(String user : usersPlayedSong) {
                         Log.d("SongsPlayedBy~~~~~~~~~", "user: " + user);
-                        if(friendsIDs != null && !friendsIDs.isEmpty()) {
-                            for (String friend : friendsIDs) {
+                        if(LoadingActivity.friendsNames != null) {
+                            for (String friend : LoadingActivity.friendsNames.getNames()) {
                                 Log.d("SongsPlayedBy~~~~~~~~~", "friend: " + friend);
-                                if (user.equals(friendsIDs)) {
+                                if (user.equals(friend)) {
                                     localSong.setPlayedByFriend(true);
                                     break;
                                 }

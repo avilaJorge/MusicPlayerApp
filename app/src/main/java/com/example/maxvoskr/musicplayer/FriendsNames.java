@@ -1,7 +1,5 @@
 package com.example.maxvoskr.musicplayer;
 
-import com.google.api.services.people.v1.model.EmailAddress;
-
 import java.util.ArrayList;
 
 /**
@@ -9,18 +7,22 @@ import java.util.ArrayList;
  */
 
 public class FriendsNames {
-    private ArrayList<String> friendsNames;
+    static private ArrayList<String> friendsNames;
 
     FriendsNames() {
         this.friendsNames = new ArrayList<String>();
     }
 
-    void add(String email) {
-        this.friendsNames.add(email);
+    static void add(String email) {
+        friendsNames.add(email);
     }
 
-    void remove(String email) {
-        this.friendsNames.remove(email);
+    static void remove(String email) {
+        friendsNames.remove(email);
+    }
+
+    static ArrayList<String> getNames() {
+        return friendsNames;
     }
 
 }
