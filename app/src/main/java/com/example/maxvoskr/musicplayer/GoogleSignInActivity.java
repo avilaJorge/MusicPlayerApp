@@ -143,15 +143,6 @@ public class GoogleSignInActivity extends BaseActivity implements
     }
     // [END on_start_check_user]
 
-    // Performed on Google Sign in click
-    private void getIdToken() {
-        // Show an account picker to let the user choose a Google account from the device.
-        // If the GoogleSignInOptions only asks for IDToken and/or profile and/or email then no
-        // consent screen will be shown here.
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_INTENT);
-    }
-
     // [START auth_with_google]
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
@@ -296,16 +287,19 @@ public class GoogleSignInActivity extends BaseActivity implements
         }
     }
 
+    //Must implement
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
     }
 
+    //Must implement
     @Override
     public void onConnectionSuspended(int i) {
 
     }
 
+    //Must implement
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 

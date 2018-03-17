@@ -170,6 +170,9 @@ public class AlbumListActivity extends AppCompatActivity {
         adapter = new AlbumAdapter(this, R.layout.custom_album_cell, musicList.albumList);
         albumListView.setAdapter(adapter);
 
+        Log.d("ALBUM_LIST_ACT", "Successfully switched into Album mode.");
+
+
         albumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
