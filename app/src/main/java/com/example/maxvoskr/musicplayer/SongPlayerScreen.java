@@ -150,6 +150,9 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
             play.setImageResource(R.drawable.pause);
 
 
+
+
+
         play.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -188,21 +191,9 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
 
 
 
-                    Date songDate = new Date(currentSong.getTimeMS());
-                    String minutes = Integer.toString(songDate.getMinutes());
-                    if (songDate.getMinutes() < 10)
-                        minutes = "0" + songDate.getMinutes();
-
-                    String AM_PM = "am";
-                    int hour = songDate.getHours();
-                    if (hour > 12) {
-                        hour -= 12;
-                        AM_PM = "pm";
-                    }
-
-
-
-                    Log.d("getLastPlayed", "Song: " + currentSong.getName()  + (hour + ":" + minutes + " " + AM_PM));
+                    FirebaseData firebase = new FirebaseData();
+                    for(String name : firebase.getSongPlayedBy(currentSong.getSongID()))
+                        Log.d(currentSong.getName() + " played by", name);
                 }
             }
         });

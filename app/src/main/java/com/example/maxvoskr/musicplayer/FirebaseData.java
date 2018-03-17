@@ -12,7 +12,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Date;
+
+import static java.lang.Thread.sleep;
 
 /**
  * Created by maxvoskr on 3/13/18.
@@ -101,6 +104,16 @@ public class FirebaseData {
         myRef.child("users").child(user.getUid()).child("email").setValue(user.getEmail());
     }
 
+    void setAnonName(String userID, String anon) {
+        myRef.child("users").child(userID).child("AnonName").setValue(anon);
+    }
+
+    String getCurrentUserID() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        return user.getUid();
+    }
+
     void addUserSong(Song songObj) {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -135,7 +148,8 @@ public class FirebaseData {
         try {
             myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("Time").setValue(songObj.getTimeMS());
             myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("Location").setValue(songObj.getLastLocation());
-            myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("User").setValue("Insert Name Here");
+            myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("User").setValue(getCurrentUserID());
+            myRef.child("songs").child(songObj.getSongID()).child("UsersPlayed").child(getCurrentUserID()).setValue(true);
 
             //TODO: Check
         //    for(String location : songObj.getLocations())
@@ -144,6 +158,35 @@ public class FirebaseData {
         catch (Exception e){
             System.out.println("Unable to retrieve last play information");
         }
+    }
+
+    public ArrayList<String> getSongPlayedBy(String songID) {
+        Query q = myRef.child("songs").child(songID).child("UsersPlayed");
+        final ArrayList<String> usersPlayedSong = new ArrayList<>();
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for(DataSnapshot data : children) {
+                    if(data.getValue(Boolean.class))
+                        usersPlayedSong.add(data.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        try {
+            sleep(3000);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return usersPlayedSong;
     }
 
 
@@ -199,6 +242,10 @@ public class FirebaseData {
                                     }
 
                                     Log.d("getLastPlayed", "Song: " + localSong.getName() + " was updated to time: " + (hour + ":" + minutes + " " + AM_PM));
+                                }
+
+                                if (lastData.child("UsersPlayed").exists()) {
+
                                 }
                             }
                         }
