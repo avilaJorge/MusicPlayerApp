@@ -26,9 +26,9 @@ import static org.junit.Assert.assertThat;
 
 public class UserDefinedDateTest {
 
-    Context context;
-    DateService dateService;
-    CurrentLocationTimeData currentLocationTimeData;
+    private Context context;
+    private DateService dateService;
+    private CurrentLocationTimeData currentLocationTimeData;
 
     @Rule
     public final ServiceTestRule mServiceRule = new ServiceTestRule();
