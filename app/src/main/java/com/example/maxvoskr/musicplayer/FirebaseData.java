@@ -28,6 +28,7 @@ public class FirebaseData {
 
     private FirebaseDatabase mDatabase;
     private DatabaseReference myRef;
+    public static ArrayList<String> friendsIDs;
 
     static final String LOCATION = "LOC";
     static final String TIME_MS = "T_MS";
@@ -42,6 +43,25 @@ public class FirebaseData {
 
         mDatabase = FirebaseDatabase.getInstance();
         myRef = mDatabase.getReferenceFromUrl("https://musicplayer-c8dfe.firebaseio.com/");
+    }
+
+    void readFriendsList(FirebaseUser user) {
+
+        Query q = myRef.child("users").child(user.getUid()).child("friends");
+        q.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot data : children) {
+                    friendsIDs.add(data.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     void updateSongList() {
