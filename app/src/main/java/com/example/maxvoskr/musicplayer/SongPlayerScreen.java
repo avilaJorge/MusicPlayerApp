@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -135,12 +136,15 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
         if(playerMode == SONG_MODE) {
             editor.putString("Activity_Name", LoadingActivity.SONG_LIST_STRING);
             background.setBackgroundColor(Color.parseColor("#5a47025c"));
+            Log.d("UI MODE", "For Testing: You are in Playback Mode");
         } else if(playerMode == ALBUM_MODE) {
             editor.putString("Activity_Name", LoadingActivity.ALBUM_MODE_STRING);
             background.setBackgroundColor(Color.parseColor("#5a0208c6"));
+            Log.d("UI MODE", "For Testing: You are in Album Mode");
         } else {
             editor.putString("Activity_Name", LoadingActivity.VIBE_MODE_STRING);
             background.setBackgroundColor(Color.parseColor("#6eff6701"));
+            Log.d("UI MODE", "For Testing: You are in Vibe Mode");
         }
         editor.apply();
 

@@ -176,7 +176,6 @@ public class SettingsActivity extends AppCompatActivity implements
                startActivity(songPlayer);
             }
         });
-
     }
 
     @Override
