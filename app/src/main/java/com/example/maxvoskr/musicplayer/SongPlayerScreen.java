@@ -304,10 +304,14 @@ public class SongPlayerScreen extends AppCompatActivity implements MusicPlayerSe
                 }
 
                 String location = currentSong.getLastLocation();
+                Log.d("LOCATION", "Location was changed to " + location);
                 if (location.length() > 30)
                     location = location.substring(0, 26) + "...";
 
                 LP_time.setText((hour + ":" + minutes + " " + AM_PM));
+                Log.d("LAST_TIME_SONG_PLAYED", "Song was last played " + day[songDate.getDay()]
+                    + " " + month[songDate.getMonth()] + " " + songDate.getDate() + ", " + (1900 + songDate.getYear())
+                        + hour + ":" + minutes + " " + AM_PM);
                 LP_dayOfWeek.setText(day[songDate.getDay()]);
                 LP_date.setText((month[songDate.getMonth()] + " " +
                         songDate.getDate() + ", " + (1900 + songDate.getYear())));
