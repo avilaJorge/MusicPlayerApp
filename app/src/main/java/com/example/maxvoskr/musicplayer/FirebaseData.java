@@ -145,19 +145,13 @@ public class FirebaseData {
         return user;
     }
 
-    void addUserSong(Song songObj) {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-        myRef.child("users").child(user.getUid()).child("lastSong").setValue(songObj.getSongID());
-    }
-
     //TODO : MATTHEW CHANGED
     void addUserFriend(String email) {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         myRef.child("users").child(user.getUid()).child("friends").child(email).setValue(true);
     }
-
+/*
     void updateSongData(Song songObj)
     {
         if(songObj == null){
@@ -177,7 +171,7 @@ public class FirebaseData {
         catch (Exception e){
             System.out.println("Unable to retrieve last play information");
         }
-    }
+    }*/
 
     public void updateLastPlayed(Song songObj) {
         if(songObj == null){
@@ -186,13 +180,12 @@ public class FirebaseData {
         try {
             myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("Time").setValue(songObj.getTimeMS());
             myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("Location").setValue(songObj.getLastLocation());
-            //TODO : MATTHEW CHANGED
             myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("User").setValue(email);
             myRef.child("songs").child(songObj.getSongID()).child("UsersPlayed").child(email).setValue(true);
 
             //TODO: Check
-        //    for(String location : songObj.getLocations())
-            //       myRef.child("songs").child(songObj.getSongID()).child("locations").child(location).setValue(true);
+            for(String location : songObj.getLocations())
+                   myRef.child("songs").child(songObj.getSongID()).child("locations").child(location).setValue(true);
         }
         catch (Exception e){
             System.out.println("Unable to retrieve last play information");
