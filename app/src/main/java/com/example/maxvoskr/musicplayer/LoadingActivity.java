@@ -22,6 +22,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     public static CurrentLocationTimeData currentLocationTimeData;
     public static SharedPreferences lastActivitySharedPref;
+    public static FriendsEmails friendsEmails = new FriendsEmails();
     public static final String SONG_LIST_STRING = "Song_List";
     public static final String ALBUM_MODE_STRING = "Album_Mode";
     public static final String VIBE_MODE_STRING = "Vibe_Mode";
