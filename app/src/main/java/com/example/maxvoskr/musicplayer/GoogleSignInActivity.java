@@ -7,15 +7,12 @@ package com.example.maxvoskr.musicplayer;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Contacts;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -30,19 +27,13 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.people.v1.People;
-import com.google.api.services.people.v1.model.EmailAddress;
-import com.google.api.services.people.v1.model.ListConnectionsResponse;
-import com.google.api.services.people.v1.model.Person;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
 
 /**
  * Demonstrate Firebase Authentication using a Google ID Token.
@@ -99,6 +90,9 @@ public class GoogleSignInActivity extends BaseActivity implements
         friendsEmails = new FriendsEmails();
 
         if(user != null) {
+
+            FirebaseData firebaseObj = new FirebaseData();
+            firebaseObj.readFriendsList(user);
             /*// Read the authorization code from the standard input stream.
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("What is the authorization code?");
@@ -143,6 +137,7 @@ public class GoogleSignInActivity extends BaseActivity implements
                 }
             }*/
 
+
             startActivity(mainActivityIntent);
         }
         // [END initialize_auth]
@@ -169,9 +164,9 @@ public class GoogleSignInActivity extends BaseActivity implements
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                //String authCode = account.getServerAuthCode();
+               /* String authCode = account.getServerAuthCode();
 
-               /* System.out.println("--------------------------------------");
+                System.out.println("--------------------------------------");
                 System.out.println(authCode);
 
                 People peopleService = null;
@@ -258,32 +253,38 @@ public class GoogleSignInActivity extends BaseActivity implements
         // Redirect URL for web based applications.
         // Can be empty too.
         String redirectUrl = "urn:ietf:wg:oauth:2.0:oob";
+        //String redirectUrl = "";
 
         String clientId = "630586042148-fdsurme8a0jv9nbatms408s64sf9haqj.apps.googleusercontent.com";
         String clientSecret = "tvEfpZaSBTrvI9Egr6VpUZZ_";
 
-        // STEP 1
-        GoogleTokenResponse tokenResponse = new GoogleAuthorizationCodeTokenRequest(
-                httpTransport,
-                jsonFactory,
-                clientId,
-                clientSecret,
-                serverAuthCode,
-                redirectUrl).execute();
 
-        // STEP 2
-        GoogleCredential credential = new GoogleCredential.Builder()
-                .setClientSecrets(clientId, clientSecret)
-                .setTransport(httpTransport)
-                .setJsonFactory(jsonFactory)
-                .build();
+            // STEP 1
+            GoogleTokenResponse tokenResponse = new GoogleAuthorizationCodeTokenRequest(
+                    httpTransport,
+                    jsonFactory,
+                    clientId,
+                    clientSecret,
+                    serverAuthCode,
+                    redirectUrl).execute();
+            ;
 
-        credential.setFromTokenResponse(tokenResponse);
+            // STEP 2
+            GoogleCredential credential = new GoogleCredential.Builder()
+                    .setClientSecrets(clientId, clientSecret)
+                    .setTransport(httpTransport)
+                    .setJsonFactory(jsonFactory)
+                    .build();
+
+            credential.setFromTokenResponse(tokenResponse);
+
 
         // STEP 3
         //return new People.Builder(httpTransport, jsonFactory, credential)
                 //.build();
+
         return new People.Builder(httpTransport, jsonFactory, credential).build();
+
     }
 
     // [START signin]

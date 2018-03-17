@@ -12,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -25,6 +26,8 @@ public class FirebaseData {
 
     private FirebaseDatabase mDatabase;
     private DatabaseReference myRef;
+    public static ArrayList<String> friendsIDs = new ArrayList<>();
+    public static ArrayList<String> usersPlayedSong = new ArrayList<>();
 
     static final String LOCATION = "LOC";
     static final String TIME_MS = "T_MS";
@@ -39,6 +42,28 @@ public class FirebaseData {
 
         mDatabase = FirebaseDatabase.getInstance();
         myRef = mDatabase.getReferenceFromUrl("https://musicplayer-c8dfe.firebaseio.com/");
+
+        readFriendsList(getCurrentUser());
+    }
+
+    void readFriendsList(FirebaseUser user) {
+
+        Query q = myRef.child("users").child(user.getUid()).child("friends");
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot data : children) {
+                    friendsIDs.add(data.getKey());
+                    Log.d("FreindList", "added Friend: " + data.getValue(String.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     void updateSongList() {
@@ -101,6 +126,24 @@ public class FirebaseData {
         myRef.child("users").child(user.getUid()).child("email").setValue(user.getEmail());
     }
 
+    void setAnonName(String userID, String anon) {
+        myRef.child("users").child(userID).child("AnonName").setValue(anon);
+    }
+
+
+
+    String getCurrentUserID() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        return user.getUid();
+    }
+
+    FirebaseUser getCurrentUser() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        return user;
+    }
+
     void addUserSong(Song songObj) {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -121,6 +164,7 @@ public class FirebaseData {
             //TODO: Check
             for(String location : songObj.getLocations())
                 myRef.child("songs").child(songObj.getSongID()).child("locations").child(location).setValue(true);
+
         }
         catch (Exception e){
             System.out.println("Unable to retrieve last play information");
@@ -134,7 +178,8 @@ public class FirebaseData {
         try {
             myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("Time").setValue(songObj.getTimeMS());
             myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("Location").setValue(songObj.getLastLocation());
-            myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("User").setValue("Insert Name Here");
+            myRef.child("songs").child(songObj.getSongID()).child("LastPlayed").child("User").setValue(getCurrentUserID());
+            myRef.child("songs").child(songObj.getSongID()).child("UsersPlayed").child(getCurrentUserID()).setValue(true);
 
             //TODO: Check
         //    for(String location : songObj.getLocations())
@@ -143,6 +188,69 @@ public class FirebaseData {
         catch (Exception e){
             System.out.println("Unable to retrieve last play information");
         }
+    }
+
+    public ArrayList<String> getSongPlayedBy(String songID) {
+        Query q = myRef.child("songs").child(songID);
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("SongsPlayedBy~~~~~~~~~", "event called");
+                Iterable<DataSnapshot> children = dataSnapshot.child("UsersPlayed").getChildren();
+                for(DataSnapshot data : children) {
+                    Log.d("SongsPlayedBy~~~~~~~~~", "is here " + dataSnapshot.toString());
+                    if(data.getValue(Boolean.class)) {
+                        usersPlayedSong.add(data.getKey());
+                        Log.d("SongsPlayedBy~~~~~~~~~", "data: " + data.getKey());
+                    }
+                }
+
+                String name = dataSnapshot.child("name").getValue(String.class);
+                String album = dataSnapshot.child("album").getValue(String.class);
+                String artist = dataSnapshot.child("artist").getValue(String.class);
+                Song localSong = null;
+                for(Song song : MusicArrayList.localMusicList) {
+                    //    Log.d("getLastPlayed", "Song: " + song.getName() + " " + song.getAlbum() + " " + song.getArtist());
+                    //    Log.d("getLastPlayed", "song: " + name + " " + album + " " + artist);
+                    if(song.getName().equals(name) && song.getAlbum().equals(album) && song.getArtist().equals(artist)) {
+                        //        Log.d("getLastPlayed", "found!");
+                        localSong = song;
+                    }
+                }
+
+                if(localSong != null) {
+                    Log.d("SongsPlayedBy~~~~~~~~~", "song: " + localSong.getName());
+                    for(String user : usersPlayedSong) {
+                        Log.d("SongsPlayedBy~~~~~~~~~", "user: " + user);
+                        if(friendsIDs != null && !friendsIDs.isEmpty()) {
+                            for (String friend : friendsIDs) {
+                                Log.d("SongsPlayedBy~~~~~~~~~", "friend: " + friend);
+                                if (user.equals(friendsIDs)) {
+                                    localSong.setPlayedByFriend(true);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+/*
+        try {
+            sleep(3000);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+*/
+        return usersPlayedSong;
     }
 
 
@@ -154,7 +262,6 @@ public class FirebaseData {
             q.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Log.d("getLastPlayed", "start");
                     Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                     for(DataSnapshot data : children) {
                         String name = data.child("name").getValue(String.class);
@@ -165,36 +272,40 @@ public class FirebaseData {
                         Song localSong = null;
 
                         for(Song song : MusicArrayList.localMusicList) {
-                            Log.d("getLastPlayed", "Song: " + song.getName() + " " + song.getAlbum() + " " + song.getArtist());
-                            Log.d("getLastPlayed", "song: " + name + " " + album + " " + artist);
+                        //    Log.d("getLastPlayed", "Song: " + song.getName() + " " + song.getAlbum() + " " + song.getArtist());
+                        //    Log.d("getLastPlayed", "song: " + name + " " + album + " " + artist);
                             if(song.getName().equals(name) && song.getAlbum().equals(album) && song.getArtist().equals(artist)) {
-                                Log.d("getLastPlayed", "found!");
+                        //        Log.d("getLastPlayed", "found!");
                                 localSong = song;
                             }
                         }
 
-                        Log.d("getLastPlayed", "null check");
                         if(localSong != null) {
-                            localSong.setTimeMS(data.child("LastPlayed").child("Time").getValue(Long.class));
-                            localSong.setLastLocation(data.child("LastPlayed").child("Location").getValue(String.class));
 
-                            Date songDate = new Date(localSong.getTimeMS());
-                            String minutes = Integer.toString(songDate.getMinutes());
-                            if (songDate.getMinutes() < 10)
-                                minutes = "0" + songDate.getMinutes();
+                            Iterable<DataSnapshot> childrenLastPlayed = dataSnapshot.child(localSong.getSongID()).getChildren();
+                            for(DataSnapshot lastData : childrenLastPlayed) {
+                                //String allData = lastData.toString();
 
-                            String AM_PM = "am";
-                            int hour = songDate.getHours();
-                            if (hour > 12) {
-                                hour -= 12;
-                                AM_PM = "pm";
+                                if (lastData.child("LastPlayed").exists()) {
+                                    Long timeMS = lastData.child("LastPlayed").child("Time").getValue(Long.class);
+                                    localSong.setTimeMS(timeMS);
+                                    localSong.setLastLocation(data.child("LastPlayed").child("Location").getValue(String.class));
+
+                                    Date songDate = new Date(localSong.getTimeMS());
+                                    String minutes = Integer.toString(songDate.getMinutes());
+                                    if (songDate.getMinutes() < 10)
+                                        minutes = "0" + songDate.getMinutes();
+
+                                    String AM_PM = "am";
+                                    int hour = songDate.getHours();
+                                    if (hour > 12) {
+                                        hour -= 12;
+                                        AM_PM = "pm";
+                                    }
+                                }
                             }
-
-                            Log.d("getLastPlayed", "Song: " + localSong.getName() + " was updated to time: " + (hour + ":" + minutes + " " + AM_PM));
                         }
-                        Log.d("getLastPlayed", "end_innner_loop");
                     }
-                    Log.d("getLastPlayed", "end");
                 }
 
 

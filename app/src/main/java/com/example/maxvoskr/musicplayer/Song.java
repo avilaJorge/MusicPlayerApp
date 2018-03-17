@@ -23,6 +23,7 @@ class Song {
     protected ArrayList<String> locations;
 
     Song() {
+        this.locations = new ArrayList<String>();
         this.weight = 0;
         this.played = false;
     }
@@ -142,6 +143,7 @@ class Song {
         this.locations.add(location);
     }
 
+    /* not SRP
     public void findWeight(CurrentLocationTimeData dataObj) {
         weight = 0;
         if (timeMS == 0) return;
@@ -152,8 +154,8 @@ class Song {
         //Like Dislike Breaks Ties Only
         //if (likeDislike == 1) weight++;
     }
+    */
 
-    //ONLY TO BE USED BY TESTERS
     public void setWeight(int weight){
         this.weight = weight;
     }

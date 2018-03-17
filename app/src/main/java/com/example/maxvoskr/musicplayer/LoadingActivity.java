@@ -87,7 +87,6 @@ public class LoadingActivity extends AppCompatActivity {
 
                 for(Song song : MusicArrayList.localMusicList)
                     Log.d("Loading", "localList after Import: " + song.getName() + " " + song.getSongID());
-
             }
         }, 1000);
 
